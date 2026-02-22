@@ -1,0 +1,8 @@
+{
+  "name": "LifeOS",
+  "description": "A comprehensive RPG-based productivity system combining tasks, habits, raids, and economy into a unified life operating system.",
+  "requestFramePermissions": [
+    "microphone",
+    "camera"
+  ]
+}
