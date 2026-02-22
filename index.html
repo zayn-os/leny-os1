@@ -1,0 +1,97 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>LifeOS</title>
+    <link rel="manifest" href="/manifest.json" />
+    
+    <!-- 🟢 Tailwind CSS CDN for instant styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              life: {
+                black: 'var(--color-life-black)',
+                paper: 'var(--color-life-paper)',
+                gold: 'var(--color-life-gold)',
+                text: 'var(--color-life-text)',
+                muted: 'var(--color-life-muted)',
+                silver: 'var(--color-life-silver)',
+                crimson: 'var(--color-life-crimson)',
+                diamond: 'var(--color-life-diamond)',
+                easy: 'var(--color-life-easy)',
+                normal: 'var(--color-life-normal)',
+                hard: 'var(--color-life-hard)',
+              }
+            },
+            fontFamily: {
+              sans: ['Inter', 'system-ui', 'sans-serif'],
+              mono: ['Fira Code', 'monospace'],
+            },
+            animation: {
+              'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+              'shake': 'shake 0.5s cubic-bezier(.36,.07,.19,.97) both',
+              'explode': 'explode 0.8s ease-out forwards',
+              'spin-slow': 'spin 3s linear infinite',
+            },
+            keyframes: {
+              shake: {
+                '10%, 90%': { transform: 'translate3d(-1px, 0, 0)' },
+                '20%, 80%': { transform: 'translate3d(2px, 0, 0)' },
+                '30%, 50%, 70%': { transform: 'translate3d(-4px, 0, 0)' },
+                '40%, 60%': { transform: 'translate3d(4px, 0, 0)' }
+              },
+              explode: {
+                '0%': { transform: 'translate(0, 0) scale(1)', opacity: '1' },
+                '100%': { transform: 'translate(var(--tx), var(--ty)) scale(0)', opacity: '0' }
+              }
+            }
+          }
+        }
+      }
+    </script>
+
+
+    <style>
+      /* Scrollbar Hiding Utility */
+      .no-scrollbar::-webkit-scrollbar {
+          display: none;
+      }
+      .no-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+      }
+    </style>
+  <link rel="stylesheet" href="/index.css">
+    <script type="importmap">
+{
+  "imports": {
+    "vite": "https://esm.sh/vite@^7.3.1",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
+    "react": "https://esm.sh/react@^19.2.4",
+    "react/": "https://esm.sh/react@^19.2.4/",
+    "lucide-react": "https://esm.sh/lucide-react@^0.563.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
+    "@google/genai": "https://esm.sh/@google/genai@^1.39.0",
+    "@capacitor/core": "https://esm.sh/@capacitor/core@^8.0.2",
+    "@capacitor/local-notifications": "https://esm.sh/@capacitor/local-notifications@^8.0.0",
+    "@capacitor/cli": "https://esm.sh/@capacitor/cli@^8.0.2",
+    "@capacitor/haptics": "https://esm.sh/@capacitor/haptics@^8.0.0",
+    "@capacitor/filesystem": "https://esm.sh/@capacitor/filesystem@^8.1.0",
+    "firebase/": "https://esm.sh/firebase@^12.9.0/",
+    "@capacitor/app": "https://esm.sh/@capacitor/app@^8.0.1"
+  }
+}
+</script>
+  <script type="module" crossorigin src="/assets/index-DLsa9aLo.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-N1_42GHR.css">
+</head>
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
