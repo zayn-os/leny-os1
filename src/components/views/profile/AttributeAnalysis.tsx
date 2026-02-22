@@ -55,37 +55,37 @@ const StatDataRow: React.FC<StatRowProps> = ({ stat, xp, target }) => {
     const fullName = STAT_FULL_NAMES[stat] || stat;
 
     return (
-        <div className="flex flex-col w-full mb-3 group">
+        <div className="flex flex-col w-full mb-2 group">
             {/* Top Row: Icon/Name & Numbers */}
-            <div className="flex justify-between items-end px-1 mb-1.5">
-                <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-lg bg-life-black border border-life-muted/20 flex items-center justify-center shadow-sm group-hover:border-life-muted/40 transition-colors">
-                        <Icon size={16} style={{ color }} />
+            <div className="flex justify-between items-end px-0 mb-1">
+                <div className="flex items-center gap-2">
+                    <div className="p-1.5 rounded-md bg-life-black border border-life-muted/20 flex items-center justify-center shadow-sm group-hover:border-life-muted/40 transition-colors">
+                        <Icon size={14} style={{ color }} />
                     </div>
-                    <div className="flex flex-col leading-tight">
-                        <span className="font-black text-xs text-life-text uppercase tracking-widest">{fullName}</span>
-                        <div className="flex items-center gap-2">
-                            <span className="text-[9px] font-mono text-life-muted font-bold opacity-50">{stat}</span>
-                            <span className="text-[9px] font-mono text-life-gold font-bold bg-life-gold/10 px-1 rounded">LVL {Math.floor(xp / 20) + 1}</span>
+                    <div className="flex flex-col leading-none gap-0.5">
+                        <span className="font-black text-[10px] text-life-text uppercase tracking-widest">{fullName}</span>
+                        <div className="flex items-center gap-1.5">
+                            <span className="text-[8px] font-mono text-life-muted font-bold opacity-50">{stat}</span>
+                            <span className="text-[8px] font-mono text-life-gold font-bold bg-life-gold/10 px-1 rounded-[2px]">LVL {Math.floor(xp / 20) + 1}</span>
                         </div>
                     </div>
                 </div>
                 
-                <p className="text-xs font-mono text-life-text text-right">
-                    <span style={{ color }} className="font-black text-sm">{xp.toFixed(0)}</span>
-                    <span className="text-life-muted/40 text-[10px] ml-1">/ {target}</span>
+                <p className="text-[10px] font-mono text-life-text text-right leading-none">
+                    <span style={{ color }} className="font-black text-xs">{xp.toFixed(0)}</span>
+                    <span className="text-life-muted/40 text-[9px] ml-1">/ {target}</span>
                 </p>
             </div>
 
             {/* Bottom Row: Large Bar */}
-            <div className="w-full bg-black h-3.5 rounded-full overflow-hidden border border-life-muted/20 relative shadow-inner">
+            <div className="w-full bg-black h-2 rounded-full overflow-hidden border border-life-muted/20 relative shadow-inner">
                 <div 
                     className="h-full rounded-full transition-all duration-700 ease-out relative z-10"
                     style={{ width: `${percentage}%`, backgroundColor: color }}
                 ></div>
                 {/* Background glow effect */}
                 <div 
-                    className="absolute inset-0 opacity-30 blur-[4px]"
+                    className="absolute inset-0 opacity-30 blur-[3px]"
                     style={{ width: `${percentage}%`, backgroundColor: color }}
                 ></div>
             </div>
@@ -106,7 +106,7 @@ export const AttributeAnalysis: React.FC<AttributeAnalysisProps> = ({ user }) =>
     const statsOrder: Stat[] = [Stat.DIS, Stat.STR, Stat.INT, Stat.CRT, Stat.PCE, Stat.EMT, Stat.CAM];
 
     return (
-        <div className="bg-life-black border border-life-muted/20 rounded-xl p-5 mb-6 shadow-lg shadow-black/50 relative overflow-hidden group">
+        <div className="bg-life-black border border-life-muted/20 rounded-xl p-4 mb-4 shadow-lg shadow-black/50 relative overflow-hidden group">
             {/* Decorative corner accents */}
             <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-life-muted/30 rounded-tl-lg"></div>
             <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-life-muted/30 rounded-tr-lg"></div>
@@ -114,7 +114,7 @@ export const AttributeAnalysis: React.FC<AttributeAnalysisProps> = ({ user }) =>
             <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-life-muted/30 rounded-br-lg"></div>
 
             {/* Header & Toggle */}
-            <div className="flex justify-between items-start mb-6">
+            <div className="flex justify-between items-start mb-4">
                 <div>
                     <h3 className="text-xs font-black uppercase tracking-[0.2em] text-life-text flex items-center gap-2">
                         <span className="text-life-gold">⬡</span> Attribute Analysis
@@ -149,7 +149,7 @@ export const AttributeAnalysis: React.FC<AttributeAnalysisProps> = ({ user }) =>
                         <StatsRadar stats={user.stats} maxVal={globalTarget} />
                     </div>
                 ) : (
-                    <div className="space-y-4 py-2">
+                    <div className="space-y-3 py-1">
                         {statsOrder.map(stat => (
                             <StatDataRow 
                                 key={stat}
