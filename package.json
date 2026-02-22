@@ -1,31 +1,35 @@
 {
   "name": "lifeos",
+  "homepage": "https://zayn-os.github.io/leny-os1",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
-    "vite": "^7.3.1",
-    "@vitejs/plugin-react": "^5.1.2",
-    "react": "^19.2.4",
-    "lucide-react": "^0.563.0",
-    "react-dom": "^19.2.4",
-    "@google/genai": "^1.39.0",
-    "@capacitor/core": "^8.0.2",
-    "@capacitor/local-notifications": "^8.0.0",
+    "@capacitor/app": "^8.0.1",
     "@capacitor/cli": "^8.0.2",
-    "@capacitor/haptics": "^8.0.0",
+    "@capacitor/core": "^8.0.2",
     "@capacitor/filesystem": "^8.1.0",
+    "@capacitor/haptics": "^8.0.0",
+    "@capacitor/local-notifications": "^8.0.0",
+    "@google/genai": "^1.39.0",
+    "@vitejs/plugin-react": "^5.1.2",
     "firebase": "^12.9.0",
-    "@capacitor/app": "^8.0.1"
+    "lucide-react": "^0.563.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "vite": "^7.3.1"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",
     "@vitejs/plugin-react": "^5.0.0",
+    "gh-pages": "^6.3.0",
     "typescript": "~5.8.2",
     "vite": "^6.2.0"
   }

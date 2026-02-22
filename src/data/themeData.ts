@@ -13,13 +13,27 @@ export const DEFAULT_THEMES: Theme[] = [
         }
     },
     {
+        id: 'zayn',
+        name: 'Zayn Protocol',
+        colors: {
+            '--color-life-black': '#0a0a0a',
+            '--color-life-paper': '#121212',
+            '--color-life-gold': '#fbbf24',
+            '--color-life-text': '#e5e5e5',
+            '--color-life-muted': '#525252',
+            '--color-life-crimson': '#dc2626',
+            '--color-life-diamond': '#60a5fa',
+            '--color-life-hard': '#ef4444'
+        }
+    },
+    {
         id: 'grey',
         name: 'Zenith Grey',
         colors: {
-            '--color-life-black': '#18181b', // Zinc 950
-            '--color-life-paper': '#27272a', // Zinc 800
-            '--color-life-gold': '#a1a1aa',  // Zinc 400
-            '--color-life-text': '#f4f4f5'   // Zinc 100
+            '--color-life-black': '#18181b',
+            '--color-life-paper': '#27272a',
+            '--color-life-gold': '#a1a1aa',
+            '--color-life-text': '#f4f4f5'
         }
     },
     {
@@ -56,6 +70,56 @@ export const DEFAULT_THEMES: Theme[] = [
             '--color-life-paper': '#ffffff', 
             '--color-life-gold': '#d97706',  
             '--color-life-text': '#111827'   
+        }
+    },
+    {
+        id: 'crimson',
+        name: 'Crimson Ops',
+        colors: {
+            '--color-life-black': '#1a0505',
+            '--color-life-paper': '#2b0a0a',
+            '--color-life-gold': '#ef4444',
+            '--color-life-text': '#fecaca'
+        }
+    },
+    {
+        id: 'sunset',
+        name: 'Sunset Drive',
+        colors: {
+            '--color-life-black': '#2e1065',
+            '--color-life-paper': '#4c1d95',
+            '--color-life-gold': '#f472b6',
+            '--color-life-text': '#fae8ff'
+        }
+    },
+    {
+        id: 'mint',
+        name: 'Mint Protocol',
+        colors: {
+            '--color-life-black': '#f0fdf4',
+            '--color-life-paper': '#dcfce7',
+            '--color-life-gold': '#16a34a',
+            '--color-life-text': '#064e3b'
+        }
+    },
+    {
+        id: 'azure',
+        name: 'Azure Citadel',
+        colors: {
+            '--color-life-black': '#082f49',
+            '--color-life-paper': '#0c4a6e',
+            '--color-life-gold': '#38bdf8',
+            '--color-life-text': '#f0f9ff'
+        }
+    },
+    {
+        id: 'toxic',
+        name: 'Toxic Grid',
+        colors: {
+            '--color-life-black': '#052e16',
+            '--color-life-paper': '#064e3b',
+            '--color-life-gold': '#a3e635',
+            '--color-life-text': '#ecfccb'
         }
     },
     {
@@ -158,6 +222,7 @@ export const DEFAULT_THEMES: Theme[] = [
                 border-radius: 20px !important;
             }
             
+            /* 3D Buttons */
             button, .bg-life-paper {
                 border-bottom-width: 4px !important;
                 border-color: rgba(0,0,0,0.4) !important;
