@@ -9,6 +9,7 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, (process as any).cwd(), '');
   
   return {
+    base: '/leny-os1/',
     plugins: [react()],
     define: {
       // Expose API_KEY to the client-side code as process.env.API_KEY
