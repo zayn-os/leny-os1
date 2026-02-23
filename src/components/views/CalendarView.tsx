@@ -108,7 +108,7 @@ const CalendarView: React.FC = () => {
         <div className="space-y-6 animate-in fade-in slide-in-from-right duration-500">
             
             {/* 🟦 SQUARE 1: MONTHLY CALENDAR */}
-            <div className="bg-life-paper border border-life-muted/20 rounded-2xl p-4 shadow-lg">
+            <div className="bg-life-paper border border-zinc-800 rounded-2xl p-4 shadow-lg">
                 
                 {/* Month Header */}
                 <div className="flex items-center justify-between mb-4">
@@ -169,10 +169,10 @@ const CalendarView: React.FC = () => {
             </div>
 
             {/* 🟦 SQUARE 2: DAILY AGENDA */}
-            <div className="bg-life-black border border-life-muted/20 rounded-2xl p-0 overflow-hidden shadow-lg min-h-[200px] flex flex-col">
+            <div className="bg-life-black border border-zinc-800 rounded-2xl p-0 overflow-hidden shadow-lg min-h-[200px] flex flex-col">
                 
                 {/* Header */}
-                <div className="p-4 border-b border-life-muted/10 flex justify-between items-center bg-life-paper/50">
+                <div className="p-4 border-b border-zinc-800 flex justify-between items-center bg-life-paper/50">
                     <div>
                         <h4 className="text-xs font-black uppercase text-life-muted tracking-widest">
                             Tactical Log
@@ -200,8 +200,8 @@ const CalendarView: React.FC = () => {
                                     className={`
                                         flex items-center gap-3 p-3 rounded-xl border transition-all
                                         ${item.isCompleted 
-                                            ? 'bg-life-black border-life-muted/10 opacity-50' 
-                                            : 'bg-life-paper border-life-muted/10 hover:border-life-gold/30'}
+                                            ? 'bg-life-black border-zinc-800 opacity-50' 
+                                            : 'bg-life-paper border-zinc-800 hover:border-life-gold/30'}
                                     `}
                                 >
                                     <div className={`

@@ -46,6 +46,10 @@ import HallOfFame from './components/badges/HallOfFame';
 import BadgeUnlockModal from './components/badges/BadgeUnlockModal';
 import ToastContainer from './components/ToastContainer'; // 👈 Add Toast Container
 
+import { auth } from './firebase';
+import { onAuthStateChanged, User } from 'firebase/auth';
+import LoginScreen from './components/auth/LoginScreen';
+
 const MainContent: React.FC = () => {
   const { state } = useLifeOS();
   const { ui, user } = state;
@@ -116,6 +120,19 @@ const MainContent: React.FC = () => {
         {ui.activeModal === 'loot' && <LootModal />} 
         {ui.activeModal === 'quickSubtask' && <QuickSubtaskModal />} 
         {ui.activeModal === 'dataExchange' && <DataExchangeModal />} 
+        {ui.activeModal === 'login' && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm animate-in fade-in">
+                <div className="relative w-full max-w-md">
+                    <button 
+                        onClick={() => state.dispatch.setModal('none')}
+                        className="absolute top-4 right-4 z-50 text-life-muted hover:text-white"
+                    >
+                        ✕
+                    </button>
+                    <LoginScreen onGuestLogin={() => state.dispatch.setModal('none')} />
+                </div>
+            </div>
+        )}
         {ui.activeModal === 'honorBreakdown' && <HonorBreakdownModal />} {/* 👈 NEW */}
         {ui.activeModal === 'questForge' && <QuestForgeModal />} {/* 👈 NEW */}
         {ui.activeModal === 'habitProtocol' && <HabitProtocolModal />} {/* 👈 NEW */}
@@ -140,6 +157,23 @@ const MainContent: React.FC = () => {
 };
 
 const App: React.FC = () => {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      setLoading(false);
+    });
+    return () => unsubscribe();
+  }, []);
+
+  if (loading) {
+    return <div className="h-screen bg-life-black flex items-center justify-center text-life-gold font-mono animate-pulse">INITIALIZING SYSTEM...</div>;
+  }
+
+  // 🟢 BYPASS LOGIN: Always render MainContent
+  // If user is null, they are effectively a "Guest" until they sign in via the Sidebar
   return <MainContent />;
 };
 

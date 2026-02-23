@@ -252,14 +252,14 @@ const ItemDetailsModal: React.FC = () => {
 
     return (
         <div onClick={handleClose} className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm animate-in fade-in duration-200">
-            <div onClick={(e) => e.stopPropagation()} className="bg-life-paper w-full max-w-md rounded-xl border border-life-muted/20 shadow-2xl overflow-hidden flex flex-col max-h-[85vh] animate-in zoom-in-95 duration-300 relative group">
+            <div onClick={(e) => e.stopPropagation()} className="bg-life-paper w-full max-w-md rounded-xl border border-zinc-800 shadow-2xl overflow-hidden flex flex-col max-h-[85vh] animate-in zoom-in-95 duration-300 relative group">
                 
                 {/* HEADER */}
-                <div className="p-5 border-b border-life-muted/10 flex justify-between items-start bg-life-black/40">
+                <div className="p-5 border-b border-zinc-800 flex justify-between items-start bg-life-black/40">
                     <div className="flex-1 min-w-0 mr-4">
                         <div className="flex items-center gap-2 mb-2">
                             <span className="text-[9px] font-black uppercase tracking-[0.2em] text-life-gold bg-life-gold/10 px-2 py-0.5 rounded border border-life-gold/20">{modalData.type.replace('_', ' ')}</span>
-                            {modalData.parentId && <span className="text-[9px] text-life-muted border border-life-muted/20 px-1.5 py-0.5 rounded bg-life-black">Linked</span>}
+                            {modalData.parentId && <span className="text-[9px] text-life-muted border border-zinc-800 px-1.5 py-0.5 rounded bg-life-black">Linked</span>}
                         </div>
                         {isEditing ? (
                             <input type="text" value={editTitle} onChange={(e) => setEditTitle(e.target.value)} className="w-full bg-black border border-life-gold/50 rounded px-2 py-1 text-lg font-bold text-life-text focus:outline-none" autoFocus />
@@ -272,7 +272,7 @@ const ItemDetailsModal: React.FC = () => {
 
                 {/* META BAR (READ ONLY) */}
                 {!isEditing && (
-                    <div className="px-5 py-3 bg-life-black border-b border-life-muted/10 flex flex-wrap gap-2 items-center">
+                    <div className="px-5 py-3 bg-life-black border-b border-zinc-800 flex flex-wrap gap-2 items-center">
                         <div className={`flex items-center gap-1 px-2 py-1 rounded border text-[10px] font-black uppercase ${diffColor} bg-opacity-10`}><Lock size={10} />{resolvedData.difficulty}</div>
                         <div className="flex items-center gap-1 px-2 py-1 rounded border text-[10px] font-black uppercase bg-life-paper" style={{ borderColor: `${statColor}40`, color: statColor }}><StatIcon stat={resolvedData.stat} size={10} />{resolvedData.stat}</div>
                         {linkedSkill && <div className="flex items-center gap-1 px-2 py-1 rounded border border-life-gold/30 text-life-gold bg-life-gold/5 text-[10px] font-bold"><BookOpen size={10} /> {linkedSkill.title}</div>}
@@ -285,7 +285,7 @@ const ItemDetailsModal: React.FC = () => {
                         <div className="space-y-4">
                             {/* 🟢 EDIT: META CONTROLS (Diff, Skill, Stat) */}
                             {resolvedData.isFullControl && (
-                                <div className="bg-life-black/30 p-3 rounded-lg border border-life-muted/10 space-y-3">
+                                <div className="bg-life-black/30 p-3 rounded-lg border border-zinc-800 space-y-3">
                                     
                                     {/* Difficulty */}
                                     <div>
@@ -304,7 +304,7 @@ const ItemDetailsModal: React.FC = () => {
                                                             if (editDifficulty === d) setEditDifficulty(undefined);
                                                             else setEditDifficulty(d);
                                                         }}
-                                                        className={`py-2 rounded text-[9px] font-black uppercase border transition-all ${isSelected ? `${DIFFICULTY_COLORS[d]} ${DIFFICULTY_BG[d]} shadow-sm` : 'border-life-muted/20 text-life-muted hover:bg-life-muted/5'}`}
+                                                        className={`py-2 rounded text-[9px] font-black uppercase border transition-all ${isSelected ? `${DIFFICULTY_COLORS[d]} ${DIFFICULTY_BG[d]} shadow-sm` : 'border-zinc-800 text-life-muted hover:bg-life-muted/5'}`}
                                                     >
                                                         {d}
                                                     </button>
@@ -324,7 +324,7 @@ const ItemDetailsModal: React.FC = () => {
                                                     value={editSkillId} 
                                                     onChange={(e) => setEditSkillId(e.target.value)}
                                                     disabled={resolvedData.isSkillLocked} // 🔒 LOCK IF STEP
-                                                    className={`w-full bg-life-black border border-life-muted/30 rounded p-1.5 pl-2 text-[10px] text-life-text appearance-none outline-none ${resolvedData.isSkillLocked ? 'opacity-50 cursor-not-allowed' : 'focus:border-life-gold'}`}
+                                                    className={`w-full bg-life-black border border-zinc-800 rounded p-1.5 pl-2 text-[10px] text-life-text appearance-none outline-none ${resolvedData.isSkillLocked ? 'opacity-50 cursor-not-allowed' : 'focus:border-life-gold'}`}
                                                 >
                                                     <option value="">None</option>
                                                     {skillState.skills.map(s => <option key={s.id} value={s.id}>{s.title}</option>)}
@@ -348,7 +348,7 @@ const ItemDetailsModal: React.FC = () => {
                                                                 if (editStat === s) setEditStat(undefined);
                                                                 else setEditStat(s);
                                                             }}
-                                                            className={`w-7 h-7 shrink-0 rounded flex items-center justify-center border transition-all ${isSelected ? 'bg-life-muted/20 border-life-muted text-life-text' : 'border-life-muted/10 text-life-muted opacity-50'}`}
+                                                            className={`w-7 h-7 shrink-0 rounded flex items-center justify-center border transition-all ${isSelected ? 'bg-life-muted/20 border-life-muted text-life-text' : 'border-zinc-800 text-life-muted opacity-50'}`}
                                                             style={{ color: isSelected ? STAT_COLORS[s] : undefined }}
                                                         >
                                                             <StatIcon stat={s} size={12} />
@@ -373,7 +373,7 @@ const ItemDetailsModal: React.FC = () => {
                             
                             {/* 🟢 RAID STEPS MANAGEMENT (EDIT MODE) */}
                             {modalData.type === 'raid' && resolvedData.item.steps && (
-                                <div className="mt-4 border-t border-life-muted/10 pt-4">
+                                <div className="mt-4 border-t border-zinc-800 pt-4">
                                     <div className="flex justify-between items-center mb-3">
                                         <h4 className="text-[10px] text-life-muted uppercase font-bold flex items-center gap-1"><Activity size={12} /> Operation Steps</h4>
                                         <button 
@@ -444,7 +444,7 @@ const ItemDetailsModal: React.FC = () => {
                             {/* 🟢 EDIT: DESCRIPTION */}
                             <div className="relative flex flex-col mt-4">
                                 <label className="block text-[9px] text-life-muted uppercase font-bold tracking-widest mb-1">Description / Intel</label>
-                                <textarea value={editDesc} onChange={(e) => setEditDesc(e.target.value)} className="w-full h-24 bg-life-black border border-life-muted/30 rounded-lg p-3 text-sm text-life-text focus:border-life-gold outline-none resize-none font-mono" />
+                                <textarea value={editDesc} onChange={(e) => setEditDesc(e.target.value)} className="w-full h-24 bg-life-black border border-zinc-800 rounded-lg p-3 text-sm text-life-text focus:border-life-gold outline-none resize-none font-mono" />
                             </div>
                         </div>
                     ) : (
@@ -458,11 +458,11 @@ const ItemDetailsModal: React.FC = () => {
                             )}
                             <p className="text-sm text-life-text/90 leading-relaxed font-mono whitespace-pre-wrap">{resolvedData.desc || <span className="text-life-muted italic">No Description</span>}</p>
                             {resolvedData.subtasks && resolvedData.subtasks.length > 0 && (
-                                <div className="mt-4 border-t border-life-muted/10 pt-4">
+                                <div className="mt-4 border-t border-zinc-800 pt-4">
                                     <h4 className="text-[10px] text-life-muted uppercase font-bold mb-2 flex items-center gap-1"><Check size={12} /> Steps</h4>
                                     <div className="space-y-2">{resolvedData.subtasks.map(st => (
-                                        <div key={st.id} className="flex items-center gap-2 p-2 rounded bg-life-black border border-life-muted/20">
-                                            <div className={`w-4 h-4 rounded border flex items-center justify-center ${st.isCompleted ? 'bg-life-gold border-life-gold text-life-black' : 'border-life-muted/50'}`}><Check size={12} strokeWidth={3} /></div>
+                                        <div key={st.id} className="flex items-center gap-2 p-2 rounded bg-life-black border border-zinc-800">
+                                            <div className={`w-4 h-4 rounded border flex items-center justify-center ${st.isCompleted ? 'bg-life-gold border-life-gold text-life-black' : 'border-zinc-800'}`}><Check size={12} strokeWidth={3} /></div>
                                             <span className={`text-xs ${st.isCompleted ? 'text-life-muted line-through' : 'text-life-text'}`}>{st.title}</span>
                                         </div>
                                     ))}</div>
@@ -471,7 +471,7 @@ const ItemDetailsModal: React.FC = () => {
 
                             {/* 🟢 RAID STEPS MANAGEMENT (ONLY FOR RAID PARENT) */}
                             {modalData.type === 'raid' && resolvedData.item.steps && (
-                                <div className="mt-6 border-t border-life-muted/10 pt-4">
+                                <div className="mt-6 border-t border-zinc-800 pt-4">
                                     <div className="flex justify-between items-center mb-3">
                                         <h4 className="text-[10px] text-life-muted uppercase font-bold flex items-center gap-1"><Activity size={12} /> Operation Steps</h4>
                                         <button 
@@ -543,7 +543,7 @@ const ItemDetailsModal: React.FC = () => {
                 </div>
 
                 {/* FOOTER */}
-                <div className="p-4 bg-life-black border-t border-life-muted/20 flex items-center justify-between gap-3">
+                <div className="p-4 bg-life-black border-t border-zinc-800 flex items-center justify-between gap-3">
                     <div className="flex gap-2">
                         <button onClick={handleDelete} className="p-2 rounded-lg text-life-hard hover:bg-life-hard/10"><Trash2 size={16} /></button>
                         {resolvedData.canArchive && <button onClick={handleArchive} className="p-2 rounded-lg text-life-muted hover:bg-life-muted/10"><Archive size={16} /></button>}
@@ -556,7 +556,7 @@ const ItemDetailsModal: React.FC = () => {
                     {isEditing ? (
                         <button onClick={handleSave} className="px-6 py-2 rounded-lg bg-life-gold text-life-black text-xs font-black uppercase hover:bg-yellow-400 flex items-center gap-2"><Save size={14} /> Save</button>
                     ) : (
-                        <button onClick={() => setIsEditing(true)} className="px-6 py-2 rounded-lg border border-life-muted/30 bg-life-paper text-life-text hover:text-life-gold text-xs font-black uppercase flex items-center gap-2"><Edit2 size={14} /> Edit</button>
+                        <button onClick={() => setIsEditing(true)} className="px-6 py-2 rounded-lg border border-zinc-800 bg-life-paper text-life-text hover:text-life-gold text-xs font-black uppercase flex items-center gap-2"><Edit2 size={14} /> Edit</button>
                     )}
                 </div>
             </div>

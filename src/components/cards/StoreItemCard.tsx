@@ -30,18 +30,18 @@ const StoreItemCard: React.FC<StoreItemCardProps> = ({ item, canAfford, onBuy, o
         className={`
         relative flex flex-col p-4 rounded-xl border bg-life-paper transition-all duration-300 group cursor-pointer
         ${canAfford 
-            ? 'border-life-muted/30 hover:border-life-gold/50 shadow-lg hover:shadow-life-gold/5' 
-            : 'border-life-muted/10 opacity-60'}
+            ? 'border-zinc-800 hover:border-life-gold/50 shadow-lg hover:shadow-life-gold/5' 
+            : 'border-zinc-800 opacity-60'}
     `}>
       
       {/* 🟢 HEADER */}
       <div className="flex justify-between items-start mb-3">
-        <div className={`p-3 rounded-lg border bg-life-black transition-colors ${canAfford ? 'border-life-gold/20 text-life-gold' : 'border-life-muted/20 text-life-muted'}`}>
+        <div className={`p-3 rounded-lg border bg-life-black transition-colors ${canAfford ? 'border-life-gold/20 text-life-gold' : 'border-zinc-800 text-life-muted'}`}>
             <ItemIcon icon={item.icon} size={24} />
         </div>
         
         {/* Cost Tag */}
-        <div className={`px-2 py-1 rounded text-xs font-mono font-bold border ${canAfford ? 'bg-life-gold/10 text-life-gold border-life-gold/20' : 'bg-life-muted/10 text-life-muted border-life-muted/20'}`}>
+        <div className={`px-2 py-1 rounded text-xs font-mono font-bold border ${canAfford ? 'bg-life-gold/10 text-life-gold border-life-gold/20' : 'bg-life-muted/10 text-life-muted border-zinc-800'}`}>
             {item.cost} G
         </div>
       </div>

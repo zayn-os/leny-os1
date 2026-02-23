@@ -23,8 +23,8 @@ export const RaidGuide: React.FC<Props> = ({ onClose }) => {
 
             <div className="space-y-4">
                 {/* 1. BASICS */}
-                <div className="grid grid-cols-[1fr_2fr] gap-3 items-start border-b border-white/5 pb-3">
-                    <div className="text-right pr-2 border-r border-white/10">
+                <div className="grid grid-cols-[1fr_2fr] gap-3 items-start border-b border-zinc-800 pb-3">
+                    <div className="text-right pr-2 border-r border-zinc-800">
                         <div className="text-life-gold font-black text-xs">Structure</div>
                         <div className="text-[9px] text-life-muted">Raid Anatomy</div>
                     </div>
@@ -33,10 +33,10 @@ export const RaidGuide: React.FC<Props> = ({ onClose }) => {
                             <span className="text-white font-bold">Raids</span> are multi-step projects. Each step is a tactical objective.
                         </p>
                         <div className="grid grid-cols-2 gap-2 mt-1">
-                            <div className="bg-life-black p-1.5 rounded border border-white/10 text-[9px] text-zinc-500">
+                            <div className="bg-life-black p-1.5 rounded border border-zinc-800 text-[9px] text-zinc-500">
                                 <span className="text-life-easy font-bold">Easy:</span> +100 XP
                             </div>
-                            <div className="bg-life-black p-1.5 rounded border border-white/10 text-[9px] text-zinc-500">
+                            <div className="bg-life-black p-1.5 rounded border border-zinc-800 text-[9px] text-zinc-500">
                                 <span className="text-life-hard font-bold">Hard:</span> +500 XP
                             </div>
                         </div>
@@ -44,8 +44,8 @@ export const RaidGuide: React.FC<Props> = ({ onClose }) => {
                 </div>
 
                 {/* 2. AI UPDATE FEATURE */}
-                <div className="grid grid-cols-[1fr_2fr] gap-3 items-start border-b border-white/5 pb-3">
-                    <div className="text-right pr-2 border-r border-white/10">
+                <div className="grid grid-cols-[1fr_2fr] gap-3 items-start border-b border-zinc-800 pb-3">
+                    <div className="text-right pr-2 border-r border-zinc-800">
                         <div className="text-indigo-400 font-black text-xs">AI Uplink</div>
                         <div className="text-[9px] text-life-muted">Update Steps</div>
                     </div>
@@ -81,7 +81,7 @@ export const RaidGuide: React.FC<Props> = ({ onClose }) => {
 
                 {/* 3. REWARDS */}
                 <div className="grid grid-cols-[1fr_2fr] gap-3 items-center">
-                    <div className="text-right pr-2 border-r border-white/10">
+                    <div className="text-right pr-2 border-r border-zinc-800">
                         <div className="text-purple-400 font-black text-xs">Victory</div>
                         <div className="text-[9px] text-life-muted">Completion</div>
                     </div>

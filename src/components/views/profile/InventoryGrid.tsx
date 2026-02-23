@@ -32,7 +32,7 @@ export const InventoryGrid: React.FC<InventoryGridProps> = ({ items, onSelectIte
                         <button 
                             key={item.id}
                             onClick={() => onSelectItem(item)}
-                            className="aspect-square bg-life-paper rounded-xl border border-life-muted/20 flex flex-col items-center justify-center gap-1 hover:border-life-gold/50 hover:bg-life-muted/5 transition-all relative"
+                            className="aspect-square bg-life-paper rounded-xl border border-zinc-800 flex flex-col items-center justify-center gap-1 hover:border-life-gold/50 hover:bg-life-muted/5 transition-all relative"
                         >
                             {item.count > 1 && (
                                 <span className="absolute top-1 right-1 bg-life-gold text-life-black text-[9px] font-black px-1.5 rounded-full shadow-sm">
@@ -44,7 +44,7 @@ export const InventoryGrid: React.FC<InventoryGridProps> = ({ items, onSelectIte
                     ))}
                 </div>
             ) : (
-                <div className="text-center py-6 border border-dashed border-life-muted/20 rounded-xl">
+                <div className="text-center py-6 border border-dashed border-zinc-800 rounded-xl">
                     <p className="text-[10px] text-life-muted">Inventory Empty</p>
                 </div>
             )}

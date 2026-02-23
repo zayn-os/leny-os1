@@ -115,7 +115,7 @@ const ProfileView: React.FC = () => {
       {/* 🟢 HALL OF FAME SHORTCUT */}
       <button 
         onClick={() => dispatch.setView('hall_of_fame')}
-        className="w-full mb-6 bg-life-black border border-life-muted/20 rounded-xl p-4 flex items-center justify-between hover:border-life-gold/50 hover:bg-life-gold/5 transition-all group shadow-lg"
+        className="w-full mb-6 bg-life-black border border-zinc-800 rounded-xl p-4 flex items-center justify-between hover:border-life-gold/50 hover:bg-life-gold/5 transition-all group shadow-lg"
       >
           <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-life-crimson/10 flex items-center justify-center text-life-crimson border border-life-crimson/20 group-hover:scale-110 transition-transform">
@@ -155,11 +155,11 @@ const ProfileView: React.FC = () => {
           >
               <div 
                 onClick={(e) => e.stopPropagation()} 
-                className="bg-life-paper w-full max-w-xs rounded-xl border border-life-muted/20 p-5 shadow-2xl relative"
+                className="bg-life-paper w-full max-w-xs rounded-xl border border-zinc-800 p-5 shadow-2xl relative"
               >
                   <button onClick={() => setSelectedItem(null)} className="absolute top-3 right-3 text-life-muted hover:text-life-text"><X size={20} /></button>
                   <div className="flex flex-col items-center text-center mb-6">
-                      <div className="w-20 h-20 rounded-full bg-life-black border border-life-muted/30 flex items-center justify-center mb-3 text-life-gold shadow-inner">
+                      <div className="w-20 h-20 rounded-full bg-life-black border border-zinc-800 flex items-center justify-center mb-3 text-life-gold shadow-inner">
                           <ItemIcon icon={selectedItem.icon} size={40} />
                       </div>
                       <h3 className="font-black uppercase tracking-widest text-life-text">{selectedItem.title}</h3>

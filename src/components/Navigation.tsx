@@ -1,14 +1,24 @@
 
-import React, { useState } from 'react';
-import { User, ShoppingBag, CheckSquare, Zap, Calendar, BookOpen, Plus, LayoutList, Target, Scale, Brain } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { User, ShoppingBag, CheckSquare, Zap, Calendar, BookOpen, Plus, LayoutList, Target, Scale, Brain, LogIn } from 'lucide-react';
 import { useLifeOS } from '../contexts/LifeOSContext';
 import { ViewState } from '../types/types';
+import { auth } from '../firebase';
+import { onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
 
 const Navigation: React.FC = () => {
   const { state, dispatch } = useLifeOS();
   const { currentView, habitsViewMode, tasksViewMode } = state.ui; 
   const { user } = state;
   const showCampaign = user.preferences.showCampaignUI;
+
+  // 🟢 AUTH STATE
+  const [currentUser, setCurrentUser] = useState<FirebaseUser | null>(null);
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (u) => setCurrentUser(u));
+    return () => unsubscribe();
+  }, []);
 
   // 🧠 MEMORY STATE
   // Left Button: Profile -> Skills -> Shop
@@ -91,6 +101,10 @@ const Navigation: React.FC = () => {
       }
   };
 
+  const handleLoginClick = () => {
+      dispatch.setModal('login'); // We need to add 'login' to ModalType
+  };
+
   const isActive = (view: ViewState) => currentView === view;
   const isLeftActive = isActive('profile') || isActive('shop') || isActive('skills');
   const isRightActive = isActive('raids') || isActive('campaign');
@@ -101,7 +115,7 @@ const Navigation: React.FC = () => {
   const currentRightIcon = (!showCampaign && rightBtnMode === 'campaign') ? 'raids' : rightBtnMode;
 
   return (
-    <nav className="h-24 pb-6 pt-2 bg-life-black/80 backdrop-blur-xl border-t border-white/5 flex items-center justify-around px-4 z-30 shadow-[0_-10px_40px_rgba(0,0,0,0.5)] relative">
+    <nav className="h-24 pb-6 pt-2 bg-life-black/80 backdrop-blur-xl border-t border-zinc-800 flex items-center justify-around px-4 z-30 shadow-[0_-10px_40px_rgba(0,0,0,0.5)] relative">
       
       {/* 🟢 BUTTON 1: THE CHARACTER (Profile / Skills / Shop) */}
       <button 
@@ -211,6 +225,17 @@ const Navigation: React.FC = () => {
         </span>
         {isRightActive && <div className="absolute -bottom-1 w-1 h-1 bg-life-hard rounded-full" />}
       </button>
+
+      {/* 🔐 LOGIN BUTTON (Only for Guests) */}
+      {!currentUser && (
+          <button 
+            onClick={handleLoginClick}
+            className="absolute top-[-40px] right-4 bg-life-black/80 backdrop-blur border border-life-gold/30 text-life-gold p-2 rounded-full shadow-lg animate-bounce"
+            title="Secure Link"
+          >
+              <LogIn size={16} />
+          </button>
+      )}
 
     </nav>
   );

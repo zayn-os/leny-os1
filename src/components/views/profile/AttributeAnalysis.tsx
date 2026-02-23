@@ -59,7 +59,7 @@ const StatDataRow: React.FC<StatRowProps> = ({ stat, xp, target }) => {
             {/* Top Row: Icon/Name & Numbers */}
             <div className="flex justify-between items-end px-0 mb-1">
                 <div className="flex items-center gap-2">
-                    <div className="p-1.5 rounded-md bg-life-black border border-life-muted/20 flex items-center justify-center shadow-sm group-hover:border-life-muted/40 transition-colors">
+                    <div className="p-1.5 rounded-md bg-life-black border border-zinc-800 flex items-center justify-center shadow-sm group-hover:border-life-muted/40 transition-colors">
                         <Icon size={14} style={{ color }} />
                     </div>
                     <div className="flex flex-col leading-none gap-0.5">
@@ -78,7 +78,7 @@ const StatDataRow: React.FC<StatRowProps> = ({ stat, xp, target }) => {
             </div>
 
             {/* Bottom Row: Large Bar */}
-            <div className="w-full bg-black h-2 rounded-full overflow-hidden border border-life-muted/20 relative shadow-inner">
+            <div className="w-full bg-black h-2 rounded-full overflow-hidden border border-zinc-800 relative shadow-inner">
                 <div 
                     className="h-full rounded-full transition-all duration-700 ease-out relative z-10"
                     style={{ width: `${percentage}%`, backgroundColor: color }}
@@ -106,7 +106,7 @@ export const AttributeAnalysis: React.FC<AttributeAnalysisProps> = ({ user }) =>
     const statsOrder: Stat[] = [Stat.DIS, Stat.STR, Stat.INT, Stat.CRT, Stat.PCE, Stat.EMT, Stat.CAM];
 
     return (
-        <div className="bg-life-black border border-life-muted/20 rounded-xl p-4 mb-4 shadow-lg shadow-black/50 relative overflow-hidden group">
+        <div className="bg-life-black border border-zinc-800 rounded-xl p-4 mb-4 shadow-lg shadow-black/50 relative overflow-hidden group">
             {/* Decorative corner accents */}
             <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-life-muted/30 rounded-tl-lg"></div>
             <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-life-muted/30 rounded-tr-lg"></div>
@@ -124,7 +124,7 @@ export const AttributeAnalysis: React.FC<AttributeAnalysisProps> = ({ user }) =>
                     </p>
                 </div>
                 
-                <div className="flex items-center bg-black border border-life-muted/20 p-1 rounded-lg gap-1">
+                <div className="flex items-center bg-black border border-zinc-800 p-1 rounded-lg gap-1">
                     <button 
                         onClick={() => setViewMode('graph')}
                         className={`flex items-center gap-2 px-3 py-1.5 text-[10px] font-black uppercase tracking-wider rounded-md transition-all ${viewMode === 'graph' ? 'bg-life-gold text-black shadow-sm' : 'text-life-muted hover:text-white hover:bg-white/5'}`}

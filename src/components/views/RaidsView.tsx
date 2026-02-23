@@ -62,14 +62,14 @@ const RaidsView: React.FC = () => {
                 <div className="absolute -right-2 -top-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity z-10">
                     <button
                         onClick={() => raidDispatch.archiveRaid(raid.id)}
-                        className="bg-life-black border border-life-muted/30 text-life-muted hover:text-life-text p-1.5 rounded-full shadow-sm hover:scale-110 transition-transform"
+                        className="bg-life-black border border-zinc-800 text-life-muted hover:text-life-text p-1.5 rounded-full shadow-sm hover:scale-110 transition-transform"
                         title="Archive Operation"
                     >
                         <Archive size={12} />
                     </button>
                     <button
                         onClick={() => raidDispatch.deleteRaid(raid.id)}
-                        className="bg-life-black border border-life-muted/30 text-life-muted hover:text-life-hard p-1.5 rounded-full shadow-sm hover:scale-110 transition-transform"
+                        className="bg-life-black border border-zinc-800 text-life-muted hover:text-life-hard p-1.5 rounded-full shadow-sm hover:scale-110 transition-transform"
                         title="Abort / Delete Operation"
                     >
                         <Trash2 size={12} />
@@ -78,7 +78,7 @@ const RaidsView: React.FC = () => {
             </div>
           ))
         ) : (
-          <div className="py-12 text-center border-2 border-dashed border-life-muted/20 rounded-xl bg-life-paper/30">
+          <div className="py-12 text-center border-2 border-dashed border-zinc-800 rounded-xl bg-life-paper/30">
             <p className="text-life-muted text-sm font-bold">No Active Operations</p>
             <p className="text-[10px] text-life-muted/60 mt-1 uppercase tracking-wider">
                 Initiate a new Raid via Command Line (+).
@@ -92,7 +92,7 @@ const RaidsView: React.FC = () => {
           <div className="mt-8">
               <button 
                 onClick={() => setShowArchived(!showArchived)}
-                className="w-full flex items-center justify-between p-3 rounded-xl border border-life-muted/10 bg-life-black hover:bg-life-muted/5 transition-all group"
+                className="w-full flex items-center justify-between p-3 rounded-xl border border-zinc-800 bg-life-black hover:bg-life-muted/5 transition-all group"
               >
                   <div className="flex items-center gap-3">
                       <div className="p-2 rounded-lg bg-life-muted/10 text-life-muted group-hover:text-life-text transition-colors">
@@ -119,7 +119,7 @@ const RaidsView: React.FC = () => {
                                 onToggleStep={() => {}} // Disabled interactions in archive
                             />
                             {/* Archive Actions (Restore & Delete) */}
-                            <div className="absolute top-2 right-2 flex gap-2 bg-life-black/80 backdrop-blur rounded-lg p-1 border border-life-muted/20">
+                            <div className="absolute top-2 right-2 flex gap-2 bg-life-black/80 backdrop-blur rounded-lg p-1 border border-zinc-800">
                                 <button
                                     onClick={() => raidDispatch.restoreRaid(raid.id)}
                                     className="flex items-center gap-1 px-2 py-1 rounded hover:bg-life-muted/20 text-[9px] font-bold text-life-gold uppercase"
@@ -176,14 +176,14 @@ const RaidsView: React.FC = () => {
                              <div className="absolute -right-2 -top-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity z-10">
                                 <button
                                     onClick={() => raidDispatch.archiveRaid(raid.id)}
-                                    className="bg-life-black border border-life-muted/30 text-life-muted hover:text-life-text p-1.5 rounded-full shadow-sm"
+                                    className="bg-life-black border border-zinc-800 text-life-muted hover:text-life-text p-1.5 rounded-full shadow-sm"
                                     title="Move to Archive"
                                 >
                                     <Archive size={12} />
                                 </button>
                                 <button
                                     onClick={() => raidDispatch.deleteRaid(raid.id)}
-                                    className="bg-life-black border border-life-muted/30 text-life-muted hover:text-life-hard p-1.5 rounded-full shadow-sm"
+                                    className="bg-life-black border border-zinc-800 text-life-muted hover:text-life-hard p-1.5 rounded-full shadow-sm"
                                     title="Delete Log"
                                 >
                                     <Trash2 size={12} />

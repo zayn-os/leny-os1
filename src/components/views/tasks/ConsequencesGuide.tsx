@@ -7,7 +7,7 @@ interface Props {
 
 export const ConsequencesGuide: React.FC<Props> = ({ onClose }) => {
     return (
-        <div className="bg-life-black border border-life-muted/20 rounded-xl p-4 mb-6 animate-in fade-in slide-in-from-top-2">
+        <div className="bg-life-black border border-zinc-800 rounded-xl p-4 mb-6 animate-in fade-in slide-in-from-top-2">
             <div className="flex justify-between items-start mb-4">
                 <div className="flex items-center gap-2">
                     <div className="p-2 bg-red-900/20 rounded-lg text-red-500">
@@ -23,8 +23,8 @@ export const ConsequencesGuide: React.FC<Props> = ({ onClose }) => {
 
             <div className="space-y-4">
                 {/* XP ECONOMY */}
-                <div className="grid grid-cols-[1fr_2fr] gap-3 items-center border-b border-white/5 pb-3">
-                    <div className="text-right pr-2 border-r border-white/10">
+                <div className="grid grid-cols-[1fr_2fr] gap-3 items-center border-b border-zinc-800 pb-3">
+                    <div className="text-right pr-2 border-r border-zinc-800">
                         <div className="text-blue-400 font-black text-xs">XP (Experience)</div>
                         <div className="text-[9px] text-life-muted">Growth Metric</div>
                     </div>
@@ -49,8 +49,8 @@ export const ConsequencesGuide: React.FC<Props> = ({ onClose }) => {
                 </div>
 
                 {/* GOLD ECONOMY */}
-                <div className="grid grid-cols-[1fr_2fr] gap-3 items-center border-b border-white/5 pb-3">
-                    <div className="text-right pr-2 border-r border-white/10">
+                <div className="grid grid-cols-[1fr_2fr] gap-3 items-center border-b border-zinc-800 pb-3">
+                    <div className="text-right pr-2 border-r border-zinc-800">
                         <div className="text-life-gold font-black text-xs">Gold (Currency)</div>
                         <div className="text-[9px] text-life-muted">Reward Power</div>
                     </div>
@@ -74,8 +74,8 @@ export const ConsequencesGuide: React.FC<Props> = ({ onClose }) => {
                 </div>
 
                 {/* STAT ECONOMY */}
-                <div className="grid grid-cols-[1fr_2fr] gap-3 items-center border-b border-white/5 pb-3">
-                    <div className="text-right pr-2 border-r border-white/10">
+                <div className="grid grid-cols-[1fr_2fr] gap-3 items-center border-b border-zinc-800 pb-3">
+                    <div className="text-right pr-2 border-r border-zinc-800">
                         <div className="text-purple-400 font-black text-xs">Attributes</div>
                         <div className="text-[9px] text-life-muted">Core Stats</div>
                     </div>
@@ -94,7 +94,7 @@ export const ConsequencesGuide: React.FC<Props> = ({ onClose }) => {
 
                 {/* HONOR ECONOMY */}
                 <div className="grid grid-cols-[1fr_2fr] gap-3 items-center">
-                    <div className="text-right pr-2 border-r border-white/10">
+                    <div className="text-right pr-2 border-r border-zinc-800">
                         <div className="text-indigo-400 font-black text-xs">Honor</div>
                         <div className="text-[9px] text-life-muted">Integrity Score</div>
                     </div>

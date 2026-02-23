@@ -104,7 +104,7 @@ const HabitCard: React.FC<HabitCardProps> = ({ habit, onProcess, onDelete }) => 
       else if (isToday) {
           if (isCompleted) statusColor = 'bg-life-easy';
           else if (isFailed) statusColor = 'bg-life-hard';
-          else statusColor = 'bg-life-muted/30 border border-life-muted/50';
+          else statusColor = 'bg-life-muted/30 border border-zinc-800';
       }
       return { isoDate, statusColor, isToday };
   });
@@ -156,7 +156,7 @@ const HabitCard: React.FC<HabitCardProps> = ({ habit, onProcess, onDelete }) => 
                     ${isCompleted ? 'border-life-easy text-life-easy' 
                      : isFailed ? 'border-life-hard text-life-hard'
                      : habit.shieldUsed ? 'border-life-diamond text-life-diamond shadow-[0_0_10px_rgba(96,165,250,0.3)]' 
-                     : 'border-life-muted/30 text-life-muted'}`}
+                     : 'border-zinc-800 text-life-muted'}`}
                 >
                     {habit.shieldUsed && isPending ? <Shield size={16} /> : 
                      isFailed ? <X size={16} /> :
@@ -164,7 +164,7 @@ const HabitCard: React.FC<HabitCardProps> = ({ habit, onProcess, onDelete }) => 
                      <StatIcon stat={habit.stat} size={16} />
                     }
                 </div>
-                <div className={`absolute -bottom-2 left-1/2 -translate-x-1/2 px-1 py-px rounded text-[7px] font-black uppercase tracking-tighter border bg-life-black whitespace-nowrap ${levelData.phaseColor}`}>LVL {levelData.level}</div>
+                <div className={`absolute -bottom-1 left-1/2 -translate-x-1/2 px-1 py-px rounded text-[7px] font-black uppercase tracking-tighter border bg-life-black whitespace-nowrap ${levelData.phaseColor}`}>LVL {levelData.level}</div>
             </div>
 
             <div className="flex-1 min-w-0 flex flex-col justify-center">
@@ -172,13 +172,6 @@ const HabitCard: React.FC<HabitCardProps> = ({ habit, onProcess, onDelete }) => 
                     <h3 className={`font-bold text-sm leading-tight truncate ${isCompleted ? 'text-life-easy' : isFailed ? 'text-life-hard' : 'text-life-text'}`}>
                         {habit.title}
                     </h3>
-                    
-                    {/* 🟢 XP REWARD LABEL */}
-                    {isPending && (
-                        <span className="text-[9px] font-mono font-bold text-life-muted bg-life-black px-1.5 py-0.5 rounded border border-life-muted/20">
-                            +{potentialReward.xp} XP
-                        </span>
-                    )}
 
                     {habit.isTimed && (
                         <span className="text-[9px] flex items-center gap-0.5 text-life-muted bg-life-muted/10 px-1.5 py-0.5 rounded">
@@ -191,9 +184,17 @@ const HabitCard: React.FC<HabitCardProps> = ({ habit, onProcess, onDelete }) => 
                     <span className="text-[9px] text-life-muted font-mono flex items-center gap-0.5"><Flame size={8} className={habit.streak > 0 ? 'text-life-gold' : 'text-life-muted'} /> {habit.streak}</span>
                     
                     <div className="flex items-center gap-1">
-                        <span className="text-[8px] font-black px-1.5 py-0.5 rounded border border-life-muted/20 bg-life-black text-life-muted flex items-center gap-1 uppercase tracking-wider" style={{ color: STAT_COLORS[habit.stat], borderColor: `${STAT_COLORS[habit.stat]}40` }}>
+                        <span className="text-[8px] font-black px-1.5 py-0.5 rounded border border-zinc-800 bg-life-black text-life-muted flex items-center gap-1 uppercase tracking-wider" style={{ color: STAT_COLORS[habit.stat], borderColor: `${STAT_COLORS[habit.stat]}40` }}>
                             <StatIcon stat={habit.stat} size={8} /> {habit.stat}
                         </span>
+                        
+                        {/* 🟢 XP REWARD LABEL (Moved Here) */}
+                        {isPending && (
+                            <span className="text-[8px] font-mono font-bold text-life-muted bg-life-black px-1.5 py-0.5 rounded border border-zinc-800">
+                                +{potentialReward.xp} XP
+                            </span>
+                        )}
+
                         {linkedSkill && (
                             <span className="text-[8px] font-black px-1.5 py-0.5 rounded border border-life-gold/30 bg-life-gold/5 text-life-gold flex items-center gap-1 uppercase tracking-wider">
                                 <Brain size={8} /> {linkedSkill.title}
@@ -216,12 +217,12 @@ const HabitCard: React.FC<HabitCardProps> = ({ habit, onProcess, onDelete }) => 
             <div className="flex items-center gap-2">
                 {isPending ? (
                     <>
-                        <button onClick={(e) => { e.stopPropagation(); onProcess(habit.id, 'failed'); }} className="w-8 h-8 rounded-lg border border-life-muted/20 hover:border-life-hard hover:bg-life-hard/10 text-life-muted hover:text-life-hard flex items-center justify-center transition-all active:scale-95 bg-life-black" title="Fail"><X size={16} strokeWidth={3} /></button>
+                        <button onClick={(e) => { e.stopPropagation(); onProcess(habit.id, 'failed'); }} className="w-8 h-8 rounded-lg border border-zinc-800 hover:border-life-hard hover:bg-life-hard/10 text-life-muted hover:text-life-hard flex items-center justify-center transition-all active:scale-95 bg-life-black" title="Fail"><X size={16} strokeWidth={3} /></button>
                         
                         {/* 🟢 COMPLETE BUTTON / COUNTER */}
                         <button 
                             onClick={(e) => { e.stopPropagation(); onProcess(habit.id, 'completed'); }} 
-                            className="w-8 h-8 rounded-lg border border-life-muted/30 hover:border-life-easy hover:bg-life-easy/10 text-life-muted hover:text-life-easy flex items-center justify-center transition-all active:scale-95 shadow-sm bg-life-black relative overflow-hidden" 
+                            className="w-8 h-8 rounded-lg border border-zinc-800 hover:border-life-easy hover:bg-life-easy/10 text-life-muted hover:text-life-easy flex items-center justify-center transition-all active:scale-95 shadow-sm bg-life-black relative overflow-hidden" 
                             title={targetReps > 1 ? `Repetition ${currentReps + 1} of ${targetReps}` : "Complete"}
                         >
                             {targetReps > 1 ? (

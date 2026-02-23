@@ -176,7 +176,7 @@ const TasksView: React.FC = () => {
             <div className="mb-4 flex justify-end">
                 {isAddingCat ? (
                     <form onSubmit={handleCreateCategory} className="flex gap-2 animate-in fade-in">
-                        <input type="text" value={newCatName} onChange={(e) => setNewCatName(e.target.value)} placeholder="Section Title..." autoFocus className="bg-life-black border border-life-muted/30 rounded-lg px-3 py-1 text-xs text-life-text focus:border-life-gold outline-none" />
+                        <input type="text" value={newCatName} onChange={(e) => setNewCatName(e.target.value)} placeholder="Section Title..." autoFocus className="bg-life-black border border-zinc-800 rounded-lg px-3 py-1 text-xs text-life-text focus:border-life-gold outline-none" />
                         <button type="submit" className="text-life-gold hover:bg-life-gold/10 p-1 rounded"><Plus size={16} /></button>
                         <button type="button" onClick={() => setIsAddingCat(false)} className="text-life-muted hover:text-white p-1"><Plus size={16} className="rotate-45" /></button>
                     </form>
@@ -193,7 +193,7 @@ const TasksView: React.FC = () => {
                             <div className="flex items-center justify-between mb-2 group relative">
                                 {editingCatId === cat.id ? (
                                     <div className="flex gap-2 w-full">
-                                        <input type="text" value={editCatName} onChange={(e) => setEditCatName(e.target.value)} className="bg-life-black border border-life-muted/30 rounded px-2 py-0.5 text-xs text-life-text w-full focus:border-life-gold outline-none" autoFocus onBlur={() => handleUpdateCategory(cat.id)} onKeyDown={(e) => e.key === 'Enter' && handleUpdateCategory(cat.id)} />
+                                        <input type="text" value={editCatName} onChange={(e) => setEditCatName(e.target.value)} className="bg-life-black border border-zinc-800 rounded px-2 py-0.5 text-xs text-life-text w-full focus:border-life-gold outline-none" autoFocus onBlur={() => handleUpdateCategory(cat.id)} onKeyDown={(e) => e.key === 'Enter' && handleUpdateCategory(cat.id)} />
                                     </div>
                                 ) : (
                                     <button onClick={() => taskDispatch.toggleCategory(cat.id)} className="flex items-center gap-2 text-life-muted hover:text-life-text transition-colors flex-1 text-left py-1">
@@ -221,27 +221,27 @@ const TasksView: React.FC = () => {
                     </div>
                 )}
 
-                {activeTasks.length === 0 && raidOperations.length === 0 && campaignWeekTasks.length === 0 && <div className="py-8 text-center border-2 border-dashed border-life-muted/20 rounded-xl bg-life-paper/50"><p className="text-life-muted text-sm font-medium">All active missions cleared.</p></div>}
+                {activeTasks.length === 0 && raidOperations.length === 0 && campaignWeekTasks.length === 0 && <div className="py-8 text-center border-2 border-dashed border-zinc-800 rounded-xl bg-life-paper/50"><p className="text-life-muted text-sm font-medium">All active missions cleared.</p></div>}
             </div>
 
             {sleepingTasks.length > 0 && (
                 <div className="mb-6 animate-in slide-in-from-bottom-2">
-                    <button onClick={() => setShowSleepTasks(!showSleepTasks)} className="w-full flex items-center justify-between p-3 rounded-xl border border-life-muted/10 bg-life-black hover:bg-life-muted/5 transition-all group">
+                    <button onClick={() => setShowSleepTasks(!showSleepTasks)} className="w-full flex items-center justify-between p-3 rounded-xl border border-zinc-800 bg-life-black hover:bg-life-muted/5 transition-all group">
                         <div className="flex items-center gap-3"><Moon size={16} className="text-life-muted group-hover:text-life-text transition-colors" /><div className="text-left"><span className="text-xs font-bold text-life-muted group-hover:text-life-text uppercase tracking-widest transition-colors">Future / Sleeping ({sleepingTasks.length})</span></div></div>
                         <div className="text-life-muted/50">{showSleepTasks ? <ChevronUp size={16} /> : <ChevronDown size={16} />}</div>
                     </button>
-                    {showSleepTasks && <div className="mt-2 pl-2 border-l border-life-muted/10 space-y-2 opacity-80">{sleepingTasks.map(task => <div key={task.id} className="scale-95 origin-top-left"><TaskCard task={task} onToggle={taskDispatch.toggleTask} onDelete={confirmDeleteTask} /></div>)}</div>}
+                    {showSleepTasks && <div className="mt-2 pl-2 border-l border-zinc-800 space-y-2 opacity-80">{sleepingTasks.map(task => <div key={task.id} className="scale-95 origin-top-left"><TaskCard task={task} onToggle={taskDispatch.toggleTask} onDelete={confirmDeleteTask} /></div>)}</div>}
                 </div>
             )}
 
             {backlogTasks.length > 0 && (
                 <div className="mb-6">
-                    <button onClick={() => setShowBacklog(!showBacklog)} className="w-full flex items-center justify-between p-2 rounded-lg border border-life-muted/10 bg-life-black hover:bg-life-muted/5 transition-all group">
+                    <button onClick={() => setShowBacklog(!showBacklog)} className="w-full flex items-center justify-between p-2 rounded-lg border border-zinc-800 bg-life-black hover:bg-life-muted/5 transition-all group">
                         <div className="flex items-center gap-2 text-life-muted group-hover:text-life-gold"><Archive size={14} /><span className="text-[10px] font-bold uppercase tracking-widest">Mission Backlog ({backlogTasks.length})</span></div>
                         {showBacklog ? <ChevronUp size={14} className="text-life-muted" /> : <ChevronDown size={14} className="text-life-muted" />}
                     </button>
                     {showBacklog && (
-                        <div className="space-y-2 mt-2 pl-2 border-l border-life-muted/10">
+                        <div className="space-y-2 mt-2 pl-2 border-l border-zinc-800">
                             {backlogTasks.map(task => <div key={task.id} className="opacity-70 grayscale hover:grayscale-0 transition-all"><TaskCard task={task} onToggle={() => taskDispatch.restoreTask(task.id)} onDelete={confirmDeleteTask} /></div>)}
                             <div className="text-center py-1 text-[9px] text-life-muted">Click Checkbox to Restore • Trash to Delete Permanently</div>
                         </div>
@@ -254,7 +254,7 @@ const TasksView: React.FC = () => {
                 <div className="mb-6">
                     <button 
                         onClick={() => setShowCompleted(!showCompleted)} 
-                        className="w-full flex items-center justify-between p-2 rounded-lg border border-life-muted/10 bg-life-black hover:bg-life-muted/5 transition-all group"
+                        className="w-full flex items-center justify-between p-2 rounded-lg border border-zinc-800 bg-life-black hover:bg-life-muted/5 transition-all group"
                     >
                         <div className="flex items-center gap-2 text-life-muted group-hover:text-life-easy">
                             <CheckCircle2 size={14} />
@@ -264,7 +264,7 @@ const TasksView: React.FC = () => {
                     </button>
                     
                     {showCompleted && (
-                        <div className="space-y-1 mt-2 pl-2 border-l border-life-muted/10 opacity-60 hover:opacity-100 transition-opacity animate-in slide-in-from-top-1">
+                        <div className="space-y-1 mt-2 pl-2 border-l border-zinc-800 opacity-60 hover:opacity-100 transition-opacity animate-in slide-in-from-top-1">
                             {completedTasks.map(task => (
                                 <TaskCard key={task.id} task={task} onToggle={taskDispatch.toggleTask} onDelete={confirmDeleteTask} />
                             ))}

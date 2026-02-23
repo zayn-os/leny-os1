@@ -33,14 +33,14 @@ export const SettingsSection: React.FC<SettingsSectionProps> = ({
         <div className="space-y-4">
             
             {/* 👑 NEW: TITLE OVERRIDE */}
-            <div className="bg-life-black border border-life-muted/20 rounded-xl p-4 space-y-4">
+            <div className="bg-life-black border border-zinc-800 rounded-xl p-4 space-y-4">
                 <div className="flex items-center gap-2 mb-2">
                     <Star size={14} className="text-life-muted" />
                     <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-life-muted">Title Override</h3>
                 </div>
 
                 {/* Toggle Switch */}
-                <div className="flex items-center justify-between p-3 bg-life-paper rounded-lg border border-life-muted/10">
+                <div className="flex items-center justify-between p-3 bg-life-paper rounded-lg border border-zinc-800">
                     <label htmlFor="title-override-toggle" className="text-xs font-bold text-life-text">Use Skill as Title</label>
                     <button 
                         id="title-override-toggle"
@@ -56,7 +56,7 @@ export const SettingsSection: React.FC<SettingsSectionProps> = ({
                         <select 
                             value={user.preferences.linkedSkillId || ''}
                             onChange={handleSkillLink}
-                            className="w-full p-3 bg-life-paper border border-life-muted/20 rounded-lg text-xs font-bold text-life-text focus:outline-none focus:ring-2 focus:ring-life-gold/50"
+                            className="w-full p-3 bg-life-paper border border-zinc-800 rounded-lg text-xs font-bold text-life-text focus:outline-none focus:ring-2 focus:ring-life-gold/50"
                         >
                             <option value="" disabled>Select a Skill...</option>
                             {skillState.skills.map(skill => (
@@ -68,7 +68,7 @@ export const SettingsSection: React.FC<SettingsSectionProps> = ({
             </div>
 
             {/* 📥 DATA MANAGEMENT GROUP */}
-            <div className="bg-life-black border border-life-muted/20 rounded-xl p-4 space-y-4">
+            <div className="bg-life-black border border-zinc-800 rounded-xl p-4 space-y-4">
                 <div className="flex items-center gap-2 mb-2">
                     <Database size={14} className="text-life-muted" />
                     <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-life-muted">Data Persistence</h3>
@@ -77,7 +77,7 @@ export const SettingsSection: React.FC<SettingsSectionProps> = ({
                 <div className="grid grid-cols-2 gap-3">
                     <button 
                         onClick={onExport} 
-                        className="flex flex-col items-center justify-center gap-2 p-4 rounded-lg bg-life-paper border border-life-muted/20 hover:border-life-gold/50 transition-all group"
+                        className="flex flex-col items-center justify-center gap-2 p-4 rounded-lg bg-life-paper border border-zinc-800 hover:border-life-gold/50 transition-all group"
                     >
                         <Download size={20} className="text-life-gold group-hover:scale-110 transition-transform" />
                         <span className="text-[9px] font-black uppercase tracking-widest text-life-text">Backup System</span>
@@ -85,7 +85,7 @@ export const SettingsSection: React.FC<SettingsSectionProps> = ({
                     
                     <button 
                         onClick={onImport} 
-                        className="flex flex-col items-center justify-center gap-2 p-4 rounded-lg bg-life-paper border border-life-muted/20 hover:border-life-easy/50 transition-all group"
+                        className="flex flex-col items-center justify-center gap-2 p-4 rounded-lg bg-life-paper border border-zinc-800 hover:border-life-easy/50 transition-all group"
                     >
                         <Upload size={20} className="text-life-easy group-hover:scale-110 transition-transform" />
                         <span className="text-[9px] font-black uppercase tracking-widest text-life-text">Restore Data</span>

@@ -153,7 +153,7 @@ const HabitsView: React.FC = () => {
                             onChange={(e) => setNewCatName(e.target.value)}
                             placeholder="Section Title..."
                             autoFocus
-                            className="bg-life-black border border-life-muted/30 rounded-lg px-3 py-1 text-xs text-life-text focus:border-life-gold outline-none"
+                            className="bg-life-black border border-zinc-800 rounded-lg px-3 py-1 text-xs text-life-text focus:border-life-gold outline-none"
                         />
                         <button type="submit" className="text-life-gold hover:bg-life-gold/10 p-1 rounded">
                             <Plus size={16} />
@@ -189,7 +189,7 @@ const HabitsView: React.FC = () => {
                                             type="text" 
                                             value={editCatName}
                                             onChange={(e) => setEditCatName(e.target.value)}
-                                            className="bg-life-black border border-life-muted/30 rounded px-2 py-0.5 text-xs text-life-text w-full focus:border-life-gold outline-none"
+                                            className="bg-life-black border border-zinc-800 rounded px-2 py-0.5 text-xs text-life-text w-full focus:border-life-gold outline-none"
                                             autoFocus
                                             onBlur={() => handleUpdateCategory(cat.id)}
                                             onKeyDown={(e) => e.key === 'Enter' && handleUpdateCategory(cat.id)}
@@ -276,7 +276,7 @@ const HabitsView: React.FC = () => {
                 )}
 
                 {activeHabits.length === 0 && categories.length === 0 && (
-                    <div className="py-8 text-center border-2 border-dashed border-life-muted/20 rounded-xl bg-life-paper/50">
+                    <div className="py-8 text-center border-2 border-dashed border-zinc-800 rounded-xl bg-life-paper/50">
                         <p className="text-life-muted text-sm font-medium">All protocols executed.</p>
                         <p className="text-[10px] text-life-muted/60 mt-1">Check the Daily Log.</p>
                     </div>
@@ -288,7 +288,7 @@ const HabitsView: React.FC = () => {
                 <div className="animate-in slide-in-from-bottom-2 fade-in mb-4">
                     <button 
                         onClick={() => setShowDailyLog(!showDailyLog)}
-                        className="w-full flex items-center justify-between p-3 rounded-lg border border-life-muted/20 bg-life-paper hover:bg-life-muted/5 transition-all mb-3 group shadow-sm"
+                        className="w-full flex items-center justify-between p-3 rounded-lg border border-zinc-800 bg-life-paper hover:bg-life-muted/5 transition-all mb-3 group shadow-sm"
                     >
                         <div className="flex items-center gap-2">
                             <Archive size={16} className="text-life-gold group-hover:scale-110 transition-transform" />
@@ -354,7 +354,7 @@ const HabitsView: React.FC = () => {
                 <div className="animate-in slide-in-from-bottom-2 fade-in">
                     <button 
                         onClick={() => setShowSleepArchive(!showSleepArchive)}
-                        className="w-full flex items-center justify-between p-3 rounded-lg border border-life-muted/10 bg-life-black hover:bg-life-muted/5 transition-all mb-3 group"
+                        className="w-full flex items-center justify-between p-3 rounded-lg border border-zinc-800 bg-life-black hover:bg-life-muted/5 transition-all mb-3 group"
                     >
                         <div className="flex items-center gap-2">
                             <Moon size={16} className="text-life-muted group-hover:text-life-gold transition-colors" />

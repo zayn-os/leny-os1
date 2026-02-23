@@ -62,7 +62,7 @@ const SkillForm: React.FC<SkillFormProps> = ({ onClose }) => {
                         onChange={(e) => setTitle(e.target.value)}
                         placeholder="e.g. Graphic Design, MMA..."
                         autoFocus
-                        className="w-full bg-life-black border border-life-muted/30 rounded-lg p-3 text-life-text placeholder:text-life-muted/50 focus:outline-none focus:border-life-gold/50 transition-all font-medium"
+                        className="w-full bg-life-black border border-zinc-800 rounded-lg p-3 text-life-text placeholder:text-life-muted/50 focus:outline-none focus:border-life-gold/50 transition-all font-medium"
                     />
                 </div>
                 
@@ -75,7 +75,7 @@ const SkillForm: React.FC<SkillFormProps> = ({ onClose }) => {
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                         placeholder="Define the scope of this ability..."
-                        className="w-full bg-life-black border border-life-muted/30 rounded-lg p-3 text-sm text-life-text placeholder:text-life-muted/50 focus:outline-none focus:border-life-gold/50 transition-all resize-none"
+                        className="w-full bg-life-black border border-zinc-800 rounded-lg p-3 text-sm text-life-text placeholder:text-life-muted/50 focus:outline-none focus:border-life-gold/50 transition-all resize-none"
                     />
                 </div>
             </div>
@@ -98,7 +98,7 @@ const SkillForm: React.FC<SkillFormProps> = ({ onClose }) => {
                                     flex flex-col items-center justify-center p-2 rounded-lg border transition-all aspect-square relative
                                     ${isSelected 
                                         ? 'bg-life-muted/10 border-current shadow-lg scale-105' 
-                                        : 'border-life-muted/20 text-life-muted hover:bg-life-muted/5 opacity-70 hover:opacity-100'}
+                                        : 'border-zinc-800 text-life-muted hover:bg-life-muted/5 opacity-70 hover:opacity-100'}
                                 `}
                                 style={{ color: isSelected ? STAT_COLORS[s] : undefined }}
                             >
@@ -121,7 +121,7 @@ const SkillForm: React.FC<SkillFormProps> = ({ onClose }) => {
                 type="submit"
                 className={`
                     w-full py-4 rounded-xl font-black uppercase tracking-widest text-sm flex items-center justify-center gap-2 transition-all mt-4
-                    ${title && selectedStats.length > 0 ? 'bg-life-gold text-life-black hover:bg-yellow-400 shadow-[0_0_20px_rgba(251,191,36,0.3)]' : 'bg-life-muted/20 text-life-muted cursor-not-allowed'}
+                    ${title && selectedStats.length > 0 ? 'bg-life-gold text-life-black hover:bg-yellow-400 shadow-[0_0_20px_rgba(251,191,36,0.3)]' : 'border-zinc-800 text-life-muted cursor-not-allowed'}
                 `}
                 disabled={!title || selectedStats.length === 0}
             >

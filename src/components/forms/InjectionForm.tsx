@@ -250,13 +250,13 @@ const InjectionForm: React.FC<InjectionFormProps> = ({ onClose }) => {
                         </button>
                         <button 
                             onClick={handleFormat}
-                            className="text-[9px] flex items-center gap-1 text-life-muted hover:text-life-gold bg-life-black px-2 py-1 rounded border border-life-muted/20 hover:border-life-gold/30 transition-all"
+                            className="text-[9px] flex items-center gap-1 text-life-muted hover:text-life-gold bg-life-black px-2 py-1 rounded border border-zinc-800 hover:border-life-gold/30 transition-all"
                         >
                             <AlignLeft size={10} /> Format
                         </button>
                         <button 
                             onClick={handleClear}
-                            className="text-[9px] flex items-center gap-1 text-life-muted hover:text-life-hard bg-life-black px-2 py-1 rounded border border-life-muted/20 hover:border-life-hard/30 transition-all"
+                            className="text-[9px] flex items-center gap-1 text-life-muted hover:text-life-hard bg-life-black px-2 py-1 rounded border border-zinc-800 hover:border-life-hard/30 transition-all"
                         >
                             <RotateCcw size={10} /> Clear
                         </button>
@@ -268,7 +268,7 @@ const InjectionForm: React.FC<InjectionFormProps> = ({ onClose }) => {
                         value={jsonInput}
                         onChange={(e) => setJsonInput(e.target.value)}
                         placeholder={`// PASTE HERE:\n// 1. Full Backup JSON (to Restore)\n// 2. AI Code (to Inject)`}
-                        className="w-full h-full min-h-[180px] bg-[#050505] text-life-easy font-mono text-[10px] p-4 rounded-lg border border-life-muted/30 focus:border-life-gold focus:outline-none resize-none shadow-inner leading-relaxed"
+                        className="w-full h-full min-h-[180px] bg-[#050505] text-life-easy font-mono text-[10px] p-4 rounded-lg border border-zinc-800 focus:border-life-gold focus:outline-none resize-none shadow-inner leading-relaxed"
                         spellCheck={false}
                         maxLength={200000} // Increased limit for full backups
                     />
@@ -276,8 +276,8 @@ const InjectionForm: React.FC<InjectionFormProps> = ({ onClose }) => {
             </div>
 
             {/* Console Log */}
-            <div className={`p-2 rounded border font-mono text-[9px] whitespace-pre-wrap transition-colors duration-300 ${status === 'error' ? 'bg-life-hard/10 border-life-hard text-life-hard' : status === 'success' ? 'bg-life-easy/10 border-life-easy text-life-easy' : (status === 'refining' || status === 'restoring') ? 'bg-life-gold/10 border-life-gold text-life-gold' : 'bg-life-black border-life-muted/20 text-life-muted'}`}>
-                <div className="flex items-center gap-2 mb-1 opacity-50 border-b border-white/10 pb-1">
+            <div className={`p-2 rounded border font-mono text-[9px] whitespace-pre-wrap transition-colors duration-300 ${status === 'error' ? 'bg-life-hard/10 border-life-hard text-life-hard' : status === 'success' ? 'bg-life-easy/10 border-life-easy text-life-easy' : (status === 'refining' || status === 'restoring') ? 'bg-life-gold/10 border-life-gold text-life-gold' : 'bg-life-black border-zinc-800 text-life-muted'}`}>
+                <div className="flex items-center gap-2 mb-1 opacity-50 border-b border-zinc-800 pb-1">
                     <Terminal size={10} />
                     <span>SYSTEM LOG</span>
                 </div>

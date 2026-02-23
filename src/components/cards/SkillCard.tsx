@@ -44,7 +44,7 @@ const SkillCard: React.FC<SkillCardProps> = ({ skill }) => {
             className={`
                 relative bg-life-paper border rounded-xl overflow-hidden mb-3 transition-all duration-200 
                 hover:bg-life-muted/5 hover:scale-[1.01] active:scale-[0.99] cursor-pointer group 
-                ${skill.isRusty ? 'border-orange-900/50' : 'border-life-muted/20'}
+                ${skill.isRusty ? 'border-orange-900/50' : 'border-zinc-800'}
             `}
         >
             
@@ -68,7 +68,7 @@ const SkillCard: React.FC<SkillCardProps> = ({ skill }) => {
                             {skill.relatedStats.map((stat) => (
                                 <div 
                                     key={stat} 
-                                    className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-life-black border border-life-muted/20 text-[9px] font-bold"
+                                    className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-life-black border border-zinc-800 text-[9px] font-bold"
                                     style={{ color: STAT_COLORS[stat], borderColor: `${STAT_COLORS[stat]}30` }}
                                 >
                                     <StatIcon stat={stat} size={10} />
@@ -95,7 +95,7 @@ const SkillCard: React.FC<SkillCardProps> = ({ skill }) => {
                         <span className={rankTextColor}>LVL {skill.level}</span>
                         <span className="text-life-muted">{skill.currentXP} / {skill.targetXP} XP</span>
                     </div>
-                    <div className="h-1.5 w-full bg-life-black rounded-full overflow-hidden border border-life-muted/10">
+                    <div className="h-1.5 w-full bg-life-black rounded-full overflow-hidden border border-zinc-800">
                         <div 
                             className={`h-full transition-all duration-700 ${skill.isRusty ? 'bg-life-muted' : 'bg-current'}`}
                             style={{ 

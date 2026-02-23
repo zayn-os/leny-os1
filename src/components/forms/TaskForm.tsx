@@ -241,7 +241,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ onClose }) => {
                         onChange={(e) => setTitle(e.target.value)}
                         placeholder="e.g. Physics Homework..."
                         autoFocus
-                        className="w-full bg-life-black border border-life-muted/30 rounded-lg p-3 text-life-text placeholder:text-life-muted/50 focus:outline-none focus:border-life-gold/50 font-medium"
+                        className="w-full bg-life-black border border-zinc-800 rounded-lg p-3 text-life-text placeholder:text-life-muted/50 focus:outline-none focus:border-life-gold/50 font-medium"
                     />
                 </div>
                 
@@ -255,7 +255,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ onClose }) => {
                             type="datetime-local" 
                             value={scheduledTime}
                             onChange={(e) => setScheduledTime(e.target.value)}
-                            className="w-full bg-life-black border border-life-muted/30 rounded-lg p-2 text-xs text-life-text focus:outline-none focus:border-life-gold/50"
+                            className="w-full bg-life-black border border-zinc-800 rounded-lg p-2 text-xs text-life-text focus:outline-none focus:border-life-gold/50"
                         />
                     </div>
                     <div>
@@ -266,7 +266,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ onClose }) => {
                             type="date" 
                             value={deadline}
                             onChange={(e) => setDeadline(e.target.value)}
-                            className="w-full bg-life-black border border-life-muted/30 rounded-lg p-2 text-xs text-life-text focus:outline-none focus:border-life-gold/50"
+                            className="w-full bg-life-black border border-zinc-800 rounded-lg p-2 text-xs text-life-text focus:outline-none focus:border-life-gold/50"
                         />
                     </div>
                 </div>
@@ -275,9 +275,9 @@ const TaskForm: React.FC<TaskFormProps> = ({ onClose }) => {
                 {scheduledTime && showCalendarSync && (
                     <div 
                         onClick={() => setSyncCalendar(!syncCalendar)}
-                        className={`flex items-center gap-2 p-2 rounded-lg border cursor-pointer transition-all ${syncCalendar ? 'bg-blue-500/10 border-blue-500/50' : 'bg-life-black border-life-muted/20'}`}
+                        className={`flex items-center gap-2 p-2 rounded-lg border cursor-pointer transition-all ${syncCalendar ? 'bg-blue-500/10 border-blue-500/50' : 'bg-life-black border-zinc-800'}`}
                     >
-                        <div className={`w-4 h-4 rounded border flex items-center justify-center ${syncCalendar ? 'bg-blue-500 border-blue-500 text-white' : 'border-life-muted'}`}>
+                        <div className={`w-4 h-4 rounded border flex items-center justify-center ${syncCalendar ? 'bg-blue-500 border-blue-500 text-white' : 'border-zinc-800'}`}>
                             {syncCalendar && <CalendarPlus size={10} />}
                         </div>
                         <span className={`text-[10px] font-bold uppercase tracking-wider ${syncCalendar ? 'text-blue-400' : 'text-life-muted'}`}>
@@ -308,7 +308,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ onClose }) => {
                     <select 
                         value={-1}
                         onChange={(e) => handleAddReminder(Number(e.target.value))}
-                        className="w-full bg-life-black border border-life-muted/30 rounded-lg p-2 text-xs text-life-muted focus:outline-none focus:border-life-gold/50"
+                        className="w-full bg-life-black border border-zinc-800 rounded-lg p-2 text-xs text-life-muted focus:outline-none focus:border-life-gold/50"
                     >
                         <option value={-1}>+ Add Reminder...</option>
                         <option value={0}>At time of event</option>
@@ -330,7 +330,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ onClose }) => {
                         onChange={(e) => setDescription(e.target.value)}
                         placeholder="e.g. Chapter 1, Exercises 1-5..."
                         rows={2}
-                        className="w-full bg-life-black border border-life-muted/30 rounded-lg p-3 text-sm text-life-text placeholder:text-life-muted/50 focus:outline-none focus:border-life-gold/50 resize-none"
+                        className="w-full bg-life-black border border-zinc-800 rounded-lg p-3 text-sm text-life-text placeholder:text-life-muted/50 focus:outline-none focus:border-life-gold/50 resize-none"
                     />
                 </div>
             </div>
@@ -352,7 +352,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ onClose }) => {
                 
                 <div className="space-y-2">
                     {subtasks.map((st, idx) => (
-                        <div key={idx} className="flex items-center gap-2 bg-life-black px-2 py-1 rounded-lg border border-life-muted/20 focus-within:border-life-gold/50 transition-colors">
+                        <div key={idx} className="flex items-center gap-2 bg-life-black px-2 py-1 rounded-lg border border-zinc-800 focus-within:border-life-gold/50 transition-colors">
                             <span className="text-[10px] text-life-muted font-mono w-4">{idx + 1}.</span>
                             <input 
                                 ref={(el) => { subtaskRefs.current[idx] = el; }}
@@ -370,7 +370,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ onClose }) => {
                         </div>
                     ))}
                     {subtasks.length === 0 && (
-                        <div onClick={handleAddSubtask} className="text-[10px] text-life-muted/40 italic border border-dashed border-life-muted/20 rounded p-2 text-center cursor-pointer hover:bg-life-muted/5 hover:text-life-muted/60">
+                        <div onClick={handleAddSubtask} className="text-[10px] text-life-muted/40 italic border border-dashed border-zinc-800 rounded p-2 text-center cursor-pointer hover:bg-life-muted/5 hover:text-life-muted/60">
                             No sub-objectives. Tap 'Add Step' or press + to start planning.
                         </div>
                     )}
@@ -392,7 +392,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ onClose }) => {
                                 py-3 rounded-lg text-xs font-bold uppercase tracking-wider border transition-all
                                 ${difficulty === diff 
                                     ? `${DIFFICULTY_COLORS[diff]} ${DIFFICULTY_BG[diff]} shadow-[0_0_10px_rgba(0,0,0,0.5)] scale-105` 
-                                    : 'border-life-muted/20 text-life-muted hover:bg-life-muted/5'}
+                                    : 'border-zinc-800 text-life-muted hover:bg-life-muted/5'}
                             `}
                         >
                             {diff}
@@ -406,7 +406,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ onClose }) => {
                 <label className="block text-[10px] text-life-muted uppercase font-bold tracking-widest mb-2">
                     Focus Timer
                 </label>
-                <div className="flex bg-life-black rounded-lg border border-life-muted/30 p-1 mb-2">
+                <div className="flex bg-life-black rounded-lg border border-zinc-800 p-1 mb-2">
                     <button
                         type="button"
                         onClick={() => setIsTimed(false)}
@@ -429,7 +429,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ onClose }) => {
                             type="number" 
                             value={duration}
                             onChange={(e) => setDuration(parseInt(e.target.value) || 0)}
-                            className="w-16 bg-life-black border border-life-muted/30 rounded p-1 text-center text-sm font-bold focus:border-life-gold outline-none"
+                            className="w-16 bg-life-black border border-zinc-800 rounded p-1 text-center text-sm font-bold focus:border-life-gold outline-none"
                         />
                         <span className="text-xs text-life-muted">minutes duration</span>
                     </div>
@@ -448,7 +448,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ onClose }) => {
                         <select 
                             value={selectedCategory}
                             onChange={(e) => setSelectedCategory(e.target.value)}
-                            className="w-full bg-life-black border border-life-muted/30 rounded-lg p-2 pl-9 text-xs text-life-text appearance-none focus:outline-none focus:border-life-gold/50"
+                            className="w-full bg-life-black border border-zinc-800 rounded-lg p-2 pl-9 text-xs text-life-text appearance-none focus:outline-none focus:border-life-gold/50"
                         >
                             <option value="">(Uncategorized)</option>
                             {categories.map(cat => (
@@ -469,7 +469,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ onClose }) => {
                         <select 
                             value={selectedSkillId}
                             onChange={(e) => setSelectedSkillId(e.target.value)}
-                            className="w-full bg-life-black border border-life-muted/30 rounded-lg p-2 pl-9 text-xs text-life-text appearance-none focus:outline-none focus:border-life-gold/50"
+                            className="w-full bg-life-black border border-zinc-800 rounded-lg p-2 pl-9 text-xs text-life-text appearance-none focus:outline-none focus:border-life-gold/50"
                         >
                             <option value="">None</option>
                             {skillState.skills.map(skill => (
@@ -497,7 +497,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ onClose }) => {
                                 flex flex-col items-center justify-center p-2 rounded border transition-all aspect-square
                                 ${stat === s 
                                     ? 'bg-life-muted/10 border-current shadow-sm scale-105' 
-                                    : 'border-life-muted/20 text-life-muted opacity-50 hover:opacity-100'}
+                                    : 'border-zinc-800 text-life-muted opacity-50 hover:opacity-100'}
                             `}
                             style={{ color: stat === s ? STAT_COLORS[s] : undefined }}
                         >

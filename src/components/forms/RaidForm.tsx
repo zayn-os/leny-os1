@@ -185,14 +185,14 @@ const RaidForm: React.FC<RaidFormProps> = ({ onClose }) => {
                         <input 
                             type="text" value={title} onChange={(e) => setTitle(e.target.value)}
                             placeholder="e.g. Master React Native..." autoFocus
-                            className="w-full bg-life-black border border-life-muted/30 rounded-lg p-3 text-life-text placeholder:text-life-muted/50 focus:outline-none focus:border-life-gold/50 transition-all font-medium"
+                            className="w-full bg-life-black border border-zinc-800 rounded-lg p-3 text-life-text placeholder:text-life-muted/50 focus:outline-none focus:border-life-gold/50 transition-all font-medium"
                         />
                     </div>
                     <div>
                         <label className="block text-[10px] text-life-muted uppercase font-bold tracking-widest mb-2">Deadline (Target Date)</label>
                         <div className="relative">
                             <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 text-life-muted" size={16} />
-                            <input type="date" value={deadline} onChange={(e) => setDeadline(e.target.value)} className="w-full bg-life-black border border-life-muted/30 rounded-lg p-3 pl-10 text-life-text focus:outline-none focus:border-life-gold/50 text-sm" />
+                            <input type="date" value={deadline} onChange={(e) => setDeadline(e.target.value)} className="w-full bg-life-black border border-zinc-800 rounded-lg p-3 pl-10 text-life-text focus:outline-none focus:border-life-gold/50 text-sm" />
                         </div>
                     </div>
                 </div>
@@ -202,7 +202,7 @@ const RaidForm: React.FC<RaidFormProps> = ({ onClose }) => {
                         <label className="block text-[10px] text-life-muted uppercase font-bold tracking-widest mb-2">Linked Skill</label>
                         <div className="relative">
                             <BookOpen className="absolute left-3 top-1/2 -translate-y-1/2 text-life-muted" size={16} />
-                            <select value={selectedSkillId} onChange={(e) => setSelectedSkillId(e.target.value)} className="w-full bg-life-black border border-life-muted/30 rounded-lg p-3 pl-10 text-sm text-life-text appearance-none focus:outline-none focus:border-life-gold/50">
+                            <select value={selectedSkillId} onChange={(e) => setSelectedSkillId(e.target.value)} className="w-full bg-life-black border border-zinc-800 rounded-lg p-3 pl-10 text-sm text-life-text appearance-none focus:outline-none focus:border-life-gold/50">
                                 <option value="">No specific skill...</option>
                                 {skillState.skills.map(skill => (<option key={skill.id} value={skill.id}>{skill.title} (Lvl {skill.level})</option>))}
                             </select>
@@ -221,7 +221,7 @@ const RaidForm: React.FC<RaidFormProps> = ({ onClose }) => {
                     
                     <div className="space-y-3">
                         {raidSteps.map((step, idx) => (
-                            <div key={step.id} className="bg-life-black/40 p-3 rounded-lg border border-life-muted/20">
+                            <div key={step.id} className="bg-life-black/40 p-3 rounded-lg border border-zinc-800">
                                 <div className="flex gap-2 items-center mb-2">
                                     <span className="text-[10px] font-mono text-life-muted w-4">{idx + 1}.</span>
                                     <input 
@@ -241,12 +241,12 @@ const RaidForm: React.FC<RaidFormProps> = ({ onClose }) => {
                                             }
                                         }}
                                         placeholder={`Step ${idx + 1} objective...`}
-                                        className="flex-1 bg-transparent border-b border-life-muted/30 px-2 py-1 text-sm text-life-text focus:outline-none focus:border-life-gold/50"
+                                        className="flex-1 bg-transparent border-b border-zinc-800 px-2 py-1 text-sm text-life-text focus:outline-none focus:border-life-gold/50"
                                     />
                                     {raidSteps.length > 1 && <button type="button" onClick={() => handleRemoveStep(idx)} className="text-life-muted hover:text-life-hard p-1"><Trash2 size={14} /></button>}
                                 </div>
                                 <div className="pl-6">
-                                    <button type="button" onClick={() => setEditingStepIndex(idx)} className={`w-full flex items-center gap-3 p-2 rounded-md border text-xs text-left transition-all ${(step.notes || step.subtasks.length > 0 || step.reminders.length > 0) ? 'bg-life-gold/5 border-life-gold/30 text-life-text' : 'bg-transparent border-dashed border-life-muted/30 text-life-muted hover:text-life-gold hover:border-life-gold/50'}`}>
+                                    <button type="button" onClick={() => setEditingStepIndex(idx)} className={`w-full flex items-center gap-3 p-2 rounded-md border text-xs text-left transition-all ${(step.notes || step.subtasks.length > 0 || step.reminders.length > 0) ? 'bg-life-gold/5 border-life-gold/30 text-life-text' : 'bg-transparent border-dashed border-zinc-800 text-life-muted hover:text-life-gold hover:border-life-gold/50'}`}>
                                         <FileText size={14} className={step.notes ? 'text-life-gold' : 'opacity-50'} />
                                         <div className="flex-1 truncate">{step.notes ? step.notes : <span className="opacity-50">+ Add Intel, Subtasks, Alerts</span>}</div>
                                         {(step.subtasks.length > 0 || step.reminders.length > 0) && (
@@ -266,7 +266,7 @@ const RaidForm: React.FC<RaidFormProps> = ({ onClose }) => {
                     <label className="block text-[10px] text-life-muted uppercase font-bold tracking-widest mb-2">Threat Level</label>
                     <div className="grid grid-cols-3 gap-2">
                         {Object.values(Difficulty).map((diff) => (
-                            <button key={diff} type="button" onClick={() => setDifficulty(diff)} className={`py-2 rounded-lg text-xs font-bold uppercase tracking-wider border transition-all ${difficulty === diff ? `${DIFFICULTY_COLORS[diff]} ${DIFFICULTY_BG[diff]} shadow-[0_0_10px_rgba(0,0,0,0.5)] scale-105` : 'border-life-muted/20 text-life-muted hover:bg-life-muted/5'}`}>{diff}</button>
+                            <button key={diff} type="button" onClick={() => setDifficulty(diff)} className={`py-2 rounded-lg text-xs font-bold uppercase tracking-wider border transition-all ${difficulty === diff ? `${DIFFICULTY_COLORS[diff]} ${DIFFICULTY_BG[diff]} shadow-[0_0_10px_rgba(0,0,0,0.5)] scale-105` : 'border-zinc-800 text-life-muted hover:bg-life-muted/5'}`}>{diff}</button>
                         ))}
                     </div>
                 </div>
@@ -277,7 +277,7 @@ const RaidForm: React.FC<RaidFormProps> = ({ onClose }) => {
                         {Object.values(Stat).map((s) => {
                             const isSelected = selectedStats.includes(s);
                             return (
-                                <button key={s} type="button" onClick={() => toggleStat(s)} className={`flex flex-col items-center justify-center p-2 rounded-lg border transition-all aspect-square relative ${isSelected ? 'bg-life-muted/10 border-current shadow-lg scale-110' : 'border-life-muted/20 text-life-muted hover:bg-life-muted/5 opacity-70 hover:opacity-100'}`} style={{ color: isSelected ? STAT_COLORS[s] : undefined }}>
+                                <button key={s} type="button" onClick={() => toggleStat(s)} className={`flex flex-col items-center justify-center p-2 rounded-lg border transition-all aspect-square relative ${isSelected ? 'bg-life-muted/10 border-current shadow-lg scale-110' : 'border-zinc-800 text-life-muted hover:bg-life-muted/5 opacity-70 hover:opacity-100'}`} style={{ color: isSelected ? STAT_COLORS[s] : undefined }}>
                                     <StatIcon type={s} /><span className="text-[9px] font-bold mt-1">{s}</span>{isSelected && <div className="absolute top-1 right-1 w-2 h-2 rounded-full bg-current shadow-[0_0_5px_currentColor]" />}
                                 </button>
                             );
@@ -285,7 +285,7 @@ const RaidForm: React.FC<RaidFormProps> = ({ onClose }) => {
                     </div>
                 </div>
 
-                <button type="submit" className={`w-full py-4 rounded-xl font-black uppercase tracking-widest text-sm flex items-center justify-center gap-2 transition-all mt-4 ${title && selectedStats.length > 0 ? 'bg-life-gold text-life-black hover:bg-yellow-400 shadow-[0_0_20px_rgba(251,191,36,0.3)]' : 'bg-life-muted/20 text-life-muted cursor-not-allowed'}`} disabled={!title || selectedStats.length === 0}>
+                <button type="submit" className={`w-full py-4 rounded-xl font-black uppercase tracking-widest text-sm flex items-center justify-center gap-2 transition-all mt-4 ${title && selectedStats.length > 0 ? 'bg-life-gold text-life-black hover:bg-yellow-400 shadow-[0_0_20px_rgba(251,191,36,0.3)]' : 'border-zinc-800 text-life-muted cursor-not-allowed'}`} disabled={!title || selectedStats.length === 0}>
                     Launch Operation <ChevronRight size={16} />
                 </button>
             </form>

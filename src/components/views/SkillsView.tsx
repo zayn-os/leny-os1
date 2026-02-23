@@ -62,7 +62,7 @@ const SkillsView: React.FC = () => {
                 </div>
                 <button 
                     onClick={handleExportSkills}
-                    className="p-3 rounded-xl bg-life-paper/50 border border-life-muted/20 text-life-gold hover:bg-life-gold/10 hover:border-life-gold/50 transition-all group active:scale-95"
+                    className="p-3 rounded-xl bg-life-paper/50 border border-zinc-800 text-life-gold hover:bg-life-gold/10 hover:border-life-gold/50 transition-all group active:scale-95"
                     title="Export Skill Codex"
                 >
                     <BookOpen size={20} className="group-hover:scale-110 transition-transform" />
@@ -73,7 +73,7 @@ const SkillsView: React.FC = () => {
             <div className="mb-6">
                 <button 
                     onClick={() => setIsAdding(true)}
-                    className="w-full py-3 rounded-xl border border-dashed border-life-muted/30 bg-life-paper/50 text-life-muted hover:text-life-gold hover:border-life-gold/50 hover:bg-life-gold/5 transition-all flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-widest group"
+                    className="w-full py-3 rounded-xl border border-dashed border-zinc-800 bg-life-paper/50 text-life-muted hover:text-life-gold hover:border-life-gold/50 hover:bg-life-gold/5 transition-all flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-widest group"
                 >
                     <Plus size={16} className="group-hover:scale-110 transition-transform" />
                     Acquire New Skill
@@ -87,7 +87,7 @@ const SkillsView: React.FC = () => {
                         <SkillCard key={skill.id} skill={skill} />
                     ))
                 ) : (
-                    <div className="py-12 text-center border-2 border-dashed border-life-muted/20 rounded-xl bg-life-paper/30">
+                    <div className="py-12 text-center border-2 border-dashed border-zinc-800 rounded-xl bg-life-paper/30">
                         <Zap size={32} className="mx-auto text-life-muted mb-3 opacity-50" />
                         <p className="text-life-muted text-sm font-bold">No Skills Learned</p>
                         <p className="text-[10px] text-life-muted/60 mt-1 uppercase tracking-wider">
@@ -105,9 +105,9 @@ const SkillsView: React.FC = () => {
                 >
                     <div 
                         onClick={(e) => e.stopPropagation()} 
-                        className="bg-life-paper w-full max-w-lg rounded-2xl border border-life-muted/20 shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95 slide-in-from-bottom-4"
+                        className="bg-life-paper w-full max-w-lg rounded-2xl border border-zinc-800 shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-in zoom-in-95 slide-in-from-bottom-4"
                     >
-                        <div className="flex items-center justify-between p-4 border-b border-life-muted/20 bg-life-black/50">
+                        <div className="flex items-center justify-between p-4 border-b border-zinc-800 bg-life-black/50">
                             <h3 className="text-sm font-black tracking-tight text-life-text flex items-center gap-2 uppercase">
                                 <BookOpen size={16} className="text-life-gold" /> Acquire Skill
                             </h3>

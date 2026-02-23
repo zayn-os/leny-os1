@@ -77,7 +77,7 @@ const HabitDetails: React.FC = () => {
                             <Calendar size={14} className="text-life-gold" />
                             <span>Weekly Schedule</span>
                         </div>
-                        <div className="flex justify-between gap-1 bg-life-black p-1.5 rounded-lg border border-life-muted/20">
+                        <div className="flex justify-between gap-1 bg-life-black p-1.5 rounded-lg border border-zinc-800">
                             {WEEKDAYS.map((day, idx) => {
                                 const isActive = habit.specificDays?.includes(idx);
                                 return (
@@ -121,11 +121,11 @@ const HabitDetails: React.FC = () => {
         >
             <div 
                 onClick={(e) => e.stopPropagation()}
-                className="bg-life-paper w-full max-w-md rounded-2xl border border-life-muted/20 shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-in slide-in-from-bottom-8 duration-500"
+                className="bg-life-paper w-full max-w-md rounded-2xl border border-zinc-800 shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-in slide-in-from-bottom-8 duration-500"
             >
                 
                 {/* 🟢 HEADER */}
-                <div className="relative p-6 border-b border-life-muted/20 overflow-hidden bg-life-black">
+                <div className="relative p-6 border-b border-zinc-800 overflow-hidden bg-life-black">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-current opacity-5 blur-[80px] rounded-full translate-x-1/2 -translate-y-1/2 pointer-events-none" style={{ color: statColor }} />
                     
                     <button 
@@ -156,7 +156,7 @@ const HabitDetails: React.FC = () => {
                 <div className="overflow-y-auto p-6 space-y-6">
                     
                     {/* 🕰️ CONFIGURATION & SCHEDULE CARD */}
-                    <div className="bg-life-black/40 border border-life-muted/10 rounded-xl p-4">
+                    <div className="bg-life-black/40 border border-zinc-800 rounded-xl p-4">
                         <h4 className="text-[10px] text-life-muted uppercase font-bold tracking-widest mb-3 flex items-center gap-2">
                             <Clock size={12} /> Execution Parameters
                         </h4>
@@ -168,7 +168,7 @@ const HabitDetails: React.FC = () => {
                             </div>
 
                             {/* Time & Duration */}
-                            <div className="flex items-center gap-4 pt-3 border-t border-life-muted/10">
+                            <div className="flex items-center gap-4 pt-3 border-t border-zinc-800">
                                 {habit.scheduledTime ? (
                                     <div className="flex items-center gap-2 bg-life-gold/10 px-3 py-1.5 rounded border border-life-gold/20 text-xs font-mono font-bold text-life-gold">
                                         <Bell size={12} />
@@ -217,14 +217,14 @@ const HabitDetails: React.FC = () => {
                                                         ? 'bg-life-gold border-life-gold text-life-black shadow-[0_0_10px_rgba(251,191,36,0.3)]' 
                                                         : isNext
                                                             ? 'bg-life-black border-life-gold text-life-gold animate-pulse scale-110 shadow-[0_0_15px_rgba(251,191,36,0.2)]'
-                                                            : 'bg-life-black border-life-muted/20 text-life-muted/30'}
+                                                            : 'bg-life-black border-zinc-800 text-life-muted/30'}
                                                 `}
                                             >
                                                 {isPassed ? <CheckCircle size={14} /> : isNext ? <Crosshair size={14} /> : <Lock size={12} />}
                                                 
                                                 {/* Safety Net Indicator */}
                                                 {isSafetyNet && (
-                                                    <div className="absolute -bottom-2 -right-2 bg-life-black border border-life-muted/50 rounded-full p-0.5" title="Safety Net">
+                                                    <div className="absolute -bottom-2 -right-2 bg-life-black border border-zinc-800 rounded-full p-0.5" title="Safety Net">
                                                         <Shield size={10} className="text-life-text" />
                                                     </div>
                                                 )}
@@ -239,7 +239,7 @@ const HabitDetails: React.FC = () => {
                         </div>
                         
                         {/* ⚠️ FALL SIMULATOR */}
-                        <div className="bg-life-black rounded-lg p-3 border border-life-muted/20 flex items-start gap-3 relative overflow-hidden group">
+                        <div className="bg-life-black rounded-lg p-3 border border-zinc-800 flex items-start gap-3 relative overflow-hidden group">
                              {/* Warning Strip */}
                              <div className="absolute left-0 top-0 bottom-0 w-1 bg-life-hard/50" />
                              
@@ -278,7 +278,7 @@ const HabitDetails: React.FC = () => {
                                         ${day.status === 'done' ? 'bg-life-easy text-life-black' :
                                           day.status === 'failed' ? 'bg-life-hard/20 text-life-hard border border-life-hard/30' :
                                           day.isToday ? 'bg-life-gold/20 text-life-gold border border-life-gold/30 animate-pulse' :
-                                          'bg-life-black border border-life-muted/10 text-life-muted/20'}
+                                          'bg-life-black border border-zinc-800 text-life-muted/20'}
                                     `}
                                     title={day.date.toLocaleDateString()}
                                 >

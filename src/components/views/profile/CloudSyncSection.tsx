@@ -27,7 +27,7 @@ export const CloudSyncSection: React.FC = () => {
     };
 
     return (
-        <div className="bg-life-black border border-life-muted/30 rounded-lg p-4 mb-6 relative overflow-hidden group">
+        <div className="bg-life-black border border-zinc-800 rounded-lg p-4 mb-6 relative overflow-hidden group">
             <div className="absolute inset-0 bg-gradient-to-r from-blue-900/10 to-transparent pointer-events-none" />
             
             <div className="flex items-center gap-3 mb-4 relative z-10">
@@ -45,7 +45,7 @@ export const CloudSyncSection: React.FC = () => {
                 <button 
                     onClick={handleManualBackup}
                     disabled={isExporting}
-                    className="w-full py-3 rounded-lg bg-life-black border border-life-muted/20 hover:border-life-gold/50 hover:bg-life-gold/5 text-life-muted hover:text-life-gold transition-all flex items-center justify-center gap-2"
+                    className="w-full py-3 rounded-lg bg-life-black border border-zinc-800 hover:border-life-gold/50 hover:bg-life-gold/5 text-life-muted hover:text-life-gold transition-all flex items-center justify-center gap-2"
                 >
                     {isExporting ? <Save size={14} className="animate-bounce" /> : <Download size={14} />}
                     <span className="text-[10px] font-bold uppercase tracking-widest">

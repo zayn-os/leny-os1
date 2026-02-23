@@ -282,7 +282,7 @@ const FocusMode: React.FC = () => {
             </div>
 
             <div className="flex-1 flex flex-col items-center justify-center relative z-10 p-6 text-center">
-                <div className="mb-4 text-[9px] font-black uppercase tracking-[0.2em] bg-white/5 px-3 py-1 rounded-full border border-white/10 text-life-gold">
+                <div className="mb-4 text-[9px] font-black uppercase tracking-[0.2em] bg-white/5 px-3 py-1 rounded-full border border-zinc-800 text-life-gold">
                     {isHabit ? 'PROTOCOL' : 'MISSION'} TARGET
                 </div>
                 <h2 className="text-2xl md:text-4xl font-black tracking-tight mb-8 max-w-2xl leading-tight">
@@ -296,7 +296,7 @@ const FocusMode: React.FC = () => {
                     </svg>
                     <div className="absolute inset-0 flex flex-col items-center justify-center">
                         <div className="text-6xl md:text-8xl font-mono font-bold tracking-tighter tabular-nums">{formatTime(timeLeft)}</div>
-                        <button onClick={() => setIsPaused(!isPaused)} className="mt-4 px-6 py-2 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-xs font-bold uppercase tracking-widest flex items-center gap-2 transition-all">
+                        <button onClick={() => setIsPaused(!isPaused)} className="mt-4 px-6 py-2 rounded-full bg-white/5 hover:bg-white/10 border border-zinc-800 text-xs font-bold uppercase tracking-widest flex items-center gap-2 transition-all">
                             {isPaused ? <Play size={12} fill="currentColor" /> : <Pause size={12} fill="currentColor" />} {isPaused ? "Resume" : "Pause"}
                         </button>
                     </div>
@@ -325,7 +325,7 @@ const FocusMode: React.FC = () => {
                         )}
                         <button 
                             onClick={() => setShowNoiseMenu(!showNoiseMenu)}
-                            className={`p-3 rounded-xl border flex flex-col items-center gap-1 transition-all w-20 shrink-0 ${noiseType !== 'none' ? 'bg-life-gold/20 border-life-gold text-life-gold' : 'bg-white/5 border-white/10 text-life-muted hover:text-white'}`}
+                            className={`p-3 rounded-xl border flex flex-col items-center gap-1 transition-all w-20 shrink-0 ${noiseType !== 'none' ? 'bg-life-gold/20 border-life-gold text-life-gold' : 'bg-white/5 border-zinc-800 text-life-muted hover:text-white'}`}
                         >
                             {getNoiseIcon()}
                             <div className="flex items-center gap-1">
@@ -335,13 +335,13 @@ const FocusMode: React.FC = () => {
                         </button>
                     </div>
 
-                    <button onClick={() => setActivePanel(activePanel === 'notes' ? 'none' : 'notes')} className={`p-3 rounded-xl border flex flex-col items-center gap-1 transition-all w-20 shrink-0 ${activePanel === 'notes' ? 'bg-life-easy/20 border-life-easy text-life-easy' : 'bg-white/5 border-white/10 text-life-muted hover:text-white'}`}>
+                    <button onClick={() => setActivePanel(activePanel === 'notes' ? 'none' : 'notes')} className={`p-3 rounded-xl border flex flex-col items-center gap-1 transition-all w-20 shrink-0 ${activePanel === 'notes' ? 'bg-life-easy/20 border-life-easy text-life-easy' : 'bg-white/5 border-zinc-800 text-life-muted hover:text-white'}`}>
                         <StickyNote size={18} />
                         <span className="text-[8px] font-bold uppercase">Notes</span>
                     </button>
 
                     {hasSubtasks && (
-                        <button onClick={() => setActivePanel(activePanel === 'subtasks' ? 'none' : 'subtasks')} className={`p-3 rounded-xl border flex flex-col items-center gap-1 transition-all w-20 shrink-0 ${activePanel === 'subtasks' ? 'bg-life-gold/20 border-life-gold text-life-gold' : 'bg-white/5 border-white/10 text-life-muted hover:text-white'}`}>
+                        <button onClick={() => setActivePanel(activePanel === 'subtasks' ? 'none' : 'subtasks')} className={`p-3 rounded-xl border flex flex-col items-center gap-1 transition-all w-20 shrink-0 ${activePanel === 'subtasks' ? 'bg-life-gold/20 border-life-gold text-life-gold' : 'bg-white/5 border-zinc-800 text-life-muted hover:text-white'}`}>
                             <ListTodo size={18} />
                             <div className="flex flex-col items-center leading-none">
                                 <span className="text-[8px] font-bold uppercase">Steps</span>
@@ -356,22 +356,22 @@ const FocusMode: React.FC = () => {
                     </button>
                 </div>
 
-                <div className={`absolute bottom-0 left-0 right-0 bg-[#111] border-t border-white/10 p-6 rounded-t-3xl transition-transform duration-300 ease-out z-20 shadow-[0_-10px_40px_rgba(0,0,0,0.5)] h-[40vh] flex flex-col ${activePanel === 'notes' ? 'translate-y-0' : 'translate-y-full'}`}>
+                <div className={`absolute bottom-0 left-0 right-0 bg-[#111] border-t border-zinc-800 p-6 rounded-t-3xl transition-transform duration-300 ease-out z-20 shadow-[0_-10px_40px_rgba(0,0,0,0.5)] h-[40vh] flex flex-col ${activePanel === 'notes' ? 'translate-y-0' : 'translate-y-full'}`}>
                     <div className="flex justify-between items-center mb-4 shrink-0">
                         <h3 className="text-xs font-bold uppercase text-life-muted tracking-widest flex items-center gap-2"><StickyNote size={14} /> Distraction Pad</h3>
                         <button onClick={() => setActivePanel('none')} className="text-life-muted hover:text-white"><X size={16} /></button>
                     </div>
-                    <textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Dump thoughts here..." className="w-full h-full bg-black/50 rounded-xl border border-white/10 p-4 text-sm text-life-text focus:outline-none focus:border-life-gold resize-none font-mono leading-relaxed" />
+                    <textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Dump thoughts here..." className="w-full h-full bg-black/50 rounded-xl border border-zinc-800 p-4 text-sm text-life-text focus:outline-none focus:border-life-gold resize-none font-mono leading-relaxed" />
                 </div>
 
-                <div className={`absolute bottom-0 left-0 right-0 bg-[#111] border-t border-white/10 p-6 rounded-t-3xl transition-transform duration-300 ease-out z-20 shadow-[0_-10px_40px_rgba(0,0,0,0.5)] h-[50vh] flex flex-col text-left ${activePanel === 'subtasks' ? 'translate-y-0' : 'translate-y-full'}`}>
+                <div className={`absolute bottom-0 left-0 right-0 bg-[#111] border-t border-zinc-800 p-6 rounded-t-3xl transition-transform duration-300 ease-out z-20 shadow-[0_-10px_40px_rgba(0,0,0,0.5)] h-[50vh] flex flex-col text-left ${activePanel === 'subtasks' ? 'translate-y-0' : 'translate-y-full'}`}>
                     <div className="flex justify-between items-center mb-4 shrink-0">
                         <h3 className="text-xs font-bold uppercase text-life-gold tracking-widest flex items-center gap-2"><ListTodo size={14} /> Tactical Objectives</h3>
                         <button onClick={() => setActivePanel('none')} className="text-life-muted hover:text-white"><X size={16} /></button>
                     </div>
                     <div className="flex-1 overflow-y-auto space-y-2 pr-2">
                         {activeItem.subtasks?.map(st => (
-                            <div key={st.id} onClick={() => handleToggleSubtask(st.id)} className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all ${st.isCompleted ? 'bg-life-gold/10 border-life-gold/30 opacity-60' : 'bg-white/5 border-white/10 hover:bg-white/10'}`}>
+                            <div key={st.id} onClick={() => handleToggleSubtask(st.id)} className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all ${st.isCompleted ? 'bg-life-gold/10 border-life-gold/30 opacity-60' : 'bg-white/5 border-zinc-800 hover:bg-white/10'}`}>
                                 <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors shrink-0 ${st.isCompleted ? 'bg-life-gold border-life-gold text-black' : 'border-life-muted text-transparent'}`}><Check size={12} strokeWidth={4} /></div>
                                 <span className={`text-sm ${st.isCompleted ? 'line-through text-life-gold' : 'text-life-text'}`}>{st.title}</span>
                             </div>

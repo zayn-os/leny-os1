@@ -426,9 +426,9 @@ const DeveloperConsole: React.FC = () => {
                                         className={`p-3 rounded-xl border flex flex-col gap-2 transition-all text-left relative overflow-hidden ${isActive ? 'border-life-gold bg-life-gold/10' : 'border-life-muted/20 bg-life-black hover:border-life-gold/30'}`}
                                     >
                                         <div className="flex gap-1">
-                                            <div className="w-3 h-3 rounded-full border border-white/10" style={{ backgroundColor: theme.colors['--color-life-black'] }} />
-                                            <div className="w-3 h-3 rounded-full border border-white/10" style={{ backgroundColor: theme.colors['--color-life-paper'] }} />
-                                            <div className="w-3 h-3 rounded-full border border-white/10" style={{ backgroundColor: theme.colors['--color-life-gold'] }} />
+                                            <div className="w-3 h-3 rounded-full border border-zinc-800" style={{ backgroundColor: theme.colors['--color-life-black'] }} />
+                                            <div className="w-3 h-3 rounded-full border border-zinc-800" style={{ backgroundColor: theme.colors['--color-life-paper'] }} />
+                                            <div className="w-3 h-3 rounded-full border border-zinc-800" style={{ backgroundColor: theme.colors['--color-life-gold'] }} />
                                         </div>
                                         <span className={`text-[9px] font-black uppercase tracking-widest ${isActive ? 'text-life-gold' : 'text-life-muted'}`}>{theme.name}</span>
                                         {isActive && <div className="absolute top-1 right-1"><Check size={10} className="text-life-gold" /></div>}

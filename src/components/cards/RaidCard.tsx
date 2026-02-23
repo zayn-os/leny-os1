@@ -101,7 +101,7 @@ const RaidCard: React.FC<RaidCardProps> = ({ raid, onToggleStep }) => {
   };
 
   return (
-    <div className={`mb-4 bg-life-paper border rounded-xl overflow-hidden shadow-lg relative transition-all ${isUnderLeveled ? 'border-orange-500/30' : 'border-life-muted/20'}`}>
+    <div className={`mb-4 bg-life-paper border rounded-xl overflow-hidden shadow-lg relative transition-all ${isUnderLeveled ? 'border-orange-500/30' : 'border-zinc-800'}`}>
       
       {/* 🟢 RAID HEADER */}
       <div 
@@ -146,7 +146,7 @@ const RaidCard: React.FC<RaidCardProps> = ({ raid, onToggleStep }) => {
                             </span>
                         )}
 
-                        <span className="text-[8px] font-black px-1.5 py-0.5 rounded border border-life-muted/20 bg-life-black text-life-muted flex items-center gap-1 uppercase tracking-wider" style={{ color: statColor, borderColor: `${statColor}40` }}>
+                        <span className="text-[8px] font-black px-1.5 py-0.5 rounded border border-zinc-800 bg-life-black text-life-muted flex items-center gap-1 uppercase tracking-wider" style={{ color: statColor, borderColor: `${statColor}40` }}>
                             <StatIcon stat={primaryStat} size={8} /> {primaryStat}
                         </span>
                     </div>
@@ -267,7 +267,7 @@ const RaidCard: React.FC<RaidCardProps> = ({ raid, onToggleStep }) => {
                                                 ${step.isCompleted 
                                                     ? 'bg-life-easy border-life-easy text-life-black' 
                                                     : step.isLocked 
-                                                        ? 'border-life-muted/20 bg-life-muted/5 cursor-not-allowed'
+                                                        ? 'border-zinc-800 bg-life-muted/5 cursor-not-allowed'
                                                         : 'border-life-muted text-transparent hover:border-life-gold'}
                                             `}
                                         >
@@ -292,7 +292,7 @@ const RaidCard: React.FC<RaidCardProps> = ({ raid, onToggleStep }) => {
                                             )}
                                             
                                             {isStatOverride && (
-                                                <span className="text-[7px] font-black px-1 rounded border border-life-muted/20 bg-life-black flex items-center gap-0.5 uppercase tracking-tighter" style={{ color: STAT_COLORS[step.stat!], borderColor: `${STAT_COLORS[step.stat!]}40` }}>
+                                                <span className="text-[7px] font-black px-1 rounded border border-zinc-800 bg-life-black flex items-center gap-0.5 uppercase tracking-tighter" style={{ color: STAT_COLORS[step.stat!], borderColor: `${STAT_COLORS[step.stat!]}40` }}>
                                                     <StatIcon stat={step.stat!} size={6} /> {step.stat}
                                                 </span>
                                             )}

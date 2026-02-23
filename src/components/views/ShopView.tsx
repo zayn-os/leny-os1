@@ -181,13 +181,13 @@ const ShopView: React.FC = () => {
 
           {/* Add Form */}
           {isAdding && (
-              <form onSubmit={handleAddItem} className="mb-4 bg-life-black border border-life-muted/20 p-3 rounded-lg flex gap-2 animate-in fade-in">
+              <form onSubmit={handleAddItem} className="mb-4 bg-life-black border border-zinc-800 p-3 rounded-lg flex gap-2 animate-in fade-in">
                   <input 
                     type="text" 
                     placeholder="Reward Name..." 
                     value={newItemTitle}
                     onChange={e => setNewItemTitle(e.target.value)}
-                    className="flex-1 bg-transparent border-b border-life-muted/30 text-xs text-white focus:outline-none focus:border-life-gold px-2"
+                    className="flex-1 bg-transparent border-b border-zinc-800 text-xs text-white focus:outline-none focus:border-life-gold px-2"
                     autoFocus
                   />
                   <input 
@@ -196,7 +196,7 @@ const ShopView: React.FC = () => {
                     value={newItemCost}
                     min={0}
                     onChange={e => setNewItemCost(Number(e.target.value))}
-                    className="w-16 bg-transparent border-b border-life-muted/30 text-xs text-white focus:outline-none focus:border-life-gold text-center"
+                    className="w-16 bg-transparent border-b border-zinc-800 text-xs text-white focus:outline-none focus:border-life-gold text-center"
                   />
                   <button type="submit" className="text-life-gold"><Plus size={16} /></button>
               </form>
@@ -246,7 +246,7 @@ const ShopView: React.FC = () => {
             ))}
             
             {customItems.length === 0 && redemptionItems.length === 0 && (
-                <div className="col-span-2 py-8 text-center border-2 border-dashed border-life-muted/10 rounded-xl">
+                <div className="col-span-2 py-8 text-center border-2 border-dashed border-zinc-800 rounded-xl">
                     <p className="text-[10px] text-life-muted">No custom rewards defined.</p>
                 </div>
             )}
@@ -254,7 +254,7 @@ const ShopView: React.FC = () => {
       </div>
       
       {/* 📜 SECTION 3: TRANSACTION LOG (Modified to show + and -) */}
-      <div className="mt-8 pt-8 border-t border-life-muted/10">
+      <div className="mt-8 pt-8 border-t border-zinc-800">
          <div className="flex items-center gap-2 mb-4 text-life-muted px-1 opacity-60">
               <History size={14} />
               <span className="text-[10px] font-bold uppercase tracking-widest">Transaction Log (Last 100)</span>
@@ -298,22 +298,22 @@ const ShopView: React.FC = () => {
           >
               <div 
                 onClick={(e) => e.stopPropagation()} 
-                className="bg-life-paper w-full max-w-xs rounded-xl border border-life-muted/20 p-5 shadow-2xl relative"
+                className="bg-life-paper w-full max-w-xs rounded-xl border border-zinc-800 p-5 shadow-2xl relative"
               >
                   <button onClick={() => setSelectedItem(null)} className="absolute top-3 right-3 text-life-muted hover:text-life-text"><X size={20} /></button>
                   <div className="flex flex-col items-center text-center mb-6">
-                      <div className="w-20 h-20 rounded-full bg-life-black border border-life-muted/30 flex items-center justify-center mb-3 text-life-gold shadow-inner">
+                      <div className="w-20 h-20 rounded-full bg-life-black border border-zinc-800 flex items-center justify-center mb-3 text-life-gold shadow-inner">
                           <ItemIcon icon={selectedItem.icon} size={40} />
                       </div>
                       <h3 className="font-black uppercase tracking-widest text-life-text">{selectedItem.title}</h3>
                       <div className="mt-2 flex items-center gap-2 justify-center">
-                          <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-life-muted/10 text-life-muted border border-life-muted/20">{selectedItem.type}</span>
+                          <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-life-muted/10 text-life-muted border border-zinc-800">{selectedItem.type}</span>
                           <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-life-gold/10 text-life-gold border border-life-gold/20">{selectedItem.cost} G</span>
                       </div>
                       <p className="text-xs text-life-muted mt-4 leading-relaxed">{selectedItem.description}</p>
                       
                       {selectedItem.effect && (
-                          <div className="mt-4 w-full bg-life-black/50 p-3 rounded border border-life-muted/10 text-left">
+                          <div className="mt-4 w-full bg-life-black/50 p-3 rounded border border-zinc-800 text-left">
                               <h4 className="text-[9px] font-bold uppercase text-life-muted mb-1 flex items-center gap-1"><Zap size={10} /> Effect</h4>
                               <p className="text-[10px] text-life-text font-mono">
                                   {selectedItem.effect.type === 'xp_boost' && `+${selectedItem.effect.value * 100}% XP Gain`}

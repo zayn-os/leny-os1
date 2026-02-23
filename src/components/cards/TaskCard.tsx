@@ -98,10 +98,10 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onToggle, onDelete }) => {
     <div 
       onClick={() => setIsExpanded(!isExpanded)}
       className={`
-        relative group flex flex-col p-4 mb-3 rounded-xl border border-white/5 bg-life-black/40 backdrop-blur-sm shadow-sm cursor-pointer transition-all duration-300 overflow-hidden
+        relative group flex flex-col p-4 mb-3 rounded-xl border border-zinc-800 bg-life-black/40 backdrop-blur-sm shadow-sm cursor-pointer transition-all duration-300 overflow-hidden
         ${task.isCompleted 
             ? 'opacity-50 grayscale border-gray-800' 
-            : `hover:border-white/10 hover:bg-life-black/60 hover:shadow-md`}
+            : `hover:border-zinc-700 hover:bg-life-black/60 hover:shadow-md`}
         ${isExpanded ? 'ring-1 ring-life-gold/20 bg-life-black/80' : ''}
       `}
     >

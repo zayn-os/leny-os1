@@ -12,12 +12,12 @@ interface IdentityCardProps {
 
 export const IdentityCard: React.FC<IdentityCardProps> = ({ user, dynamicTitle, featuredBadgesData }) => {
     return (
-        <div className="bg-life-paper border border-life-muted/20 rounded-xl p-6 text-center mb-6 relative overflow-hidden group">
+        <div className="bg-life-paper border border-zinc-800 rounded-xl p-6 text-center mb-6 relative overflow-hidden group">
             <div className="absolute inset-0 bg-gradient-to-b from-life-gold/5 to-transparent pointer-events-none" />
             
             {/* Avatar */}
             <div 
-                className="w-24 h-24 mx-auto bg-life-black rounded-full border-4 border-life-muted/30 flex items-center justify-center mb-4 relative shadow-2xl z-10 transition-transform select-none"
+                className="w-24 h-24 mx-auto bg-life-black rounded-full border-4 border-zinc-800 flex items-center justify-center mb-4 relative shadow-2xl z-10 transition-transform select-none"
             >
                 <User size={48} className="text-life-silver" />
                 <div className="absolute -bottom-2 bg-life-gold text-life-black text-xs font-black px-2 py-0.5 rounded shadow-sm border border-life-black">
@@ -42,7 +42,7 @@ export const IdentityCard: React.FC<IdentityCardProps> = ({ user, dynamicTitle, 
                         
                         return (
                             <div key={data!.badge.id} className="relative group/badge cursor-help" title={data!.badge.name}>
-                                <div className={`w-8 h-8 rounded-full bg-life-black border border-life-muted/30 flex items-center justify-center ${color}`}>
+                                <div className={`w-8 h-8 rounded-full bg-life-black border border-zinc-800 flex items-center justify-center ${color}`}>
                                     <span className="text-sm">{data!.badge.icon}</span>
                                 </div>
                                 <div className={`absolute -bottom-1 -right-1 w-3 h-3 rounded-full border-2 border-life-paper bg-current ${color}`} />
@@ -53,7 +53,7 @@ export const IdentityCard: React.FC<IdentityCardProps> = ({ user, dynamicTitle, 
             )}
 
             {/* XP Progress Bar */}
-            <div className="bg-black/40 rounded-lg p-3 backdrop-blur-sm border border-life-muted/10 relative z-10">
+            <div className="bg-black/40 rounded-lg p-3 backdrop-blur-sm border border-zinc-800 relative z-10">
                 <div className="flex justify-between text-[10px] text-life-muted mb-1 uppercase font-bold">
                     <span>XP Progress</span>
                     <span className="text-life-gold">{user.currentXP} <span className="text-life-muted">/ {user.targetXP}</span></span>

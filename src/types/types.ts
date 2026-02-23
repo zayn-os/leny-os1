@@ -158,6 +158,7 @@ export type ModalType =
     | 'loot' 
     | 'quickSubtask' 
     | 'dataExchange'
+    | 'login' // 👈 NEW
     | 'honorBreakdown'
     | 'questForge'
     | 'habitProtocol'

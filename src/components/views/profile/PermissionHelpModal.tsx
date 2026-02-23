@@ -31,10 +31,10 @@ export const PermissionHelpModal: React.FC<PermissionHelpModalProps> = ({ onClos
                     </p>
                 </div>
 
-                <div className="flex-1 overflow-y-auto space-y-3 bg-life-paper/50 p-3 rounded-lg border border-life-muted/10 mb-4 text-right pr-2" dir="rtl">
+                <div className="flex-1 overflow-y-auto space-y-3 bg-life-paper/50 p-3 rounded-lg border border-zinc-800 mb-4 text-right pr-2" dir="rtl">
                     
                     {/* الخطوة 1: التشغيل التلقائي */}
-                    <div className="flex items-start gap-3 border-b border-life-muted/10 pb-2">
+                    <div className="flex items-start gap-3 border-b border-zinc-800 pb-2">
                         <div className="bg-blue-500/20 text-blue-400 w-6 h-6 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
                             <Zap size={14} />
                         </div>
@@ -45,7 +45,7 @@ export const PermissionHelpModal: React.FC<PermissionHelpModalProps> = ({ onClos
                     </div>
 
                     {/* الخطوة 2: موفر البطارية */}
-                    <div className="flex items-start gap-3 border-b border-life-muted/10 pb-2">
+                    <div className="flex items-start gap-3 border-b border-zinc-800 pb-2">
                         <div className="bg-green-500/20 text-green-400 w-6 h-6 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
                             <Battery size={14} />
                         </div>
@@ -56,7 +56,7 @@ export const PermissionHelpModal: React.FC<PermissionHelpModalProps> = ({ onClos
                     </div>
 
                     {/* الخطوة 3: الإشعارات */}
-                    <div className="flex items-start gap-3 border-b border-life-muted/10 pb-2">
+                    <div className="flex items-start gap-3 border-b border-zinc-800 pb-2">
                         <div className="bg-life-gold/20 text-life-gold w-6 h-6 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
                             <BellOff size={14} />
                         </div>
