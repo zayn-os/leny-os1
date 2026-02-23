@@ -217,14 +217,21 @@ export const TaskProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
             const statReward = task.difficulty === Difficulty.HARD ? 2 : task.difficulty === Difficulty.NORMAL ? 1 : 0.5;
 
+            // 🟢 MULTI-STAT DISTRIBUTION LOGIC
+            const linkedSkill = skillState.skills.find(s => s.id === task.skillId);
+            const targetStats = linkedSkill?.relatedStats?.length ? linkedSkill.relatedStats : [task.stat];
+            const rewardPerStat = statReward / targetStats.length;
+
+            const newStats = { ...lifeState.user.stats };
+            targetStats.forEach(stat => {
+                newStats[stat] = (newStats[stat] || 0) + rewardPerStat;
+            });
+
             lifeDispatch.updateUser({
                 currentXP: lifeState.user.currentXP + rewards.xp,
                 dailyXP: lifeState.user.dailyXP + rewards.xp,
                 gold: lifeState.user.gold + rewards.gold,
-                stats: {
-                    ...lifeState.user.stats,
-                    [task.stat]: lifeState.user.stats[task.stat] + statReward
-                },
+                stats: newStats,
                 metrics: newMetrics 
             });
 

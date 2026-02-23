@@ -171,7 +171,7 @@ export const sendAlert = async (
                     tag: String(id),
                     requireInteraction: true,
                     data: { url: window.location.href } // Pass data for click handler
-                });
+                } as any);
                 console.log("🔔 Service Worker notification sent");
             } else {
                 // 🟡 FALLBACK TO CLASSIC API
@@ -182,7 +182,7 @@ export const sendAlert = async (
                     vibrate: [200, 100, 200],
                     tag: String(id),
                     requireInteraction: true,
-                });
+                } as any);
 
                 notification.onclick = () => {
                     window.focus();

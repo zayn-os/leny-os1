@@ -323,14 +323,21 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
             const statReward = habit.difficulty === Difficulty.HARD ? 2 : habit.difficulty === Difficulty.NORMAL ? 1 : 0.5;
 
+            // 🟢 MULTI-STAT DISTRIBUTION LOGIC
+            const linkedSkill = skillState.skills.find(s => s.id === habit.skillId);
+            const targetStats = linkedSkill?.relatedStats?.length ? linkedSkill.relatedStats : [habit.stat];
+            const rewardPerStat = statReward / targetStats.length;
+
+            const newStats = { ...lifeState.user.stats };
+            targetStats.forEach(stat => {
+                newStats[stat] = (newStats[stat] || 0) + rewardPerStat;
+            });
+
             lifeDispatch.updateUser({
                 currentXP: lifeState.user.currentXP + rewards.xp,
                 dailyXP: lifeState.user.dailyXP + rewards.xp,
                 gold: lifeState.user.gold + rewards.gold,
-                stats: {
-                    ...lifeState.user.stats,
-                    [habit.stat]: lifeState.user.stats[habit.stat] + statReward
-                },
+                stats: newStats,
                 metrics: {
                     ...lifeState.user.metrics,
                     habitsFixed: lifeState.user.metrics.habitsFixed + 1

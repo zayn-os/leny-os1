@@ -39,6 +39,7 @@ export const handleRaids = (ctx: HandlerContext) => {
                     description: r.description,
                     difficulty: r.difficulty,
                     stats: r.stats,
+                    skillId: r.skillId, // 👈 Added skillId
                     deadline: r.deadline,
                     isCampaign: r.isCampaign
                 });
@@ -54,6 +55,7 @@ export const handleRaids = (ctx: HandlerContext) => {
                     description: r.description,
                     difficulty: r.difficulty || 'hard',
                     stats: r.stats || ['STR'],
+                    skillId: r.skillId, // 👈 Added skillId
                     deadline: r.deadline,
                     steps,
                     isCampaign: r.isCampaign || undefined

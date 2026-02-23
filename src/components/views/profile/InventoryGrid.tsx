@@ -19,7 +19,7 @@ export const InventoryGrid: React.FC<InventoryGridProps> = ({ items, onSelectIte
         return acc;
     }, {} as Record<string, StoreItem & { count: number }>);
 
-    const displayItems = Object.values(groupedItems);
+    const displayItems: (StoreItem & { count: number })[] = Object.values(groupedItems);
 
     return (
         <div className="mb-8">

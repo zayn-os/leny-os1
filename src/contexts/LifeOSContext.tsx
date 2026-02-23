@@ -213,7 +213,7 @@ export const LifeOSProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   const setView = (view: ViewState) => { if (view !== state.ui.currentView) { playSound('click', soundEnabled); window.history.pushState({ view }, '', ''); setState(prev => ({ ...prev, ui: { ...prev.ui, currentView: view } })); }};
   const setHabitsViewMode = (mode: 'list' | 'calendar') => { playSound('click', soundEnabled); setState(prev => ({ ...prev, ui: { ...prev.ui, habitsViewMode: mode } })); };
   const setTasksViewMode = (mode: 'missions' | 'codex') => { playSound('click', soundEnabled); setState(prev => ({ ...prev, ui: { ...prev.ui, tasksViewMode: mode } })); };
-  const setModal = (modal: ModalType, data?: any) => { if (modal !== 'none') playSound('click', soundEnabled); setState(prev => ({ ...prev, ui: { ...prev.ui, activeModal: modal, modalData: data } })); };
+  const setModal = (modal: ModalType, data?: any) => { if (modal !== 'none') playSound('click', soundEnabled); setState(prev => ({ ...prev, ui: { ...prev.ui, activeModal: modal, modalData: data ?? null } })); };
   const addToast = (message: string, type: Toast['type'] = 'info') => { 
     const id = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`; 
     setState(prev => ({ 

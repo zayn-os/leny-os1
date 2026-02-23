@@ -19,7 +19,7 @@ interface InjectionFormProps {
 const InjectionForm: React.FC<InjectionFormProps> = ({ onClose }) => {
     // Collect all dispatchers & state for context aware validation
     const { state: lifeState, dispatch: lifeDispatch } = useLifeOS();
-    const { taskDispatch } = useTasks();
+    const { taskState, taskDispatch } = useTasks(); // 👈 Destructure taskState
     const { habitState, habitDispatch } = useHabits();
     const { raidState, raidDispatch } = useRaids();
     const { skillDispatch } = useSkills();

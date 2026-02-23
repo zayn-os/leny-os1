@@ -61,7 +61,7 @@ const migrateRaidState = (data: any): { raids: Raid[] } => {
 
 export const RaidProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const { state: lifeState, dispatch: lifeDispatch } = useLifeOS();
-    const { skillDispatch } = useSkills();
+    const { skillDispatch, skillState } = useSkills();
     const soundEnabled = lifeState.user.preferences.soundEnabled;
 
     // 🟢 USE PERSISTENCE HOOK
@@ -187,11 +187,21 @@ export const RaidProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         // 🟢 REWARD CALCULATION
         const stepDifficulty = step.difficulty || raid.difficulty;
         const stepStat = step.stat || (raid.stats && raid.stats.length > 0 ? raid.stats[0] : Stat.STR);
-        const stepSkillId = step.skillId || raid.skillId;
+        const stepSkillId = raid.skillId;
         const rewards = calculateTaskReward(stepDifficulty, lifeState.user.currentMode);
         const xp = rewards.xp;
         const gold = rewards.gold;
         const statReward = stepDifficulty === Difficulty.HARD ? 2 : stepDifficulty === Difficulty.NORMAL ? 1 : 0.5;
+
+        // 🟢 MULTI-STAT DISTRIBUTION LOGIC
+        const linkedSkill = skillState.skills.find(s => s.id === stepSkillId);
+        const targetStats = linkedSkill?.relatedStats?.length ? linkedSkill.relatedStats : [stepStat];
+        const rewardPerStat = statReward / targetStats.length;
+
+        const newStats = { ...lifeState.user.stats };
+        targetStats.forEach(stat => {
+            newStats[stat] = (newStats[stat] || 0) + rewardPerStat;
+        });
 
         // Calculate what the new progress will be
         const tempSteps = [...raid.steps];
@@ -208,10 +218,7 @@ export const RaidProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                 currentXP: lifeState.user.currentXP + xp,
                 dailyXP: lifeState.user.dailyXP + xp,
                 gold: lifeState.user.gold + gold,
-                stats: {
-                    ...lifeState.user.stats,
-                    [stepStat]: lifeState.user.stats[stepStat] + statReward
-                }
+                stats: newStats
             });
 
             if (stepSkillId) skillDispatch.addSkillXP(stepSkillId, Math.ceil(xp * 0.5));
@@ -239,14 +246,16 @@ export const RaidProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             }
         } else {
             // 🔴 UNDO LOGIC
+            const undoStats = { ...lifeState.user.stats };
+            targetStats.forEach(stat => {
+                undoStats[stat] = Math.max(0, (undoStats[stat] || 0) - rewardPerStat);
+            });
+
             lifeDispatch.updateUser({
                 currentXP: Math.max(0, lifeState.user.currentXP - xp),
                 dailyXP: Math.max(0, lifeState.user.dailyXP - xp),
                 gold: Math.max(0, lifeState.user.gold - gold),
-                stats: {
-                    ...lifeState.user.stats,
-                    [stepStat]: Math.max(0, lifeState.user.stats[stepStat] - statReward)
-                }
+                stats: undoStats
             });
 
             if (raid.status === 'completed') {

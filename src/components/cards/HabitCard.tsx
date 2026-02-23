@@ -7,6 +7,7 @@ import { STAT_COLORS, DIFFICULTY_COLORS } from '../../types/constants';
 import { getHabitLevel } from '../../utils/habitEngine';
 import { useHabits } from '../../contexts/HabitContext';
 import { useLifeOS } from '../../contexts/LifeOSContext';
+import { useSkills } from '../../contexts/SkillContext'; // 👈 IMPORT
 import { calculateTaskReward } from '../../utils/economyEngine'; // 👈 IMPORT
 
 interface HabitCardProps {
@@ -31,6 +32,7 @@ const StatIcon = ({ stat, size = 14 }: { stat: Stat; size?: number }) => {
 const HabitCard: React.FC<HabitCardProps> = ({ habit, onProcess, onDelete }) => {
   const { habitState, habitDispatch } = useHabits();
   const { dispatch, state } = useLifeOS();
+  const { skillState } = useSkills(); // 👈 USE HOOK
   const { categories } = habitState;
   
   const [isExpanded, setIsExpanded] = useState(false);
@@ -184,9 +186,18 @@ const HabitCard: React.FC<HabitCardProps> = ({ habit, onProcess, onDelete }) => 
                     <span className="text-[9px] text-life-muted font-mono flex items-center gap-0.5"><Flame size={8} className={habit.streak > 0 ? 'text-life-gold' : 'text-life-muted'} /> {habit.streak}</span>
                     
                     <div className="flex items-center gap-1">
-                        <span className="text-[8px] font-black px-1.5 py-0.5 rounded border border-zinc-800 bg-life-black text-life-muted flex items-center gap-1 uppercase tracking-wider" style={{ color: STAT_COLORS[habit.stat], borderColor: `${STAT_COLORS[habit.stat]}40` }}>
-                            <StatIcon stat={habit.stat} size={8} /> {habit.stat}
-                        </span>
+                        {/* 🟢 MULTI-STAT DISPLAY */}
+                        {linkedSkill && linkedSkill.relatedStats && linkedSkill.relatedStats.length > 0 ? (
+                            linkedSkill.relatedStats.map((stat: Stat) => (
+                                <span key={stat} className="text-[8px] font-black px-1.5 py-0.5 rounded border border-zinc-800 bg-life-black text-life-muted flex items-center gap-1 uppercase tracking-wider" style={{ color: STAT_COLORS[stat], borderColor: `${STAT_COLORS[stat]}40` }}>
+                                    <StatIcon stat={stat} size={8} /> {stat}
+                                </span>
+                            ))
+                        ) : (
+                            <span className="text-[8px] font-black px-1.5 py-0.5 rounded border border-zinc-800 bg-life-black text-life-muted flex items-center gap-1 uppercase tracking-wider" style={{ color: STAT_COLORS[habit.stat], borderColor: `${STAT_COLORS[habit.stat]}40` }}>
+                                <StatIcon stat={habit.stat} size={8} /> {habit.stat}
+                            </span>
+                        )}
                         
                         {/* 🟢 XP REWARD LABEL (Moved Here) */}
                         {isPending && (

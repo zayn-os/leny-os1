@@ -69,7 +69,9 @@ export function usePersistence<T>(
         // 🟢 SAVE TO FIRESTORE
         try {
            const docRef = doc(db, 'users', user.uid, 'modules', firestorePath);
-           await setDoc(docRef, data as any);
+           // 🛡️ SANITIZE: Remove undefined values (Firestore doesn't like them)
+           const cleanData = JSON.parse(JSON.stringify(data, (k, v) => v === undefined ? null : v)); 
+           await setDoc(docRef, cleanData);
         } catch (err) {
            console.error(`Error saving ${firestorePath}:`, err);
         }

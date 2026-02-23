@@ -146,9 +146,18 @@ const RaidCard: React.FC<RaidCardProps> = ({ raid, onToggleStep }) => {
                             </span>
                         )}
 
-                        <span className="text-[8px] font-black px-1.5 py-0.5 rounded border border-zinc-800 bg-life-black text-life-muted flex items-center gap-1 uppercase tracking-wider" style={{ color: statColor, borderColor: `${statColor}40` }}>
-                            <StatIcon stat={primaryStat} size={8} /> {primaryStat}
-                        </span>
+                        {/* 🟢 MULTI-STAT DISPLAY */}
+                        {linkedSkill && linkedSkill.relatedStats && linkedSkill.relatedStats.length > 0 ? (
+                            linkedSkill.relatedStats.map((stat: Stat) => (
+                                <span key={stat} className="text-[8px] font-black px-1.5 py-0.5 rounded border border-zinc-800 bg-life-black text-life-muted flex items-center gap-1 uppercase tracking-wider" style={{ color: STAT_COLORS[stat], borderColor: `${STAT_COLORS[stat]}40` }}>
+                                    <StatIcon stat={stat} size={8} /> {stat}
+                                </span>
+                            ))
+                        ) : (
+                            <span className="text-[8px] font-black px-1.5 py-0.5 rounded border border-zinc-800 bg-life-black text-life-muted flex items-center gap-1 uppercase tracking-wider" style={{ color: statColor, borderColor: `${statColor}40` }}>
+                                <StatIcon stat={primaryStat} size={8} /> {primaryStat}
+                            </span>
+                        )}
                     </div>
                     
                     <div className="flex items-center gap-2 mt-1">
