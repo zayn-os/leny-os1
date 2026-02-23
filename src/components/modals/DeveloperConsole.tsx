@@ -57,7 +57,7 @@ The Executor is a "Silent Agent". It does not speak. It outputs raw JSON payload
     {
       "title": "String (Required)",
       "difficulty": "easy | normal | hard",
-      "stat": "STR | INT | DIS | PCE | EMT | CAM | CRT",
+      "stat": "STR | INT | DIS | HEA | CRT | SPR | REL | FIN",
       "energyLevel": "low | medium | high",
       "deadline": "YYYY-MM-DD",
       "subtasks": ["Step 1", "Step 2"]

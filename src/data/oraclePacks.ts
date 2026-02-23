@@ -9,16 +9,16 @@ export const PACK_MONK: InjectionPayload = {
     },
     habits: [
         { title: "05:00 AM Rising", difficulty: "hard", stat: "DIS", type: "daily", description: "Wake up before the enemy." },
-        { title: "Meditation (20m)", difficulty: "normal", stat: "PCE", type: "daily", description: "Clear the mind. Sharpen the blade." },
+        { title: "Meditation (20m)", difficulty: "normal", stat: "SPR", type: "daily", description: "Clear the mind. Sharpen the blade." },
         { title: "Deep Reading", difficulty: "normal", stat: "INT", type: "daily", description: "Consume ancient wisdom." },
         { title: "Intermittent Fasting", difficulty: "hard", stat: "DIS", type: "daily", description: "16:8 Protocol. Hunger is clarity." }
     ],
     tasks: [
-        { title: "Digital Detox (24h)", difficulty: "hard", stat: "PCE", description: "No screens. Only reality." },
-        { title: "Journal Reflection", difficulty: "easy", stat: "EMT", description: "Audit your thoughts." }
+        { title: "Digital Detox (24h)", difficulty: "hard", stat: "SPR", description: "No screens. Only reality." },
+        { title: "Journal Reflection", difficulty: "easy", stat: "HEA", description: "Audit your thoughts." }
     ],
     skills: [
-        { title: "Mindfulness", relatedStats: ["PCE", "DIS"], description: "The art of being present." },
+        { title: "Mindfulness", relatedStats: ["SPR", "DIS"], description: "The art of being present." },
         { title: "Philosophy", relatedStats: ["INT"], description: "Understanding the why." }
     ],
     storeItems: [
@@ -47,13 +47,13 @@ export const PACK_FOUNDER: InjectionPayload = {
     habits: [
         { title: "Deep Work Block (4h)", difficulty: "hard", stat: "INT", type: "daily", description: "No distractions. Pure output." },
         { title: "Zero Inbox", difficulty: "normal", stat: "DIS", type: "daily", description: "Clear comms channels." },
-        { title: "Network Outreach", difficulty: "normal", stat: "CAM", type: "specific_days", specificDays: [1, 3, 5], description: "Send 3 cold emails/DMs." }
+        { title: "Network Outreach", difficulty: "normal", stat: "REL", type: "specific_days", specificDays: [1, 3, 5], description: "Send 3 cold emails/DMs." }
     ],
     raids: [
         {
             title: "Launch MVP",
             difficulty: "hard",
-            stats: ["INT", "CAM"],
+            stats: ["INT", "REL"],
             status: "active",
             progress: 0,
             steps: [
@@ -65,8 +65,8 @@ export const PACK_FOUNDER: InjectionPayload = {
         }
     ],
     skills: [
-        { title: "Product Management", relatedStats: ["INT", "CAM"], description: "Building the right thing." },
-        { title: "Sales", relatedStats: ["CAM", "DIS"], description: "Selling the thing." }
+        { title: "Product Management", relatedStats: ["INT", "REL"], description: "Building the right thing." },
+        { title: "Sales", relatedStats: ["REL", "DIS"], description: "Selling the thing." }
     ],
     storeItems: [
         { id: "item_lambo", title: "Rental Supercar", description: "Taste the dream.", cost: 50000, type: "custom", icon: "Zap", isInfinite: true }

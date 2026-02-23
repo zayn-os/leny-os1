@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Brain, Dumbbell, Activity, Heart, Zap, Shield, AlertTriangle, Palette } from 'lucide-react';
+import { Brain, Dumbbell, Activity, Heart, Zap, Shield, AlertTriangle, Palette, Coins, Users, Flame } from 'lucide-react';
 // --- تصحيح المسارات (العودة خطوتين للوراء ../../) ---
 import { Skill, SkillRank } from '../../types/skillTypes';
 import { Stat } from '../../types/types';
@@ -15,10 +15,11 @@ const StatIcon = ({ stat, size = 14 }: { stat: Stat; size?: number }) => {
         case Stat.STR: return <Dumbbell size={size} />;
         case Stat.INT: return <Brain size={size} />;
         case Stat.DIS: return <Zap size={size} />;
-        case Stat.PCE: return <Shield size={size} />;
-        case Stat.EMT: return <Heart size={size} />;
-        case Stat.CAM: return <Activity size={size} />;
+        case Stat.HEA: return <Heart size={size} />;
         case Stat.CRT: return <Palette size={size} />;
+        case Stat.SPR: return <Flame size={size} />;
+        case Stat.REL: return <Users size={size} />;
+        case Stat.FIN: return <Coins size={size} />;
         default: return <Activity size={size} />;
     }
 };

@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Flame, Check, Brain, Dumbbell, Activity, Heart, Zap, Shield, Maximize2, X, FolderInput, Trash2, Clock, Play, TrendingUp, ChevronDown, ChevronUp, Palette } from 'lucide-react';
+import { Flame, Check, Brain, Dumbbell, Activity, Heart, Zap, Shield, Maximize2, X, FolderInput, Trash2, Clock, Play, TrendingUp, ChevronDown, ChevronUp, Palette, Coins, Users } from 'lucide-react';
 import { Habit, DailyStatus } from '../../types/habitTypes';
 import { Stat } from '../../types/types';
 import { STAT_COLORS, DIFFICULTY_COLORS } from '../../types/constants';
@@ -21,10 +21,11 @@ const StatIcon = ({ stat, size = 14 }: { stat: Stat; size?: number }) => {
     case Stat.STR: return <Dumbbell size={size} />;
     case Stat.INT: return <Brain size={size} />;
     case Stat.DIS: return <Zap size={size} />;
-    case Stat.PCE: return <Shield size={size} />;
-    case Stat.EMT: return <Heart size={size} />;
-    case Stat.CAM: return <Activity size={size} />;
+    case Stat.HEA: return <Heart size={size} />;
     case Stat.CRT: return <Palette size={size} />;
+    case Stat.SPR: return <Flame size={size} />;
+    case Stat.REL: return <Users size={size} />;
+    case Stat.FIN: return <Coins size={size} />;
     default: return <Activity size={size} />;
   }
 };

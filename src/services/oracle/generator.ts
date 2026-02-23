@@ -198,7 +198,7 @@ I will describe a project, goal, or campaign.
 1. **Structure:** A Raid is a container for multiple "Steps" (Missions).
 2. **Title:** Military/Tactical naming (e.g., "Operation: Apollo").
 3. **Difficulty:** "easy", "normal", "hard".
-4. **Stat:** Primary attribute [STR, INT, DIS, CAM, CRT, PCE, EMT].
+4. **Stats:** Array of primary attributes (e.g., ["STR", "INT"]).
 5. **Skill Link:** If known, link to a skill ID (e.g., "s_coding").
 6. **Steps (The Missions):**
    - Each step acts like a Task.
@@ -215,7 +215,7 @@ I will describe a project, goal, or campaign.
       "id": "OPTIONAL_ID_FOR_UPDATE",
       "title": "Operation: PROJECT_NAME",
       "difficulty": "hard",
-      "stat": "INT",
+      "stats": ["INT"],
       "skillId": "OPTIONAL_SKILL_ID",
       "description": "Brief tactical overview.",
       "deadline": "YYYY-MM-DD",

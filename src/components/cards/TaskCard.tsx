@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Check, Clock, Brain, Dumbbell, Activity, Heart, Zap, Shield, BookOpen, Play, AlignLeft, Calendar, FolderInput, Maximize2, Trash2, Target, Bell, Palette, CalendarPlus } from 'lucide-react';
+import { Check, Clock, Brain, Dumbbell, Activity, Heart, Zap, Shield, BookOpen, Play, AlignLeft, Calendar, FolderInput, Maximize2, Trash2, Target, Bell, Palette, CalendarPlus, Coins, Users, Flame } from 'lucide-react';
 import { Task } from '../../types/taskTypes';
 import { Stat, Difficulty } from '../../types/types';
 import { DIFFICULTY_COLORS, STAT_COLORS } from '../../types/constants';
@@ -23,10 +23,11 @@ const StatIcon = ({ stat, size = 14 }: { stat: Stat; size?: number }) => {
     case Stat.STR: return <Dumbbell size={size} />;
     case Stat.INT: return <Brain size={size} />;
     case Stat.DIS: return <Zap size={size} />;
-    case Stat.PCE: return <Shield size={size} />;
-    case Stat.EMT: return <Heart size={size} />;
-    case Stat.CAM: return <Activity size={size} />;
+    case Stat.HEA: return <Heart size={size} />;
     case Stat.CRT: return <Palette size={size} />;
+    case Stat.SPR: return <Flame size={size} />;
+    case Stat.REL: return <Users size={size} />;
+    case Stat.FIN: return <Coins size={size} />;
     default: return <Activity size={size} />;
   }
 };

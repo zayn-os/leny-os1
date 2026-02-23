@@ -50,12 +50,24 @@ const LifeOSContext = createContext<LifeOSContextType | undefined>(undefined);
 
 // 🔄 MIGRATION LOGIC
 const migrateLifeOSState = (parsed: any): LifeOSState => {
+        const oldStats = parsed.user?.stats || {};
+        const migratedStats = {
+            [Stat.STR]: oldStats.STR || 1,
+            [Stat.INT]: oldStats.INT || 1,
+            [Stat.DIS]: oldStats.DIS || 1,
+            [Stat.HEA]: oldStats.HEA || oldStats.EMT || 1, // Map EMT to HEA
+            [Stat.CRT]: oldStats.CRT || 1,
+            [Stat.SPR]: oldStats.SPR || oldStats.PCE || 1, // Map PCE to SPR
+            [Stat.REL]: oldStats.REL || oldStats.CAM || 1, // Map CAM to REL
+            [Stat.FIN]: oldStats.FIN || 1,
+        };
+
     const migratedUser: UserProfile = {
         ...INITIAL_STATE.user,
         ...parsed.user,
         metrics: { ...INITIAL_STATE.user.metrics, ...(parsed.user?.metrics || {}) },
         preferences: { ...INITIAL_STATE.user.preferences, ...(parsed.user?.preferences || {}) },
-        stats: { ...INITIAL_STATE.user.stats, ...(parsed.user?.stats || {}) },
+        stats: migratedStats,
         inventory: parsed.user?.inventory || [],
         equippedItems: parsed.user?.equippedItems || [],
         badges: parsed.user?.badges || [],

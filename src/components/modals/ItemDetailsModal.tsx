@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { X, Save, Trash2, Archive, Edit2, Activity, Shield, Zap, Brain, Heart, Dumbbell, BookOpen, Lock, Hash, AlertTriangle, Clock, Bell, Check, Palette, CalendarPlus, ChevronDown, Copy } from 'lucide-react';
+import { X, Save, Trash2, Archive, Edit2, Activity, Shield, Zap, Brain, Heart, Dumbbell, BookOpen, Lock, Hash, AlertTriangle, Clock, Bell, Check, Palette, CalendarPlus, ChevronDown, Copy, Coins, Users, Flame } from 'lucide-react';
 import { useLifeOS } from '../../contexts/LifeOSContext';
 import { useTasks } from '../../contexts/TaskContext';
 import { useHabits } from '../../contexts/HabitContext';
@@ -20,10 +20,11 @@ const StatIcon = ({ stat, size = 14 }: { stat: Stat; size?: number }) => {
     case Stat.STR: return <Dumbbell size={size} />;
     case Stat.INT: return <Brain size={size} />;
     case Stat.DIS: return <Zap size={size} />;
-    case Stat.PCE: return <Shield size={size} />;
-    case Stat.EMT: return <Heart size={size} />;
-    case Stat.CAM: return <Activity size={size} />;
+    case Stat.HEA: return <Heart size={size} />;
     case Stat.CRT: return <Palette size={size} />;
+    case Stat.SPR: return <Flame size={size} />;
+    case Stat.REL: return <Users size={size} />;
+    case Stat.FIN: return <Coins size={size} />;
     default: return <Activity size={size} />;
   }
 };

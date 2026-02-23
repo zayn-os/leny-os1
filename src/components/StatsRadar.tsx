@@ -2,7 +2,7 @@
 import React from 'react';
 import { Stat } from '../types/types';
 import { STAT_COLORS } from '../types/constants';
-import { Brain, Dumbbell, Activity, Heart, Zap, Shield, Palette, Crown } from 'lucide-react';
+import { Brain, Heart, Shield, Zap, Dumbbell, Palette, Crown, Coins, Users, Flame } from 'lucide-react';
 
 interface StatsRadarProps {
   stats: Record<Stat, number>;
@@ -14,10 +14,11 @@ const StatIcon = ({ stat, size = 14 }: { stat: Stat; size?: number }) => {
         case Stat.STR: return <Dumbbell size={size} />;
         case Stat.INT: return <Brain size={size} />;
         case Stat.DIS: return <Zap size={size} />;
-        case Stat.PCE: return <Shield size={size} />;
-        case Stat.EMT: return <Heart size={size} />;
-        case Stat.CAM: return <Crown size={size} />;
+        case Stat.HEA: return <Heart size={size} />;
         case Stat.CRT: return <Palette size={size} />;
+        case Stat.SPR: return <Flame size={size} />;
+        case Stat.REL: return <Users size={size} />;
+        case Stat.FIN: return <Coins size={size} />;
         default: return <Crown size={size} />;
     }
 };
@@ -29,8 +30,8 @@ const StatsRadar: React.FC<StatsRadarProps> = ({ stats, maxVal = 20 }) => {
   const radius = 85; // The actual chart radius
   const maxStat = maxVal; // The scale reference (100% value)
 
-  // Order of stats (Clockwise starting from Top) - Now 7 items
-  const statOrder: Stat[] = [Stat.DIS, Stat.STR, Stat.INT, Stat.CRT, Stat.PCE, Stat.EMT, Stat.CAM];
+  // Order of stats (Clockwise starting from Top) - Now 8 items
+  const statOrder: Stat[] = [Stat.STR, Stat.INT, Stat.DIS, Stat.HEA, Stat.CRT, Stat.SPR, Stat.REL, Stat.FIN];
   
   // --- MATH HELPERS ---
   const getPoint = (value: number, index: number, offsetRadius: number = radius) => {

@@ -26,13 +26,14 @@ export enum DailyMode {
 }
 
 export enum Stat {
-  DIS = 'DIS', // Discipline
-  STR = 'STR', // Strength
-  INT = 'INT', // Intelligence
-  PCE = 'PCE', // Peace
-  EMT = 'EMT', // Emotion
-  CAM = 'CAM', // Charisma
-  CRT = 'CRT', // Creativity (New)
+  STR = 'STR', // Strength - القوة البدنية والتحمل
+  INT = 'INT', // Intelligence - العقل، التعلم، والبرمجة
+  DIS = 'DIS', // Discipline - الانضباط والالتزام بالجدول
+  HEA = 'HEA', // Health - الصحة، التغذية، والنوم
+  CRT = 'CRT', // Creativity - الإبداع والحلول خارج الصندوق
+  SPR = 'SPR', // Spirit - الروح، التأمل، والجوهر الداخلي
+  REL = 'REL', // Relation - العلاقات، التواصل، والذكاء الاجتماعي
+  FIN = 'FIN', // Finance - المالية، الاستثمار، وإدارة الأموال
 }
 
 // 🎨 MODULE 20: THEME ENGINE

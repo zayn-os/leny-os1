@@ -40,10 +40,11 @@ const SkillForm: React.FC<SkillFormProps> = ({ onClose }) => {
           case Stat.STR: return <Dumbbell size={18} />;
           case Stat.INT: return <Brain size={18} />;
           case Stat.DIS: return <Zap size={18} />;
-          case Stat.PCE: return <Shield size={18} />;
-          case Stat.EMT: return <Heart size={18} />;
-          case Stat.CAM: return <Activity size={18} />;
+          case Stat.HEA: return <Heart size={18} />;
           case Stat.CRT: return <Palette size={18} />;
+          case Stat.SPR: return <Flame size={18} />;
+          case Stat.REL: return <Users size={18} />;
+          case Stat.FIN: return <Coins size={18} />;
           default: return <Activity size={18} />;
         }
     };

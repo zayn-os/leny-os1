@@ -93,7 +93,7 @@ const InjectionForm: React.FC<InjectionFormProps> = ({ onClose }) => {
         
         2. LAWS & CONSEQUENCES:
            - If the input describes a rule, punishment, or consequence (e.g., "If I upset my girlfriend, deduct Emotion points"), convert it into a "laws" array.
-           - Structure: { "title": "Short Title", "penaltyType": "gold" | "xp" | "stat" | "honor", "penaltyValue": number, "statTarget": "STR" | "INT" | "DIS" | "EMT" | "PCE" | "CAM" | "CRT" (only if type is stat) }
+           - Structure: { "title": "Short Title", "penaltyType": "gold" | "xp" | "stat" | "honor", "penaltyValue": number, "statTarget": "STR" | "INT" | "DIS" | "HEA" | "CRT" | "SPR" | "REL" | "FIN" (only if type is stat) }
            - Example: "If I miss prayer, lose 50 Honor" -> { "laws": [{ "title": "Missed Prayer", "penaltyType": "honor", "penaltyValue": 50 }] }
 
         3. STRUCTURE: Ensure strict valid JSON. No trailing commas.

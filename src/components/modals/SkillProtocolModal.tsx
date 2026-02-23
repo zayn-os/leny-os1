@@ -61,7 +61,7 @@ GOAL: Define and track long-term proficiencies.
   "skills": [
     {
       "title": "Culinary Arts",
-      "relatedStats": ["CRT", "PCE"],
+      "relatedStats": ["CRT", "HEA"],
       "description": "Mastering flavors and techniques."
     }
   ]

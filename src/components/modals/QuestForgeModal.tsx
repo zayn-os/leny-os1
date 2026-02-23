@@ -19,10 +19,11 @@ I will describe a goal, or provide an existing Task JSON to modify.
 1. **Updates:** If I provide an "id" (e.g., "t_123..."), YOU MUST include it in the output to UPDATE that task instead of creating a new one.
 2. **Title:** Action-oriented (e.g., "Operation: Deep Dive").
 3. **Difficulty:** "easy" (Scout), "normal" (Infantry), "hard" (SpecOps).
-4. **Stat:** [STR, INT, DIS, CAM, CRT, PCE, EMT].
-5. **Reminders:** Array of minutes before due (e.g., [15, 60] = 15 mins & 1 hour before).
-6. **Campaign:** Set "isCampaign": true if this is a strategic quarterly goal (G12).
-7. **Time:**
+4. **Stat:** [STR, INT, DIS, HEA, CRT, SPR, REL, FIN].
+5. **Skill Link:** If known, link to a skill ID (e.g., "s_coding").
+6. **Reminders:** Array of minutes before due (e.g., [15, 60] = 15 mins & 1 hour before).
+7. **Campaign:** Set "isCampaign": true if this is a strategic quarterly goal (G12).
+8. **Time:**
    - "scheduledTime": ISO String (YYYY-MM-DDTHH:mm) for specific execution time.
    - "deadline": YYYY-MM-DD for due date.
    - "durationMinutes": Number (if timed session).
@@ -37,6 +38,7 @@ I will describe a goal, or provide an existing Task JSON to modify.
       "title": "QUEST_TITLE",
       "difficulty": "hard",
       "stat": "INT",
+      "skillId": "OPTIONAL_SKILL_ID",
       "description": "🎯 Objective: ... \\n🔗 Skill: ...",
       "subtasks": [
         "Step 1 (5m)",
@@ -56,6 +58,7 @@ I will describe a goal, or provide an existing Task JSON to modify.
       "title": "HABIT_TITLE",
       "difficulty": "normal",
       "stat": "DIS",
+      "skillId": "OPTIONAL_SKILL_ID",
       "type": "daily",
       "dailyTarget": 5,
       "description": "e.g. Drink 5 glasses of water"

@@ -86,7 +86,7 @@ export const ConsequencesGuide: React.FC<Props> = ({ onClose }) => {
                         <div className="mt-1 p-2 bg-red-950/10 rounded border border-red-900/20">
                             <div className="text-[9px] text-red-400 font-bold mb-1">Severe Punishment:</div>
                             <div className="text-[9px] text-zinc-400">
-                                Losing <span className="text-red-400">-1 Stat</span> is equivalent to erasing a completed mission from your history. Use sparingly for character flaws (e.g., Anger = -1 EMT).
+                                Losing <span className="text-red-400">-1 Stat</span> is equivalent to erasing a completed mission from your history. Use sparingly for character flaws (e.g., Anger = -1 HEA).
                             </div>
                         </div>
                     </div>

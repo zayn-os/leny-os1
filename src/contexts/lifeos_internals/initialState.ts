@@ -50,13 +50,14 @@ export const INITIAL_STATE: LifeOSState = {
     // 🎨 Use Imported Themes
     unlockedThemes: DEFAULT_THEMES,
     stats: {
-      [Stat.DIS]: 1,
       [Stat.STR]: 1,
       [Stat.INT]: 1,
-      [Stat.PCE]: 1,
-      [Stat.EMT]: 1,
-      [Stat.CAM]: 1,
-      [Stat.CRT]: 1, // Creativity Added
+      [Stat.DIS]: 1,
+      [Stat.HEA]: 1,
+      [Stat.CRT]: 1,
+      [Stat.SPR]: 1,
+      [Stat.REL]: 1,
+      [Stat.FIN]: 1,
     },
     lastOnline: new Date().toISOString(), 
     preferences: {

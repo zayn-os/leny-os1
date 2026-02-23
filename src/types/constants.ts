@@ -14,13 +14,14 @@ export const DIFFICULTY_BG = {
 };
 
 export const STAT_COLORS = {
-  [Stat.DIS]: '#60a5fa', // Blue
   [Stat.STR]: '#ef4444', // Red
   [Stat.INT]: '#a855f7', // Purple
-  [Stat.PCE]: '#10b981', // Emerald
-  [Stat.EMT]: '#f43f5e', // Rose
-  [Stat.CAM]: '#fbbf24', // Amber
-  [Stat.CRT]: '#e879f9', // Fuchsia (Creativity)
+  [Stat.DIS]: '#60a5fa', // Blue
+  [Stat.HEA]: '#10b981', // Emerald
+  [Stat.CRT]: '#e879f9', // Fuchsia
+  [Stat.SPR]: '#f43f5e', // Rose
+  [Stat.REL]: '#fbbf24', // Amber
+  [Stat.FIN]: '#14b8a6', // Teal
 };
 
 // 🆕 DAILY TARGETS (Survival Modes)

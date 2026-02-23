@@ -20,12 +20,10 @@ I will describe a category (e.g., "Fitness", "Coding") or a specific achievement
 2. **Name:** Creative title (e.g., "Dawn Breaker").
 3. **Description:** Clear criteria for unlocking.
 4. **Icon:** A valid Lucide React icon name (e.g., "Sun", "Dumbbell", "Code").
-5. **Category:** One of: "growth", "combat", "wealth", "social", "system".
-6. **Tiers:** 
-   - **Standard Badges:** Must have 4 tiers: "silver", "gold", "diamond", "crimson".
-   - **Honor Badges:** Must have 7 tiers: "wood", "iron", "copper", "silver", "gold", "diamond", "crimson".
-7. **System Badges:** If the badge is related to system stats (e.g., Streak), ensure the criteria matches the system logic (e.g., "7 Day Streak" requires checking the global streak counter).
-8. **XP Reward:** Base XP for unlocking the badge.
+5. **Category:** One of: "progression", "combat", "warfare", "consistency", "resilience", "economy", "mastery", "skill", "special".
+6. **Trigger Type:** One of: "stat", "metric", "manual", "skill", "habit", "raid".
+7. **Metric Key:** The specific metric to track (e.g., "totalTasksCompleted", "stats.STR", or the exact Habit Title).
+8. **Levels:** Array of 4 tiers ("silver", "gold", "diamond", "crimson"). Each level needs a "target" (number), "quote" (string), and "rewards" (xp and gold).
 
 --- JSON TEMPLATE ---
 
@@ -37,14 +35,35 @@ I will describe a category (e.g., "Fitness", "Coding") or a specific achievement
       "name": "Badge Name",
       "description": "Unlock criteria description.",
       "icon": "Award",
-      "category": "growth",
-      "tiers": {
-        "silver": "Criteria for Silver",
-        "gold": "Criteria for Gold",
-        "diamond": "Criteria for Diamond",
-        "crimson": "Criteria for Crimson"
-      },
-      "xpReward": 500
+      "category": "combat",
+      "triggerType": "metric",
+      "metricKey": "totalTasksCompleted",
+      "levels": [
+        {
+          "tier": "silver",
+          "target": 10,
+          "quote": "A good start.",
+          "rewards": { "xp": 100, "gold": 50 }
+        },
+        {
+          "tier": "gold",
+          "target": 50,
+          "quote": "You are getting stronger.",
+          "rewards": { "xp": 250, "gold": 100 }
+        },
+        {
+          "tier": "diamond",
+          "target": 100,
+          "quote": "Unstoppable force.",
+          "rewards": { "xp": 500, "gold": 250 }
+        },
+        {
+          "tier": "crimson",
+          "target": 500,
+          "quote": "A legend is born.",
+          "rewards": { "xp": 1000, "gold": 500 }
+        }
+      ]
     }
   ]
 }
@@ -62,14 +81,35 @@ I will describe a category (e.g., "Fitness", "Coding") or a specific achievement
       "name": "Keeper of Knowledge",
       "description": "Awarded for consistent reading habits.",
       "icon": "BookOpen",
-      "category": "growth",
-      "tiers": {
-        "silver": "Read 5 Books",
-        "gold": "Read 20 Books",
-        "diamond": "Read 50 Books",
-        "crimson": "Read 100 Books"
-      },
-      "xpReward": 300
+      "category": "special",
+      "triggerType": "habit",
+      "metricKey": "Read a Book",
+      "levels": [
+        {
+          "tier": "silver",
+          "target": 5,
+          "quote": "The mind is a muscle.",
+          "rewards": { "xp": 100, "gold": 50 }
+        },
+        {
+          "tier": "gold",
+          "target": 20,
+          "quote": "Knowledge is power.",
+          "rewards": { "xp": 250, "gold": 100 }
+        },
+        {
+          "tier": "diamond",
+          "target": 50,
+          "quote": "A library in your head.",
+          "rewards": { "xp": 500, "gold": 250 }
+        },
+        {
+          "tier": "crimson",
+          "target": 100,
+          "quote": "Omniscience achieved.",
+          "rewards": { "xp": 1000, "gold": 500 }
+        }
+      ]
     }
   ]
 }
@@ -85,14 +125,35 @@ I will describe a category (e.g., "Fitness", "Coding") or a specific achievement
       "name": "Time Walker",
       "description": "Awarded for maintaining a daily streak.",
       "icon": "Flame",
-      "category": "system",
-      "tiers": {
-        "silver": "7 Day Streak",
-        "gold": "30 Day Streak",
-        "diamond": "100 Day Streak",
-        "crimson": "365 Day Streak"
-      },
-      "xpReward": 1000
+      "category": "consistency",
+      "triggerType": "metric",
+      "metricKey": "currentStreak",
+      "levels": [
+        {
+          "tier": "silver",
+          "target": 7,
+          "quote": "A week of focus.",
+          "rewards": { "xp": 100, "gold": 50 }
+        },
+        {
+          "tier": "gold",
+          "target": 30,
+          "quote": "A month of discipline.",
+          "rewards": { "xp": 250, "gold": 100 }
+        },
+        {
+          "tier": "diamond",
+          "target": 100,
+          "quote": "A hundred days of power.",
+          "rewards": { "xp": 500, "gold": 250 }
+        },
+        {
+          "tier": "crimson",
+          "target": 365,
+          "quote": "A year of mastery.",
+          "rewards": { "xp": 1000, "gold": 500 }
+        }
+      ]
     }
   ]
 }

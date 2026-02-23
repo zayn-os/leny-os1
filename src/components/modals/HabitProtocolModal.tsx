@@ -21,8 +21,10 @@ I will describe a routine, or provide an existing Habit JSON to modify.
 3. **Repetitions:** Use "dailyTarget" (number) for habits that repeat within a day (e.g., "Drink Water" with dailyTarget: 8).
 4. **Subtasks:** Habits can have steps! (e.g., Routine -> [Drink Water, Stretch]).
 5. **Difficulty:** "easy", "normal", "hard".
-6. **Reminders:** Array of minutes before (e.g., [0, 10]).
-7. **Time:** "scheduledTime" (24h format "HH:mm").
+6. **Stat:** Primary attribute [STR, INT, DIS, HEA, CRT, SPR, REL, FIN].
+7. **Skill Link:** If known, link to a skill ID (e.g., "s_coding").
+8. **Reminders:** Array of minutes before (e.g., [0, 10]).
+9. **Time:** "scheduledTime" (24h format "HH:mm").
 
 --- JSON TEMPLATE ---
 
@@ -33,6 +35,7 @@ I will describe a routine, or provide an existing Habit JSON to modify.
       "id": "OPTIONAL_ID_FOR_UPDATE",
       "title": "HABIT_TITLE",
       "stat": "DIS",
+      "skillId": "OPTIONAL_SKILL_ID",
       "difficulty": "normal",
       "type": "daily", 
       "dailyTarget": 1,
@@ -57,7 +60,7 @@ I will describe a routine, or provide an existing Habit JSON to modify.
   "habits": [
     {
       "title": "Protocol: Morning Prime",
-      "stat": "PCE",
+      "stat": "SPR",
       "difficulty": "hard",
       "type": "daily",
       "dailyTarget": 1,
@@ -80,7 +83,7 @@ I will describe a routine, or provide an existing Habit JSON to modify.
   "habits": [
     {
       "title": "Protocol: Hydration",
-      "stat": "CAM",
+      "stat": "HEA",
       "difficulty": "easy",
       "type": "daily",
       "dailyTarget": 8,

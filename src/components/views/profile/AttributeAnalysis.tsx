@@ -10,10 +10,11 @@ const useBalanceAlgorithm = (stats: Record<Stat, number>) => {
         [Stat.STR]: stats.STR || 0,
         [Stat.INT]: stats.INT || 0,
         [Stat.DIS]: stats.DIS || 0,
+        [Stat.HEA]: stats.HEA || 0,
         [Stat.CRT]: stats.CRT || 0,
-        [Stat.PCE]: stats.PCE || 0,
-        [Stat.EMT]: stats.EMT || 0,
-        [Stat.CAM]: stats.CAM || 0,
+        [Stat.SPR]: stats.SPR || 0,
+        [Stat.REL]: stats.REL || 0,
+        [Stat.FIN]: stats.FIN || 0,
     };
 
     const maxXP = Math.max(...Object.values(xpValues));
@@ -35,10 +36,11 @@ const STAT_FULL_NAMES: Record<Stat, string> = {
     [Stat.STR]: 'Strength',
     [Stat.INT]: 'Intelligence',
     [Stat.DIS]: 'Discipline',
+    [Stat.HEA]: 'Health',
     [Stat.CRT]: 'Creativity',
-    [Stat.PCE]: 'Peace',
-    [Stat.EMT]: 'Emotion',
-    [Stat.CAM]: 'Charisma',
+    [Stat.SPR]: 'Spirit',
+    [Stat.REL]: 'Relation',
+    [Stat.FIN]: 'Finance',
 };
 
 // --- SUB-COMPONENT: Stat Data Row ---
@@ -103,7 +105,7 @@ export const AttributeAnalysis: React.FC<AttributeAnalysisProps> = ({ user }) =>
     const [viewMode, setViewMode] = useState<'graph' | 'data'>('data');
     const { xpValues, globalTarget } = useBalanceAlgorithm(user.stats);
 
-    const statsOrder: Stat[] = [Stat.DIS, Stat.STR, Stat.INT, Stat.CRT, Stat.PCE, Stat.EMT, Stat.CAM];
+    const statsOrder: Stat[] = [Stat.STR, Stat.INT, Stat.DIS, Stat.HEA, Stat.CRT, Stat.SPR, Stat.REL, Stat.FIN];
 
     return (
         <div className="bg-life-black border border-zinc-800 rounded-xl p-4 mb-4 shadow-lg shadow-black/50 relative overflow-hidden group">

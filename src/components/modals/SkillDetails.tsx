@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { X, Trophy, Calendar, Zap, AlertTriangle, Trash2, Dumbbell, Brain, Shield, Heart, Activity, Clock, Hourglass, Palette } from 'lucide-react';
+import { X, Trophy, Calendar, Zap, AlertTriangle, Trash2, Dumbbell, Brain, Shield, Heart, Activity, Clock, Hourglass, Palette, Users, Coins, Flame } from 'lucide-react';
 // --- تصحيح المسارات (الرجوع خطوتين ../../ والدخول للمجلدات الصحيحة) ---
 import { useSkills } from '../../contexts/SkillContext';
 import { useLifeOS } from '../../contexts/LifeOSContext';
@@ -20,10 +20,11 @@ const StatIcon = ({ stat, size = 14 }: { stat: Stat; size?: number }) => {
         case Stat.STR: return <Dumbbell size={size} />;
         case Stat.INT: return <Brain size={size} />;
         case Stat.DIS: return <Zap size={size} />;
-        case Stat.PCE: return <Shield size={size} />;
-        case Stat.EMT: return <Heart size={size} />;
-        case Stat.CAM: return <Activity size={size} />;
+        case Stat.HEA: return <Heart size={size} />;
         case Stat.CRT: return <Palette size={size} />;
+        case Stat.SPR: return <Flame size={size} />;
+        case Stat.REL: return <Users size={size} />;
+        case Stat.FIN: return <Coins size={size} />;
         default: return <Activity size={size} />;
     }
 };
