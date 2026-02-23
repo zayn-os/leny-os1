@@ -34,30 +34,44 @@ const STORAGE_KEY_RAIDS = 'LIFE_OS_RAIDS_DATA';
 
 const RaidContext = createContext<RaidContextType | undefined>(undefined);
 
+import { usePersistence } from '../hooks/usePersistence';
+
+// Migration Logic
+const migrateRaid = (r: any): Raid => {
+    return {
+        ...r,
+        status: r.status || 'active',
+        progress: r.progress || 0,
+        isCampaign: r.isCampaign || false,
+        steps: (r.steps || []).map((s: any) => ({
+            ...s,
+            isCompleted: !!s.isCompleted,
+            isLocked: !!s.isLocked,
+            subtasks: s.subtasks || []
+        }))
+    };
+};
+
+const migrateRaidState = (data: any): { raids: Raid[] } => {
+    const rawRaids = Array.isArray(data) ? data : (data.raids || []);
+    return {
+        raids: rawRaids.map(migrateRaid)
+    };
+};
+
 export const RaidProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const { state: lifeState, dispatch: lifeDispatch } = useLifeOS();
     const { skillDispatch } = useSkills();
     const soundEnabled = lifeState.user.preferences.soundEnabled;
 
-    // 🛡️ Safe Loader
-    const safeLoad = (): Raid[] => {
-        try {
-            const saved = localStorage.getItem(STORAGE_KEY_RAIDS);
-            if (saved) return JSON.parse(saved);
-        } catch (e) { console.warn("Failed to load raids:", e); }
-        return [];
-    };
-
-    const [raids, setRaids] = useState<Raid[]>(safeLoad);
-
-    useEffect(() => {
-        const saveTimeout = setTimeout(() => {
-            if (raids.length > 0 || localStorage.getItem(STORAGE_KEY_RAIDS)) {
-                localStorage.setItem(STORAGE_KEY_RAIDS, JSON.stringify(raids));
-            }
-        }, 500);
-        return () => clearTimeout(saveTimeout);
-    }, [raids]);
+    // 🟢 USE PERSISTENCE HOOK
+    const [state, setState] = usePersistence<{ raids: Raid[] }>(
+        'LIFE_OS_RAIDS_DATA',
+        { raids: [] },
+        'raids_data',
+        migrateRaidState
+    );
+    const { raids } = state;
 
     // Actions
     const addRaid = (raidData: Omit<Raid, 'id' | 'status' | 'progress'>) => {
@@ -68,59 +82,59 @@ export const RaidProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             progress: 0,
             isCampaign: raidData.isCampaign || false
         };
-        setRaids(prev => [newRaid, ...prev]);
+        setState(prev => ({ ...prev, raids: [newRaid, ...prev.raids] }));
         playSound('click', soundEnabled);
         lifeDispatch.addToast('Operation Initialized', 'success');
     };
 
     const updateRaid = (raidId: string, updates: Partial<Raid>) => {
-        setRaids(prev => prev.map(r => r.id === raidId ? { ...r, ...updates } : r));
+        setState(prev => ({ ...prev, raids: prev.raids.map(r => r.id === raidId ? { ...r, ...updates } : r) }));
         playSound('click', soundEnabled);
     };
 
     const deleteRaid = (raidId: string) => {
-        setRaids(prev => prev.filter(r => r.id !== raidId));
+        setState(prev => ({ ...prev, raids: prev.raids.filter(r => r.id !== raidId) }));
         playSound('delete', soundEnabled);
         lifeDispatch.addToast('Operation Deleted', 'info');
     };
 
     const archiveRaid = (raidId: string) => {
-        setRaids(prev => prev.map(r => r.id === raidId ? { ...r, status: 'archived' } : r));
+        setState(prev => ({ ...prev, raids: prev.raids.map(r => r.id === raidId ? { ...r, status: 'archived' } : r) }));
         lifeDispatch.addToast('Operation Archived', 'info');
     };
 
     const restoreRaid = (raidId: string) => {
-        setRaids(prev => prev.map(r => r.id === raidId ? { ...r, status: 'active' } : r));
+        setState(prev => ({ ...prev, raids: prev.raids.map(r => r.id === raidId ? { ...r, status: 'active' } : r) }));
         lifeDispatch.addToast('Operation Restored', 'success');
     };
 
     const archiveRaidStep = (raidId: string, stepId: string) => {
-        setRaids(prev => prev.map(r => {
+        setState(prev => ({ ...prev, raids: prev.raids.map(r => {
             if (r.id !== raidId) return r;
             const updatedSteps = r.steps.map(s => s.id === stepId ? { ...s, isArchived: true } : s);
             return { ...r, steps: updatedSteps };
-        }));
+        })}));
     };
 
     const deleteRaidStep = (raidId: string, stepId: string) => {
-        setRaids(prev => prev.map(r => {
+        setState(prev => ({ ...prev, raids: prev.raids.map(r => {
             if (r.id !== raidId) return r;
             const updatedSteps = r.steps.filter(s => s.id !== stepId);
             return { ...r, steps: updatedSteps };
-        }));
+        })}));
         lifeDispatch.setModal('none');
     };
 
     const updateRaidStep = (raidId: string, stepId: string, updates: Partial<RaidStep>) => {
-        setRaids(prev => prev.map(r => {
+        setState(prev => ({ ...prev, raids: prev.raids.map(r => {
             if (r.id !== raidId) return r;
             const updatedSteps = r.steps.map(s => s.id === stepId ? { ...s, ...updates } : s);
             return { ...r, steps: updatedSteps };
-        }));
+        })}));
     };
 
     const mergeRaidSteps = (raidId: string, newSteps: Partial<RaidStep>[]) => {
-        setRaids(prev => prev.map(r => {
+        setState(prev => ({ ...prev, raids: prev.raids.map(r => {
             if (r.id !== raidId) return r;
             
             // Create a map of updates for faster lookup
@@ -141,12 +155,12 @@ export const RaidProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             });
 
             return { ...r, steps: updatedSteps };
-        }));
+        })}));
         lifeDispatch.addToast('Raid Steps Updated', 'success');
     };
 
     const toggleRaidStepSubtask = (raidId: string, stepId: string, subtaskId: string) => {
-        setRaids(prev => prev.map(r => {
+        setState(prev => ({ ...prev, raids: prev.raids.map(r => {
             if (r.id !== raidId) return r;
             const updatedSteps = r.steps.map(s => {
                 if (s.id !== stepId) return s;
@@ -156,7 +170,7 @@ export const RaidProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                 return { ...s, subtasks: newSubtasks };
             });
             return { ...r, steps: updatedSteps };
-        }));
+        })}));
         playSound('click', soundEnabled);
     };
 
@@ -252,7 +266,7 @@ export const RaidProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         }
 
         // 🔄 UPDATE RAIDS STATE
-        setRaids(prev => prev.map(r => {
+        setState(prev => ({ ...prev, raids: prev.raids.map(r => {
             if (r.id !== raidId) return r;
 
             const newSteps = [...r.steps];
@@ -268,7 +282,7 @@ export const RaidProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                 progress: newProgress,
                 status: isRaidComplete ? 'completed' : (r.status === 'completed' ? 'active' : r.status)
             };
-        }));
+        })}));
 
         if (lootPayload) {
             setTimeout(() => lifeDispatch.setModal('loot', lootPayload), 300);
@@ -276,7 +290,7 @@ export const RaidProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     };
 
     const restoreData = (newRaids: Raid[]) => {
-        setRaids(newRaids);
+        setState({ raids: newRaids });
         lifeDispatch.addToast('Raids Restored', 'success');
     };
 

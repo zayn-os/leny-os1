@@ -6,17 +6,20 @@ import { BadgeDefinition } from '../types/badgeTypes';
 import { playSound } from '../utils/audio';
 import { requestNotificationPermission } from '../utils/notifications'; 
 import { INITIAL_STATE } from './lifeos_internals/initialState';
-import { loadState, saveState } from './lifeos_internals/storage';
+import { STORAGE_KEY } from './lifeos_internals/storage'; // Import STORAGE_KEY
 import { calculateMidnightUpdates } from './lifeos_internals/midnightStrategy';
-import { useNativeBack } from '../hooks/useNativeBack'; // 👈 IMPORT HOOK
+import { useNativeBack } from '../hooks/useNativeBack'; 
+import { usePersistence } from '../hooks/usePersistence'; // Import Hook
+import { DEFAULT_THEMES } from '../data/themeData'; // Import Themes
 
 interface LifeOSContextType {
   state: LifeOSState;
+  isDataLoaded: boolean; // 👈 NEW
   dispatch: {
     updateUser: (updates: Partial<UserProfile>) => void;
     setView: (view: ViewState) => void;
     setHabitsViewMode: (mode: 'list' | 'calendar') => void;
-    setTasksViewMode: (mode: 'missions' | 'codex') => void; // 👈 NEW
+    setTasksViewMode: (mode: 'missions' | 'codex') => void; 
     setModal: (modal: ModalType, data?: any) => void;
     useItem: (item: StoreItem) => void; 
     addBadge: (badge: BadgeDefinition) => void; 
@@ -39,14 +42,56 @@ interface LifeOSContextType {
     toggleEquip: (itemId: string) => void;
     enableNotifications: () => Promise<boolean>; 
     setCustomAudio: (file: File) => void; 
-    setDayStartHour: (hour: number) => void; // 👈 NEW ACTION
+    setDayStartHour: (hour: number) => void; 
   };
 }
 
 const LifeOSContext = createContext<LifeOSContextType | undefined>(undefined);
 
+// 🔄 MIGRATION LOGIC
+const migrateLifeOSState = (parsed: any): LifeOSState => {
+    const migratedUser: UserProfile = {
+        ...INITIAL_STATE.user,
+        ...parsed.user,
+        metrics: { ...INITIAL_STATE.user.metrics, ...(parsed.user?.metrics || {}) },
+        preferences: { ...INITIAL_STATE.user.preferences, ...(parsed.user?.preferences || {}) },
+        stats: { ...INITIAL_STATE.user.stats, ...(parsed.user?.stats || {}) },
+        inventory: parsed.user?.inventory || [],
+        equippedItems: parsed.user?.equippedItems || [],
+        badges: parsed.user?.badges || [],
+        featuredBadges: parsed.user?.featuredBadges || [],
+        unlockedThemes: parsed.user?.unlockedThemes
+            ? [
+                ...parsed.user.unlockedThemes,
+                ...DEFAULT_THEMES.filter((t: Theme) => !parsed.user.unlockedThemes.some((pt: Theme) => pt.id === t.id))
+              ]
+            : DEFAULT_THEMES,
+        lastOnline: parsed.user?.lastOnline || new Date().toISOString(),
+        hasOnboarded: parsed.user?.hasOnboarded ?? (parsed.user?.name !== "Shadow Walker")
+    };
+
+    return {
+        user: migratedUser,
+        badgesRegistry: parsed.badgesRegistry || [],
+        ui: {
+            ...INITIAL_STATE.ui,
+            ...parsed.ui,
+            currentView: parsed.ui?.currentView || 'tasks',
+            debugDate: parsed.ui?.debugDate || null,
+            habitsViewMode: parsed.ui?.habitsViewMode || 'list',
+            modalQueue: []
+        }
+    };
+};
+
 export const LifeOSProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [state, setState] = useState<LifeOSState>(loadState);
+  // 🟢 USE PERSISTENCE HOOK
+  const [state, setState, isLoading] = usePersistence<LifeOSState>(
+      STORAGE_KEY, 
+      INITIAL_STATE, 
+      'lifeos_data', 
+      migrateLifeOSState
+  );
 
   // 🔌 USE NATIVE BACK LOGIC HOOK
   useNativeBack(state, setState);
@@ -74,8 +119,6 @@ export const LifeOSProvider: React.FC<{ children: ReactNode }> = ({ children }) 
           const lastProcessed = new Date(state.user.lastProcessedDate);
           
           // 🕰️ VIRTUAL TIME MACHINE
-          // We shift time BACKWARDS by the offset to check if the "Virtual Day" has changed.
-          // Example: If offset is 4 (4 AM), and time is 03:00 AM, shifted time is 11:00 PM previous day.
           const startHour = state.user.preferences.dayStartHour ?? 4;
           
           const getVirtualDate = (d: Date) => {
@@ -101,7 +144,7 @@ export const LifeOSProvider: React.FC<{ children: ReactNode }> = ({ children }) 
                       updatedRegistry = [...prev.badgesRegistry, newBadge];
                       if (!newUser.badges.includes(newBadge.id)) {
                           newUser.badges.push(newBadge.id);
-                          newUser.badgeTiers[newBadge.id] = 'gold'; // Award highest tier immediately
+                          newUser.badgeTiers[newBadge.id] = 'gold'; 
                           if (!newUser.badgeHistory[newBadge.id]) newUser.badgeHistory[newBadge.id] = {};
                           newUser.badgeHistory[newBadge.id]['gold'] = new Date().toISOString();
                       }
@@ -123,7 +166,7 @@ export const LifeOSProvider: React.FC<{ children: ReactNode }> = ({ children }) 
       return () => clearInterval(interval);
   }, [state.ui.debugDate, state.user.lastProcessedDate, state.user.preferences.dayStartHour]);
 
-  useEffect(() => { const t = setTimeout(() => saveState(state), 500); return () => clearTimeout(t); }, [state]);
+  // REMOVED: saveState useEffect (handled by usePersistence)
 
   // ✨ LEVEL UP PROTOCOL
   useEffect(() => {
@@ -265,7 +308,7 @@ export const LifeOSProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   const setCustomAudio = (file: File) => { const url = URL.createObjectURL(file); setState(prev => ({ ...prev, ui: { ...prev.ui, customAudio: { name: file.name, url } } })); addToast(`Audio Loaded: ${file.name}`, 'success'); };
 
   return (
-    <LifeOSContext.Provider value={{ state, dispatch: { updateUser, setView, setModal, addToast, removeToast, resetSystem, toggleSound, togglePreference, useItem, addBadge, awardBadge, addTheme, deleteTheme, setTheme, importData, exportData, triggerDailyReset, setDebugDate, startFocusSession, endFocusSession, completeOnboarding, setHabitsViewMode, setTasksViewMode, toggleEquip, enableNotifications, setCustomAudio, setDayStartHour } }}>
+    <LifeOSContext.Provider value={{ state, isDataLoaded: !isLoading, dispatch: { updateUser, setView, setModal, addToast, removeToast, resetSystem, toggleSound, togglePreference, useItem, addBadge, awardBadge, addTheme, deleteTheme, setTheme, importData, exportData, triggerDailyReset, setDebugDate, startFocusSession, endFocusSession, completeOnboarding, setHabitsViewMode, setTasksViewMode, toggleEquip, enableNotifications, setCustomAudio, setDayStartHour } }}>
       {children}
     </LifeOSContext.Provider>
   );

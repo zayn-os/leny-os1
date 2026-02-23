@@ -40,6 +40,9 @@ const RaidForm: React.FC<RaidFormProps> = ({ onClose }) => {
     const [selectedStats, setSelectedStats] = useState<Stat[]>([Stat.DIS]);
     const [selectedSkillId, setSelectedSkillId] = useState<string>('');
     
+    // 🟢 REWARD TYPE TOGGLE
+    const [rewardType, setRewardType] = useState<'skill' | 'stat'>('stat');
+    
     const [raidSteps, setRaidSteps] = useState<PendingRaidStep[]>([
         { id: `temp_${Date.now()}_1`, title: '', notes: '', subtasks: [], reminders: [] },
         { id: `temp_${Date.now()}_2`, title: '', notes: '', subtasks: [], reminders: [] }
@@ -157,7 +160,7 @@ const RaidForm: React.FC<RaidFormProps> = ({ onClose }) => {
             deadline: deadline || undefined,
             difficulty,
             stats: selectedStats,
-            skillId: selectedSkillId || undefined,
+            skillId: rewardType === 'skill' ? (selectedSkillId || undefined) : undefined,
             steps: validSteps
         });
         onClose();
@@ -196,20 +199,6 @@ const RaidForm: React.FC<RaidFormProps> = ({ onClose }) => {
                         </div>
                     </div>
                 </div>
-
-                {skillState.skills.length > 0 && (
-                    <div>
-                        <label className="block text-[10px] text-life-muted uppercase font-bold tracking-widest mb-2">Linked Skill</label>
-                        <div className="relative">
-                            <BookOpen className="absolute left-3 top-1/2 -translate-y-1/2 text-life-muted" size={16} />
-                            <select value={selectedSkillId} onChange={(e) => setSelectedSkillId(e.target.value)} className="w-full bg-life-black border border-zinc-800 rounded-lg p-3 pl-10 text-sm text-life-text appearance-none focus:outline-none focus:border-life-gold/50">
-                                <option value="">No specific skill...</option>
-                                {skillState.skills.map(skill => (<option key={skill.id} value={skill.id}>{skill.title} (Lvl {skill.level})</option>))}
-                            </select>
-                            <ChevronRight className="absolute right-3 top-1/2 -translate-y-1/2 text-life-muted rotate-90" size={16} />
-                        </div>
-                    </div>
-                )}
 
                 <div>
                     <div className="flex items-center justify-between mb-2">
@@ -271,19 +260,102 @@ const RaidForm: React.FC<RaidFormProps> = ({ onClose }) => {
                     </div>
                 </div>
 
-                <div>
-                    <label className="block text-[10px] text-life-muted uppercase font-bold tracking-widest mb-2">Attribute Focus (Select 1-3)</label>
-                    <div className="grid grid-cols-7 gap-2">
-                        {Object.values(Stat).map((s) => {
-                            const isSelected = selectedStats.includes(s);
-                            return (
-                                <button key={s} type="button" onClick={() => toggleStat(s)} className={`flex flex-col items-center justify-center p-2 rounded-lg border transition-all aspect-square relative ${isSelected ? 'bg-life-muted/10 border-current shadow-lg scale-110' : 'border-zinc-800 text-life-muted hover:bg-life-muted/5 opacity-70 hover:opacity-100'}`} style={{ color: isSelected ? STAT_COLORS[s] : undefined }}>
-                                    <StatIcon type={s} /><span className="text-[9px] font-bold mt-1">{s}</span>{isSelected && <div className="absolute top-1 right-1 w-2 h-2 rounded-full bg-current shadow-[0_0_5px_currentColor]" />}
-                                </button>
-                            );
-                        })}
-                    </div>
+            {/* Reward Type Toggle & Selection */}
+            <div>
+                <label className="block text-[10px] text-life-muted uppercase font-bold tracking-widest mb-2">
+                    Reward Source
+                </label>
+                
+                {/* Toggle Switch */}
+                <div className="flex bg-life-black rounded-lg border border-zinc-800 p-1 mb-4">
+                    <button
+                        type="button"
+                        onClick={() => setRewardType('stat')}
+                        className={`flex-1 py-2 rounded-md text-[10px] font-bold uppercase transition-all ${rewardType === 'stat' ? 'bg-life-gold text-life-black shadow-sm' : 'text-life-muted hover:text-white hover:bg-white/5'}`}
+                    >
+                        Attribute Focus
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => setRewardType('skill')}
+                        className={`flex-1 py-2 rounded-md text-[10px] font-bold uppercase transition-all ${rewardType === 'skill' ? 'bg-life-gold text-life-black shadow-sm' : 'text-life-muted hover:text-white hover:bg-white/5'}`}
+                    >
+                        Skill Link
+                    </button>
                 </div>
+
+                {/* Conditional Render */}
+                {rewardType === 'stat' ? (
+                    <div className="animate-in fade-in slide-in-from-top-2 duration-300">
+                        <div className="grid grid-cols-7 gap-2">
+                            {Object.values(Stat).map((s) => {
+                                const isSelected = selectedStats.includes(s);
+                                return (
+                                    <button
+                                        key={s}
+                                        type="button"
+                                        onClick={() => toggleStat(s)}
+                                        className={`
+                                            flex flex-col items-center justify-center p-2 rounded-lg border transition-all aspect-square relative
+                                            ${isSelected 
+                                                ? 'bg-life-muted/10 border-current shadow-lg scale-110' 
+                                                : 'border-zinc-800 text-life-muted opacity-70 hover:opacity-100 hover:bg-life-muted/5'}
+                                        `}
+                                        style={{ color: isSelected ? STAT_COLORS[s] : undefined }}
+                                    >
+                                        <StatIcon type={s} />
+                                        <span className="text-[9px] font-bold mt-1">{s}</span>
+                                        {isSelected && <div className="absolute top-1 right-1 w-2 h-2 rounded-full bg-current shadow-[0_0_5px_currentColor]" />}
+                                    </button>
+                                );
+                            })}
+                        </div>
+                    </div>
+                ) : (
+                    <div className="animate-in fade-in slide-in-from-top-2 duration-300 space-y-2">
+                        <div className="relative">
+                            <BookOpen className="absolute left-3 top-1/2 -translate-y-1/2 text-life-muted" size={16} />
+                            <select 
+                                value={selectedSkillId}
+                                onChange={(e) => {
+                                    const newSkillId = e.target.value;
+                                    setSelectedSkillId(newSkillId);
+                                    // Auto-update stats based on skill
+                                    const skill = skillState.skills.find(s => s.id === newSkillId);
+                                    if (skill && skill.relatedStats.length > 0) {
+                                        setSelectedStats(skill.relatedStats);
+                                    }
+                                }}
+                                className="w-full bg-life-black border border-zinc-800 rounded-lg p-3 pl-10 text-xs text-life-text appearance-none focus:outline-none focus:border-life-gold/50"
+                            >
+                                <option value="">Select a Skill...</option>
+                                {skillState.skills.map(skill => (
+                                    <option key={skill.id} value={skill.id}>{skill.title} (Lvl {skill.level})</option>
+                                ))}
+                            </select>
+                            <ChevronRight className="absolute right-3 top-1/2 -translate-y-1/2 text-life-muted rotate-90" size={14} />
+                        </div>
+                        
+                        {selectedSkillId && (
+                            <div className="p-3 bg-life-gold/10 border border-life-gold/20 rounded-lg flex items-center gap-3">
+                                <div className="p-2 bg-life-gold/20 rounded-full text-life-gold">
+                                    <Zap size={14} />
+                                </div>
+                                <div className="flex-1">
+                                    <p className="text-[10px] text-life-gold font-bold uppercase tracking-wider">Auto-Linked Attributes</p>
+                                    <div className="flex gap-2 mt-1">
+                                        {selectedStats.map(s => (
+                                            <span key={s} className="text-xs font-mono px-1.5 py-0.5 rounded bg-life-black/50 border border-life-gold/30 text-life-gold">
+                                                {s}
+                                            </span>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                )}
+            </div>
 
                 <button type="submit" className={`w-full py-4 rounded-xl font-black uppercase tracking-widest text-sm flex items-center justify-center gap-2 transition-all mt-4 ${title && selectedStats.length > 0 ? 'bg-life-gold text-life-black hover:bg-yellow-400 shadow-[0_0_20px_rgba(251,191,36,0.3)]' : 'border-zinc-800 text-life-muted cursor-not-allowed'}`} disabled={!title || selectedStats.length === 0}>
                     Launch Operation <ChevronRight size={16} />

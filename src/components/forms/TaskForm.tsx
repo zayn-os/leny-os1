@@ -29,6 +29,9 @@ const TaskForm: React.FC<TaskFormProps> = ({ onClose }) => {
     const [selectedSkillId, setSelectedSkillId] = useState<string>('');
     const [selectedCategory, setSelectedCategory] = useState<string>(''); 
     
+    // 🟢 REWARD TYPE TOGGLE
+    const [rewardType, setRewardType] = useState<'skill' | 'stat'>('stat');
+    
     // Subtasks
     const [subtasks, setSubtasks] = useState<string[]>([]);
     
@@ -167,7 +170,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ onClose }) => {
             deadline: deadline || undefined,
             scheduledTime: scheduledTime || undefined,
             reminders: reminders,
-            skillId: selectedSkillId || undefined,
+            skillId: rewardType === 'skill' ? (selectedSkillId || undefined) : undefined,
             categoryId: selectedCategory || undefined,
             subtasks: formattedSubtasks,
             isCampaign: isG12Origin, // 🟢 G12 Only
@@ -436,76 +439,112 @@ const TaskForm: React.FC<TaskFormProps> = ({ onClose }) => {
                 )}
             </div>
 
-            {/* Extras: Category, Skill, Deadline */}
-            <div className="grid grid-cols-2 gap-3">
-                {/* Category Selector */}
-                <div>
-                     <label className="block text-[10px] text-life-muted uppercase font-bold tracking-widest mb-2">
-                        Category
-                    </label>
-                    <div className="relative">
-                        <Folder className="absolute left-3 top-1/2 -translate-y-1/2 text-life-muted" size={16} />
-                        <select 
-                            value={selectedCategory}
-                            onChange={(e) => setSelectedCategory(e.target.value)}
-                            className="w-full bg-life-black border border-zinc-800 rounded-lg p-2 pl-9 text-xs text-life-text appearance-none focus:outline-none focus:border-life-gold/50"
-                        >
-                            <option value="">(Uncategorized)</option>
-                            {categories.map(cat => (
-                                <option key={cat.id} value={cat.id}>{cat.title}</option>
-                            ))}
-                        </select>
-                         <ChevronRight className="absolute right-3 top-1/2 -translate-y-1/2 text-life-muted rotate-90" size={14} />
-                    </div>
-                </div>
-
-                {/* Skill Link */}
-                <div>
-                    <label className="block text-[10px] text-life-muted uppercase font-bold tracking-widest mb-2">
-                        Skill Link
-                    </label>
-                    <div className="relative">
-                        <BookOpen className="absolute left-3 top-1/2 -translate-y-1/2 text-life-muted" size={16} />
-                        <select 
-                            value={selectedSkillId}
-                            onChange={(e) => setSelectedSkillId(e.target.value)}
-                            className="w-full bg-life-black border border-zinc-800 rounded-lg p-2 pl-9 text-xs text-life-text appearance-none focus:outline-none focus:border-life-gold/50"
-                        >
-                            <option value="">None</option>
-                            {skillState.skills.map(skill => (
-                                <option key={skill.id} value={skill.id}>{skill.title}</option>
-                            ))}
-                        </select>
+            {/* Category Selector */}
+            <div>
+                <label className="block text-[10px] text-life-muted uppercase font-bold tracking-widest mb-2">
+                    Category
+                </label>
+                <div className="relative">
+                    <Folder className="absolute left-3 top-1/2 -translate-y-1/2 text-life-muted" size={16} />
+                    <select 
+                        value={selectedCategory}
+                        onChange={(e) => setSelectedCategory(e.target.value)}
+                        className="w-full bg-life-black border border-zinc-800 rounded-lg p-3 pl-10 text-xs text-life-text appearance-none focus:outline-none focus:border-life-gold/50"
+                    >
+                        <option value="">(Uncategorized)</option>
+                        {categories.map(cat => (
+                            <option key={cat.id} value={cat.id}>{cat.title}</option>
+                        ))}
+                    </select>
                         <ChevronRight className="absolute right-3 top-1/2 -translate-y-1/2 text-life-muted rotate-90" size={14} />
-                    </div>
                 </div>
             </div>
 
-            {/* Stat (Moved to Bottom) */}
+            {/* Reward Type Toggle & Selection */}
             <div>
-                 <label className="block text-[10px] text-life-muted uppercase font-bold tracking-widest mb-2">
-                    Attribute
+                <label className="block text-[10px] text-life-muted uppercase font-bold tracking-widest mb-2">
+                    Reward Source
                 </label>
-                {/* 🟢 Updated grid cols to 7 */}
-                <div className="grid grid-cols-7 gap-2">
-                    {Object.values(Stat).map((s) => (
-                        <button
-                            key={s}
-                            type="button"
-                            onClick={() => setStat(s)}
-                            className={`
-                                flex flex-col items-center justify-center p-2 rounded border transition-all aspect-square
-                                ${stat === s 
-                                    ? 'bg-life-muted/10 border-current shadow-sm scale-105' 
-                                    : 'border-zinc-800 text-life-muted opacity-50 hover:opacity-100'}
-                            `}
-                            style={{ color: stat === s ? STAT_COLORS[s] : undefined }}
-                        >
-                            <StatIcon type={s} />
-                            <span className="text-[8px] font-bold mt-1">{s}</span>
-                        </button>
-                    ))}
+                
+                {/* Toggle Switch */}
+                <div className="flex bg-life-black rounded-lg border border-zinc-800 p-1 mb-4">
+                    <button
+                        type="button"
+                        onClick={() => setRewardType('stat')}
+                        className={`flex-1 py-2 rounded-md text-[10px] font-bold uppercase transition-all ${rewardType === 'stat' ? 'bg-life-gold text-life-black shadow-sm' : 'text-life-muted hover:text-white hover:bg-white/5'}`}
+                    >
+                        Attribute Focus
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => setRewardType('skill')}
+                        className={`flex-1 py-2 rounded-md text-[10px] font-bold uppercase transition-all ${rewardType === 'skill' ? 'bg-life-gold text-life-black shadow-sm' : 'text-life-muted hover:text-white hover:bg-white/5'}`}
+                    >
+                        Skill Link
+                    </button>
                 </div>
+
+                {/* Conditional Render */}
+                {rewardType === 'stat' ? (
+                    <div className="animate-in fade-in slide-in-from-top-2 duration-300">
+                        <div className="grid grid-cols-7 gap-2">
+                            {Object.values(Stat).map((s) => (
+                                <button
+                                    key={s}
+                                    type="button"
+                                    onClick={() => setStat(s)}
+                                    className={`
+                                        flex flex-col items-center justify-center p-2 rounded border transition-all aspect-square
+                                        ${stat === s 
+                                            ? 'bg-life-muted/10 border-current shadow-sm scale-105' 
+                                            : 'border-zinc-800 text-life-muted opacity-50 hover:opacity-100'}
+                                    `}
+                                    style={{ color: stat === s ? STAT_COLORS[s] : undefined }}
+                                >
+                                    <StatIcon type={s} />
+                                    <span className="text-[8px] font-bold mt-1">{s}</span>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                ) : (
+                    <div className="animate-in fade-in slide-in-from-top-2 duration-300 space-y-2">
+                        <div className="relative">
+                            <BookOpen className="absolute left-3 top-1/2 -translate-y-1/2 text-life-muted" size={16} />
+                            <select 
+                                value={selectedSkillId}
+                                onChange={(e) => {
+                                    const newSkillId = e.target.value;
+                                    setSelectedSkillId(newSkillId);
+                                    // Auto-update stat based on skill
+                                    const skill = skillState.skills.find(s => s.id === newSkillId);
+                                    if (skill && skill.relatedStats.length > 0) {
+                                        setStat(skill.relatedStats[0]);
+                                    }
+                                }}
+                                className="w-full bg-life-black border border-zinc-800 rounded-lg p-3 pl-10 text-xs text-life-text appearance-none focus:outline-none focus:border-life-gold/50"
+                            >
+                                <option value="">Select a Skill...</option>
+                                {skillState.skills.map(skill => (
+                                    <option key={skill.id} value={skill.id}>{skill.title} (Lvl {skill.level})</option>
+                                ))}
+                            </select>
+                            <ChevronRight className="absolute right-3 top-1/2 -translate-y-1/2 text-life-muted rotate-90" size={14} />
+                        </div>
+                        
+                        {selectedSkillId && (
+                            <div className="p-3 bg-life-gold/10 border border-life-gold/20 rounded-lg flex items-center gap-3">
+                                <div className="p-2 bg-life-gold/20 rounded-full text-life-gold">
+                                    <Zap size={14} />
+                                </div>
+                                <div className="flex-1">
+                                    <p className="text-[10px] text-life-gold font-bold uppercase tracking-wider">Auto-Linked Attribute</p>
+                                    <p className="text-xs text-life-text font-mono">{stat}</p>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                )}
             </div>
 
             {/* Submit */}

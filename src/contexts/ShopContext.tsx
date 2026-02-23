@@ -39,48 +39,55 @@ const INITIAL_STOCK: StoreItem[] = [
 
 const ShopContext = createContext<ShopContextType | undefined>(undefined);
 
+import { usePersistence } from '../hooks/usePersistence';
+
+// Migration Logic
+const migrateShopState = (data: any): { storeItems: StoreItem[] } => {
+    const rawItems = Array.isArray(data) ? data : (data.storeItems || []);
+    // Ensure unique items
+    const seenIds = new Set();
+    const uniqueItems: StoreItem[] = [];
+    for (const item of rawItems) {
+        if (!seenIds.has(item.id)) {
+            seenIds.add(item.id);
+            uniqueItems.push(item);
+        }
+    }
+    return {
+        storeItems: uniqueItems.length > 0 ? uniqueItems : INITIAL_STOCK
+    };
+};
+
 export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const { state: lifeState, dispatch: lifeDispatch } = useLifeOS();
     const { user } = lifeState;
     const soundEnabled = user.preferences.soundEnabled;
 
-    const safeLoad = (): StoreItem[] => {
-        try {
-            const saved = localStorage.getItem(STORAGE_KEY_SHOP);
-            if (saved) return JSON.parse(saved);
-        } catch (e) {
-            console.warn("Failed to load shop:", e);
-        }
-        return INITIAL_STOCK;
-    };
-
-    const [storeItems, setStoreItems] = useState<StoreItem[]>(safeLoad);
-
-    useEffect(() => {
-        const saveTimeout = setTimeout(() => {
-            if (storeItems.length > 0 || localStorage.getItem(STORAGE_KEY_SHOP)) {
-                localStorage.setItem(STORAGE_KEY_SHOP, JSON.stringify(storeItems));
-            }
-        }, 500);
-        return () => clearTimeout(saveTimeout);
-    }, [storeItems]);
+    // 🟢 USE PERSISTENCE HOOK
+    const [state, setState] = usePersistence<{ storeItems: StoreItem[] }>(
+        'LIFE_OS_SHOP_DATA',
+        { storeItems: INITIAL_STOCK },
+        'shop_data',
+        migrateShopState
+    );
+    const { storeItems } = state;
 
     // 🧹 DEDUPLICATION & CLEANUP: Ensure no duplicate IDs exist
     useEffect(() => {
-        setStoreItems(prev => {
+        setState(prev => {
             const seenIds = new Set();
             const uniqueItems: StoreItem[] = [];
             
-            for (const item of prev) {
+            for (const item of prev.storeItems) {
                 if (!seenIds.has(item.id)) {
                     seenIds.add(item.id);
                     uniqueItems.push(item);
                 }
             }
             
-            if (uniqueItems.length !== prev.length) {
+            if (uniqueItems.length !== prev.storeItems.length) {
                 console.log("🧹 ShopContext: Removed duplicate items.");
-                return uniqueItems;
+                return { ...prev, storeItems: uniqueItems };
             }
             return prev;
         });
@@ -189,31 +196,31 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         playSound('coin', soundEnabled);
 
         if (!item.isInfinite) {
-            setStoreItems(prev => prev.filter(i => i.id !== itemId));
+            setState(prev => ({ ...prev, storeItems: prev.storeItems.filter(i => i.id !== itemId) }));
         }
         
         return true; 
     };
 
     const addStoreItem = (item: StoreItem) => {
-        setStoreItems(prev => {
+        setState(prev => {
             // Check by ID first for updates
-            const existingIndex = prev.findIndex(i => i.id === item.id);
+            const existingIndex = prev.storeItems.findIndex(i => i.id === item.id);
             if (existingIndex >= 0) {
-                const newItems = [...prev];
+                const newItems = [...prev.storeItems];
                 newItems[existingIndex] = item;
-                return newItems;
+                return { ...prev, storeItems: newItems };
             }
             // Fallback check by title to prevent duplicates if ID is different (optional, but good for UX)
-            if (prev.some(i => i.title === item.title)) return prev;
-            return [...prev, item];
+            if (prev.storeItems.some(i => i.title === item.title)) return prev;
+            return { ...prev, storeItems: [...prev.storeItems, item] };
         });
         playSound('click', soundEnabled);
     };
 
     const addStoreItems = (items: StoreItem[]) => {
-        setStoreItems(prev => {
-            let newItems = [...prev];
+        setState(prev => {
+            let newItems = [...prev.storeItems];
             let addedCount = 0;
 
             items.forEach(item => {
@@ -230,20 +237,20 @@ export const ShopProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                 }
             });
             
-            return newItems;
+            return { ...prev, storeItems: newItems };
         });
         playSound('level-up', soundEnabled);
     };
 
     const deleteStoreItem = (itemId: string) => {
         if(confirm("Remove this item from the market?")) {
-            setStoreItems(prev => prev.filter(i => i.id !== itemId));
+            setState(prev => ({ ...prev, storeItems: prev.storeItems.filter(i => i.id !== itemId) }));
             playSound('delete', soundEnabled);
         }
     };
 
     const restoreData = (newStoreItems: StoreItem[]) => {
-        setStoreItems(newStoreItems);
+        setState({ storeItems: newStoreItems });
         lifeDispatch.addToast('Market Restored', 'success');
     };
 

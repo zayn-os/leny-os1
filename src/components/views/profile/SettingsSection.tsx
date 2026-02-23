@@ -259,7 +259,7 @@ export const SettingsSection: React.FC<SettingsSectionProps> = ({
                     </button>
                     
                     <button 
-                        onClick={() => sendAlert(Date.now(), "Layn OS", "System Test: Notifications Operational ⚡")} 
+                        onClick={() => sendAlert(Date.now(), "Life OS", "System Test: Notifications Operational ⚡")} 
                         className="flex flex-col items-center justify-center gap-2 p-4 rounded-lg bg-life-paper border border-life-muted/20 hover:border-life-easy/50 transition-all group"
                     >
                         <Activity size={20} className="text-life-easy group-hover:scale-110 transition-transform" />

@@ -59,8 +59,8 @@ const LoginScreen: React.FC<LoginScreenProps> = ({ onGuestLogin }) => {
                     <div className="w-20 h-20 bg-life-black border-2 border-life-gold rounded-full flex items-center justify-center mx-auto mb-6 shadow-[0_0_20px_rgba(251,191,36,0.3)] group-hover:shadow-[0_0_30px_rgba(251,191,36,0.5)] transition-all duration-500">
                         <Zap size={40} className="text-life-gold animate-pulse" />
                     </div>
-                    <h1 className="text-4xl font-black uppercase tracking-tighter text-white mb-2 glitch-text" data-text="LAYN OS">
-                        LAYN OS
+                    <h1 className="text-4xl font-black uppercase tracking-tighter text-white mb-2 glitch-text" data-text="LIFE OS">
+                        LIFE OS
                     </h1>
                     <p className="text-xs text-life-gold font-bold uppercase tracking-[0.3em] opacity-80">
                         Neural Interface v2.0

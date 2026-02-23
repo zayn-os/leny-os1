@@ -5,6 +5,7 @@ import { Stat } from '../types/types';
 import { calculateNextLevelXP, getSkillRank, checkIsRusty } from '../utils/skillEngine';
 import { useLifeOS } from './LifeOSContext';
 import { playSound } from '../utils/audio';
+import { usePersistence } from '../hooks/usePersistence';
 
 interface SkillState {
     skills: Skill[];
@@ -42,41 +43,47 @@ const INITIAL_SKILLS: Skill[] = [
 
 const SkillContext = createContext<SkillContextType | undefined>(undefined);
 
+// Migration Logic
+const migrateSkill = (s: any): Skill => {
+    return {
+        ...s,
+        targetXP: s.targetXP || calculateNextLevelXP(s.level || 1),
+        rank: s.rank || getSkillRank(s.level || 1),
+        isRusty: s.isRusty ?? false,
+        lastPracticed: s.lastPracticed || new Date().toISOString()
+    };
+};
+
+const migrateSkillState = (data: any): { skills: Skill[] } => {
+    const rawSkills = Array.isArray(data) ? data : (data.skills || []);
+    return {
+        skills: rawSkills.map(migrateSkill)
+    };
+};
+
 export const SkillProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const { state: lifeState, dispatch: lifeDispatch } = useLifeOS();
     const soundEnabled = lifeState.user.preferences.soundEnabled;
 
-    const safeLoad = (): Skill[] => {
-        try {
-            const saved = localStorage.getItem(STORAGE_KEY_SKILLS);
-            if (saved) {
-                const parsed = JSON.parse(saved);
-                return Array.isArray(parsed) ? parsed : INITIAL_SKILLS;
-            }
-        } catch (e) {
-            console.warn("Failed to load skills:", e);
-        }
-        return INITIAL_SKILLS;
-    };
-
-    const [skills, setSkills] = useState<Skill[]>(safeLoad);
+    // 🟢 USE PERSISTENCE HOOK
+    const [state, setState] = usePersistence<{ skills: Skill[] }>(
+        'LIFE_OS_SKILLS_DATA',
+        { skills: INITIAL_SKILLS },
+        'skills_data',
+        migrateSkillState
+    );
+    const { skills } = state;
     const [activeSkillId, setActiveSkillId] = useState<string | null>(null);
 
     useEffect(() => {
-        const saveTimeout = setTimeout(() => {
-            if (skills.length > 0 || localStorage.getItem(STORAGE_KEY_SKILLS)) {
-                localStorage.setItem(STORAGE_KEY_SKILLS, JSON.stringify(skills));
-            }
-        }, 500);
-        return () => clearTimeout(saveTimeout);
-    }, [skills]);
-
-    useEffect(() => {
         const checkRustRoutine = () => {
-            setSkills(prev => prev.map(skill => ({
-                ...skill,
-                isRusty: checkIsRusty(skill.lastPracticed)
-            })));
+            setState(prev => ({
+                ...prev,
+                skills: prev.skills.map(skill => ({
+                    ...skill,
+                    isRusty: checkIsRusty(skill.lastPracticed)
+                }))
+            }));
         };
         checkRustRoutine();
     }, []);
@@ -102,59 +109,62 @@ export const SkillProvider: React.FC<{ children: ReactNode }> = ({ children }) =
             createdAt: new Date().toISOString()
         };
         playSound('click', soundEnabled);
-        setSkills(prev => [...prev, newSkill]);
+        setState(prev => ({ ...prev, skills: [...prev.skills, newSkill] }));
         lifeDispatch.addToast(`Skill Acquired: ${title}`, 'success');
     };
 
     const addSkillXP = (skillId: string, amount: number) => {
-        setSkills(prev => prev.map(skill => {
-            if (skill.id !== skillId) return skill;
+        setState(prev => ({
+            ...prev,
+            skills: prev.skills.map(skill => {
+                if (skill.id !== skillId) return skill;
 
-            const wasRusty = skill.isRusty;
-            let newXP = skill.currentXP + amount;
-            let newLevel = skill.level;
-            let newTarget = skill.targetXP;
-            let levelUpOccurred = false;
+                const wasRusty = skill.isRusty;
+                let newXP = skill.currentXP + amount;
+                let newLevel = skill.level;
+                let newTarget = skill.targetXP;
+                let levelUpOccurred = false;
 
-            while (newXP >= newTarget) {
-                newXP -= newTarget;
-                newLevel++;
-                newTarget = calculateNextLevelXP(newLevel);
-                levelUpOccurred = true;
-            }
+                while (newXP >= newTarget) {
+                    newXP -= newTarget;
+                    newLevel++;
+                    newTarget = calculateNextLevelXP(newLevel);
+                    levelUpOccurred = true;
+                }
 
-            const newRank = getSkillRank(newLevel);
+                const newRank = getSkillRank(newLevel);
 
-            if (levelUpOccurred) {
-                playSound('level-up', soundEnabled);
-                lifeDispatch.addToast(`${skill.title} reached Level ${newLevel}!`, 'level-up');
-            }
-            
-            if (wasRusty) {
-                lifeDispatch.addToast(`${skill.title} is no longer Rusty!`, 'success');
-            }
+                if (levelUpOccurred) {
+                    playSound('level-up', soundEnabled);
+                    lifeDispatch.addToast(`${skill.title} reached Level ${newLevel}!`, 'level-up');
+                }
+                
+                if (wasRusty) {
+                    lifeDispatch.addToast(`${skill.title} is no longer Rusty!`, 'success');
+                }
 
-            return {
-                ...skill,
-                level: newLevel,
-                currentXP: newXP,
-                targetXP: newTarget,
-                rank: newRank,
-                lastPracticed: new Date().toISOString(), 
-                isRusty: false 
-            };
+                return {
+                    ...skill,
+                    level: newLevel,
+                    currentXP: newXP,
+                    targetXP: newTarget,
+                    rank: newRank,
+                    lastPracticed: new Date().toISOString(), 
+                    isRusty: false 
+                };
+            })
         }));
     };
 
     const deleteSkill = (skillId: string) => {
         playSound('delete', soundEnabled);
-        setSkills(prev => prev.filter(s => s.id !== skillId));
+        setState(prev => ({ ...prev, skills: prev.skills.filter(s => s.id !== skillId) }));
         if (activeSkillId === skillId) setActiveSkillId(null);
         lifeDispatch.addToast('Skill Deleted', 'info');
     };
 
     const restoreData = (newSkills: Skill[]) => {
-        setSkills(newSkills);
+        setState({ skills: newSkills });
         lifeDispatch.addToast('Skills Restored', 'success');
     };
 

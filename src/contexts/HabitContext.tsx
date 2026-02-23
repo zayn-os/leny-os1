@@ -10,6 +10,7 @@ import { playSound } from '../utils/audio';
 import { calculateTaskReward } from '../utils/economyEngine';
 // 🟢 Updated Import
 import { calculateMonthlyAverage, calculateDailyHonorPenalty } from '../utils/honorSystem'; 
+import { usePersistence } from '../hooks/usePersistence';
 
 // 🏗️ Define Shape of Habit Store
 interface HabitState {
@@ -77,63 +78,53 @@ const INITIAL_CATEGORIES: HabitCategory[] = [
 
 const HabitContext = createContext<HabitContextType | undefined>(undefined);
 
+// Migration Logic
+const migrateHabit = (h: any): Habit => {
+    let reminders: Reminder[] = h.reminders || [];
+    if (!h.reminders && h.reminderMinutes && h.reminderMinutes > 0) {
+        reminders = [{ id: `mig_${Date.now()}_${Math.random()}`, minutesBefore: h.reminderMinutes, isSent: !!h.isReminderSent }];
+    }
+
+    return {
+        difficulty: Difficulty.NORMAL,
+        stat: Stat.DIS,
+        type: 'daily',
+        history: [],
+        streak: 0,
+        checkpoint: 0,
+        bestStreak: 0,
+        status: 'pending',
+        isTimed: false, 
+        durationMinutes: 0,
+        reminders: reminders,
+        subtasks: [], 
+        dailyTarget: h.dailyTarget || 1, 
+        dailyProgress: h.dailyProgress || 0, 
+        ...h
+    }
+};
+
+const migrateHabitState = (data: any): { habits: Habit[], categories: HabitCategory[] } => {
+    return {
+        habits: (data.habits || []).map(migrateHabit),
+        categories: data.categories || INITIAL_CATEGORIES
+    };
+};
+
 export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const { state: lifeState, dispatch: lifeDispatch } = useLifeOS();
     const { skillDispatch, skillState } = useSkills(); 
     const soundEnabled = lifeState.user.preferences.soundEnabled;
 
-    const safeLoad = <T,>(key: string, fallback: T): T => {
-        try {
-            const saved = localStorage.getItem(key);
-            if (saved) return JSON.parse(saved);
-        } catch (e) { console.warn(`Failed to load ${key}`, e); }
-        return fallback;
-    };
-
-    const loadHabits = (): Habit[] => {
-        const parsed = safeLoad<any[]>(STORAGE_KEY_HABITS, []);
-        if (parsed.length === 0 && !localStorage.getItem(STORAGE_KEY_HABITS)) return INITIAL_HABITS;
-
-        return parsed.map((h: any) => {
-            // Migrate single reminder to array if needed
-            let reminders: Reminder[] = h.reminders || [];
-            if (!h.reminders && h.reminderMinutes && h.reminderMinutes > 0) {
-                reminders = [{ id: `mig_${Date.now()}_${Math.random()}`, minutesBefore: h.reminderMinutes, isSent: !!h.isReminderSent }];
-            }
-
-            return {
-                difficulty: Difficulty.NORMAL,
-                stat: Stat.DIS,
-                type: 'daily',
-                history: [],
-                streak: 0,
-                checkpoint: 0,
-                bestStreak: 0,
-                status: 'pending',
-                isTimed: false, 
-                durationMinutes: 0,
-                reminders: reminders,
-                subtasks: [], // Ensure subtasks exist
-                dailyTarget: h.dailyTarget || 1, 
-                dailyProgress: h.dailyProgress || 0, // 👈 Initialize progress
-                ...h
-            }
-        });
-    };
-
-    const [habits, setHabits] = useState<Habit[]>(loadHabits);
-    const [categories, setCategories] = useState<HabitCategory[]>(() => safeLoad(STORAGE_KEY_CATEGORIES, INITIAL_CATEGORIES));
+    // 🟢 USE PERSISTENCE HOOK
+    const [state, setState] = usePersistence<{ habits: Habit[], categories: HabitCategory[] }>(
+        'LIFE_OS_HABITS_COMBINED',
+        { habits: INITIAL_HABITS, categories: INITIAL_CATEGORIES },
+        'habits_data',
+        migrateHabitState
+    );
+    const { habits, categories } = state;
     const [activeHabitId, setActiveHabitId] = useState<string | null>(null); 
-
-    useEffect(() => {
-        const saveTimeout = setTimeout(() => {
-            if (habits.length > 0 || localStorage.getItem(STORAGE_KEY_HABITS)) {
-                localStorage.setItem(STORAGE_KEY_HABITS, JSON.stringify(habits));
-            }
-            if (categories.length > 0) localStorage.setItem(STORAGE_KEY_CATEGORIES, JSON.stringify(categories));
-        }, 500);
-        return () => clearTimeout(saveTimeout);
-    }, [habits, categories]);
 
     // 🟢 CHECK DAILY RESET (REFACTORED TO AVOID SIDE EFFECTS IN SETTER)
     useEffect(() => {
@@ -154,9 +145,6 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
             const isNewDay = vNow.getDate() !== vLast.getDate() || vNow.getMonth() !== vLast.getMonth();
 
             if (isNewDay) {
-                // If it's a new virtual day, "yesterday" is the previous virtual day.
-                // We construct the ISO string for "yesterday" using the virtual date for consistent history tracking.
-                // Note: History stores regular ISO dates, but logic depends on "logical days".
                 const yesterday = new Date(now);
                 yesterday.setDate(yesterday.getDate() - 1);
                 const yesterdayIso = yesterday.toISOString();
@@ -212,7 +200,7 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
                 });
 
                 // Apply Updates & Side Effects
-                setHabits(updatedHabits);
+                setState(prev => ({ ...prev, habits: updatedHabits }));
 
                 if (shieldsConsumed > 0) {
                     lifeDispatch.updateUser({ shields: remainingShields });
@@ -260,19 +248,19 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
             dailyProgress: 0
         };
         playSound('click', soundEnabled);
-        setHabits(prev => [...prev, newHabit]);
+        setState(prev => ({ ...prev, habits: [...prev.habits, newHabit] }));
         lifeDispatch.setModal('none');
     };
 
     // 🟢 ALLOW FULL PARTIALS
     const updateHabit = (habitId: string, updates: Partial<Habit>) => {
-        setHabits(prev => prev.map(h => h.id === habitId ? { ...h, ...updates } : h));
+        setState(prev => ({ ...prev, habits: prev.habits.map(h => h.id === habitId ? { ...h, ...updates } : h) }));
         playSound('click', soundEnabled);
     };
 
     // 🆕 SUBTASK TOGGLE (With Partial Progress Logic)
     const toggleSubtask = (habitId: string, subtaskId: string) => {
-        setHabits(prev => prev.map(h => {
+        setState(prev => ({ ...prev, habits: prev.habits.map(h => {
             if (h.id !== habitId) return h;
             
             const updatedSubtasks = h.subtasks.map(st => 
@@ -280,7 +268,7 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
             );
             
             return { ...h, subtasks: updatedSubtasks };
-        }));
+        })}));
         playSound('click', soundEnabled);
     };
 
@@ -295,7 +283,7 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
             
             if (newReps < habit.dailyTarget) {
                 // Just increment reps
-                setHabits(prev => prev.map(h => h.id === habitId ? { ...h, dailyProgress: newReps } : h));
+                setState(prev => ({ ...prev, habits: prev.habits.map(h => h.id === habitId ? { ...h, dailyProgress: newReps } : h) }));
                 playSound('click', soundEnabled);
                 lifeDispatch.addToast(`${habit.title}: Rep ${newReps}/${habit.dailyTarget}`, 'info');
                 return; // Stop here, don't complete yet
@@ -377,20 +365,20 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         }
 
         // Apply
-        setHabits(prev => prev.map(h => h.id === habitId ? { 
+        setState(prev => ({ ...prev, habits: prev.habits.map(h => h.id === habitId ? { 
             ...h, 
             status, 
             streak: newStreak, 
             history: newHistory,
             bestStreak: Math.max(h.bestStreak, newStreak),
             dailyProgress: status === 'completed' ? h.dailyTarget : h.dailyProgress // Max out reps
-        } : h));
+        } : h) }));
 
         playSound(soundToPlay, soundEnabled);
     };
 
     const deleteHabit = (habitId: string) => {
-        setHabits(prev => prev.filter(h => h.id !== habitId));
+        setState(prev => ({ ...prev, habits: prev.habits.filter(h => h.id !== habitId) }));
         playSound('delete', soundEnabled);
         lifeDispatch.addToast('Protocol Deleted', 'info');
         if (activeHabitId === habitId) setActiveHabitId(null);
@@ -402,32 +390,34 @@ export const HabitProvider: React.FC<{ children: ReactNode }> = ({ children }) =
             title, 
             isCollapsed: false 
         };
-        setCategories(prev => [...prev, newCat]);
+        setState(prev => ({ ...prev, categories: [...prev.categories, newCat] }));
         playSound('click', soundEnabled);
     };
 
     const deleteCategory = (id: string) => {
-        setCategories(prev => prev.filter(c => c.id !== id));
-        setHabits(prev => prev.map(h => h.categoryId === id ? { ...h, categoryId: undefined } : h));
+        setState(prev => ({ 
+            ...prev, 
+            categories: prev.categories.filter(c => c.id !== id),
+            habits: prev.habits.map(h => h.categoryId === id ? { ...h, categoryId: undefined } : h)
+        }));
         playSound('delete', soundEnabled);
     };
 
     const renameCategory = (id: string, newTitle: string) => {
-        setCategories(prev => prev.map(c => c.id === id ? { ...c, title: newTitle } : c));
+        setState(prev => ({ ...prev, categories: prev.categories.map(c => c.id === id ? { ...c, title: newTitle } : c) }));
     };
 
     const toggleCategory = (id: string) => {
-        setCategories(prev => prev.map(c => c.id === id ? { ...c, isCollapsed: !c.isCollapsed } : c));
+        setState(prev => ({ ...prev, categories: prev.categories.map(c => c.id === id ? { ...c, isCollapsed: !c.isCollapsed } : c) }));
     };
 
     const moveHabit = (habitId: string, categoryId: string | undefined) => {
-        setHabits(prev => prev.map(h => h.id === habitId ? { ...h, categoryId } : h));
+        setState(prev => ({ ...prev, habits: prev.habits.map(h => h.id === habitId ? { ...h, categoryId } : h) }));
         playSound('click', soundEnabled);
     };
 
     const restoreData = (newHabits: Habit[], newCategories: HabitCategory[]) => {
-        setHabits(newHabits);
-        setCategories(newCategories);
+        setState({ habits: newHabits, categories: newCategories });
         lifeDispatch.addToast('Habits Restored', 'success');
     };
 

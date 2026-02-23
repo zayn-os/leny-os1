@@ -27,6 +27,9 @@ const HabitForm: React.FC<HabitFormProps> = ({ onClose }) => {
     const [selectedCategory, setSelectedCategory] = useState<string>('');
     const [selectedSkillId, setSelectedSkillId] = useState<string>('');
     
+    // 🟢 REWARD TYPE TOGGLE
+    const [rewardType, setRewardType] = useState<'skill' | 'stat'>('stat');
+    
     // Habit Specifics
     const [habitType, setHabitType] = useState<HabitType>('daily');
     const [habitDescription, setHabitDescription] = useState(''); 
@@ -87,7 +90,7 @@ const HabitForm: React.FC<HabitFormProps> = ({ onClose }) => {
         const formattedSubtasks = subtasks.filter(st => st.trim() !== '').map((st, idx) => ({ id: `st_${Date.now()}_${idx}`, title: st, isCompleted: false }));
 
         habitDispatch.addHabit({
-            title, description: habitDescription, skillId: selectedSkillId || undefined, difficulty, stat, type: habitType,
+            title, description: habitDescription, skillId: rewardType === 'skill' ? (selectedSkillId || undefined) : undefined, difficulty, stat, type: habitType,
             categoryId: selectedCategory || undefined, specificDays: habitType === 'specific_days' ? selectedDays : undefined,
             intervalValue: habitType === 'interval' ? intervalVal : undefined, pattern: habitType === 'custom' ? pattern : undefined,
             isTimed, durationMinutes: isTimed ? duration : undefined, scheduledTime: scheduledTime || undefined, reminders, subtasks: formattedSubtasks, dailyTarget: reps
@@ -151,7 +154,7 @@ const HabitForm: React.FC<HabitFormProps> = ({ onClose }) => {
                     </div>
                 </div>
                 
-                {/* Category & Skill */}
+                {/* Category */}
                 <div>
                      <label className="block text-[10px] text-life-muted uppercase font-bold tracking-widest mb-2">Category / Section</label>
                     <div className="relative">
@@ -160,16 +163,6 @@ const HabitForm: React.FC<HabitFormProps> = ({ onClose }) => {
                          <ChevronRight className="absolute right-3 top-1/2 -translate-y-1/2 text-life-muted rotate-90" size={16} />
                     </div>
                 </div>
-                {skillState.skills.length > 0 && (
-                    <div>
-                        <label className="block text-[10px] text-life-muted uppercase font-bold tracking-widest mb-2">Linked Skill</label>
-                        <div className="relative">
-                            <BookOpen className="absolute left-3 top-1/2 -translate-y-1/2 text-life-muted" size={16} />
-                            <select value={selectedSkillId} onChange={(e) => setSelectedSkillId(e.target.value)} className="w-full bg-life-black border border-zinc-800 rounded-lg p-3 pl-10 text-sm text-life-text appearance-none focus:outline-none focus:border-life-gold/50"><option value="">No specific skill...</option>{skillState.skills.map(skill => (<option key={skill.id} value={skill.id}>{skill.title} (Lvl {skill.level})</option>))}</select>
-                            <ChevronRight className="absolute right-3 top-1/2 -translate-y-1/2 text-life-muted rotate-90" size={16} />
-                        </div>
-                    </div>
-                )}
             </div>
 
             {/* 🟢 NEW SPLIT COMPONENT */}
@@ -201,9 +194,91 @@ const HabitForm: React.FC<HabitFormProps> = ({ onClose }) => {
             <div className="flex bg-life-black rounded-lg border border-zinc-800 p-1 mb-2"><button type="button" onClick={() => setIsTimed(false)} className={`flex-1 py-1.5 rounded text-[10px] font-bold uppercase ${!isTimed ? 'bg-life-muted/30 text-white' : 'text-life-muted'}`}>No Timer</button><button type="button" onClick={() => setIsTimed(true)} className={`flex-1 py-1.5 rounded text-[10px] font-bold uppercase ${isTimed ? 'bg-life-gold text-life-black' : 'text-life-muted'}`}>With Timer</button></div>
             {isTimed && <div className="flex items-center gap-2"><Clock size={14} className="text-life-gold" /><input type="number" value={duration} onChange={(e) => setDuration(parseInt(e.target.value) || 0)} className="w-16 bg-life-black border border-zinc-800 rounded p-1 text-center text-sm font-bold focus:border-life-gold outline-none" /><span className="text-xs text-life-muted">mins</span></div>}
 
+            {/* Reward Type Toggle & Selection */}
             <div>
-                <label className="block text-[10px] text-life-muted uppercase font-bold tracking-widest mb-2">Attribute Focus</label>
-                <div className="grid grid-cols-7 gap-2">{Object.values(Stat).map((s) => (<button key={s} type="button" onClick={() => setStat(s)} className={`flex flex-col items-center justify-center p-2 rounded-lg border transition-all aspect-square ${stat === s ? 'bg-life-muted/10 border-current shadow-lg scale-110' : 'border-zinc-800 text-life-muted hover:bg-life-muted/5 opacity-70 hover:opacity-100'}`} style={{ color: stat === s ? STAT_COLORS[s] : undefined }}><StatIcon type={s} /><span className="text-[9px] font-bold mt-1">{s}</span></button>))}</div>
+                <label className="block text-[10px] text-life-muted uppercase font-bold tracking-widest mb-2">
+                    Reward Source
+                </label>
+                
+                {/* Toggle Switch */}
+                <div className="flex bg-life-black rounded-lg border border-zinc-800 p-1 mb-4">
+                    <button
+                        type="button"
+                        onClick={() => setRewardType('stat')}
+                        className={`flex-1 py-2 rounded-md text-[10px] font-bold uppercase transition-all ${rewardType === 'stat' ? 'bg-life-gold text-life-black shadow-sm' : 'text-life-muted hover:text-white hover:bg-white/5'}`}
+                    >
+                        Attribute Focus
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => setRewardType('skill')}
+                        className={`flex-1 py-2 rounded-md text-[10px] font-bold uppercase transition-all ${rewardType === 'skill' ? 'bg-life-gold text-life-black shadow-sm' : 'text-life-muted hover:text-white hover:bg-white/5'}`}
+                    >
+                        Skill Link
+                    </button>
+                </div>
+
+                {/* Conditional Render */}
+                {rewardType === 'stat' ? (
+                    <div className="animate-in fade-in slide-in-from-top-2 duration-300">
+                        <div className="grid grid-cols-7 gap-2">
+                            {Object.values(Stat).map((s) => (
+                                <button
+                                    key={s}
+                                    type="button"
+                                    onClick={() => setStat(s)}
+                                    className={`
+                                        flex flex-col items-center justify-center p-2 rounded-lg border transition-all aspect-square
+                                        ${stat === s 
+                                            ? 'bg-life-muted/10 border-current shadow-lg scale-110' 
+                                            : 'border-zinc-800 text-life-muted opacity-70 hover:opacity-100 hover:bg-life-muted/5'}
+                                    `}
+                                    style={{ color: stat === s ? STAT_COLORS[s] : undefined }}
+                                >
+                                    <StatIcon type={s} />
+                                    <span className="text-[9px] font-bold mt-1">{s}</span>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                ) : (
+                    <div className="animate-in fade-in slide-in-from-top-2 duration-300 space-y-2">
+                        <div className="relative">
+                            <BookOpen className="absolute left-3 top-1/2 -translate-y-1/2 text-life-muted" size={16} />
+                            <select 
+                                value={selectedSkillId}
+                                onChange={(e) => {
+                                    const newSkillId = e.target.value;
+                                    setSelectedSkillId(newSkillId);
+                                    // Auto-update stat based on skill
+                                    const skill = skillState.skills.find(s => s.id === newSkillId);
+                                    if (skill && skill.relatedStats.length > 0) {
+                                        setStat(skill.relatedStats[0]);
+                                    }
+                                }}
+                                className="w-full bg-life-black border border-zinc-800 rounded-lg p-3 pl-10 text-xs text-life-text appearance-none focus:outline-none focus:border-life-gold/50"
+                            >
+                                <option value="">Select a Skill...</option>
+                                {skillState.skills.map(skill => (
+                                    <option key={skill.id} value={skill.id}>{skill.title} (Lvl {skill.level})</option>
+                                ))}
+                            </select>
+                            <ChevronRight className="absolute right-3 top-1/2 -translate-y-1/2 text-life-muted rotate-90" size={14} />
+                        </div>
+                        
+                        {selectedSkillId && (
+                            <div className="p-3 bg-life-gold/10 border border-life-gold/20 rounded-lg flex items-center gap-3">
+                                <div className="p-2 bg-life-gold/20 rounded-full text-life-gold">
+                                    <Zap size={14} />
+                                </div>
+                                <div className="flex-1">
+                                    <p className="text-[10px] text-life-gold font-bold uppercase tracking-wider">Auto-Linked Attribute</p>
+                                    <p className="text-xs text-life-text font-mono">{stat}</p>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                )}
             </div>
 
             <button type="submit" className={`w-full py-4 rounded-xl font-black uppercase tracking-widest text-sm flex items-center justify-center gap-2 transition-all mt-4 ${title ? 'bg-life-gold text-life-black hover:bg-yellow-400 shadow-[0_0_20px_rgba(251,191,36,0.3)]' : 'bg-life-muted/20 text-life-muted cursor-not-allowed'}`} disabled={!title}>Install Protocol <ChevronRight size={16} /></button>

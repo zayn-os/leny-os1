@@ -10,6 +10,7 @@ import { parseTimeCode, parseCalendarCode, calculateCampaignDate, getActiveCampa
 import { calculateTaskReward } from '../utils/economyEngine';
 // 🟢 Updated Import
 import { calculateMonthlyAverage, calculateDailyHonorPenalty } from '../utils/honorSystem'; 
+import { usePersistence } from '../hooks/usePersistence';
 
 interface TaskState {
     tasks: Task[];
@@ -71,58 +72,48 @@ const INITIAL_CATS: TaskCategory[] = [
 
 const TaskContext = createContext<TaskContextType | undefined>(undefined);
 
+// Migration Logic
+const migrateTask = (t: any): Task => {
+    let reminders: Reminder[] = t.reminders || [];
+    if (!t.reminders && t.reminderMinutes && t.reminderMinutes > 0) {
+        reminders = [{ id: `mig_${Date.now()}_${Math.random()}`, minutesBefore: t.reminderMinutes, isSent: !!t.isReminderSent }];
+    }
+    return {
+        difficulty: Difficulty.NORMAL,
+        stat: Stat.STR,
+        subtasks: [],
+        energyLevel: 'medium',
+        isTimed: false,
+        isArchived: false,
+        isCompleted: false,
+        isCampaign: false,
+        reminders: reminders,
+        ...t,
+    };
+};
+
+const migrateTaskState = (data: any): TaskState => {
+    return {
+        tasks: (data.tasks || []).map(migrateTask),
+        categories: data.categories || INITIAL_CATS,
+        laws: data.laws || []
+    };
+};
+
 export const TaskProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const { state: lifeState, dispatch: lifeDispatch } = useLifeOS();
     const { skillDispatch, skillState } = useSkills();
     const soundEnabled = lifeState.user.preferences.soundEnabled;
 
-    // 🛡️ Safe Loader Helper
-    const safeLoad = <T,>(key: string, fallback: T): T => {
-        try {
-            const saved = localStorage.getItem(key);
-            if (saved) return JSON.parse(saved);
-        } catch (e) { console.warn(`Failed to load ${key}`, e); }
-        return fallback;
-    };
-
-    const loadTasks = (): Task[] => {
-        const parsed = safeLoad<any[]>(STORAGE_KEY_TASKS, []);
-        if (parsed.length === 0 && !localStorage.getItem(STORAGE_KEY_TASKS)) return INITIAL_TASKS;
-        
-        return parsed.map((t: any) => {
-            let reminders: Reminder[] = t.reminders || [];
-            if (!t.reminders && t.reminderMinutes && t.reminderMinutes > 0) {
-                reminders = [{ id: `mig_${Date.now()}_${Math.random()}`, minutesBefore: t.reminderMinutes, isSent: !!t.isReminderSent }];
-            }
-            return {
-                difficulty: Difficulty.NORMAL,
-                stat: Stat.STR,
-                subtasks: [],
-                energyLevel: 'medium',
-                isTimed: false,
-                isArchived: false,
-                isCompleted: false,
-                isCampaign: false,
-                reminders: reminders,
-                ...t,
-            };
-        });
-    };
-
-    const [tasks, setTasks] = useState<Task[]>(loadTasks);
-    const [categories, setCategories] = useState<TaskCategory[]>(() => safeLoad(STORAGE_KEY_TASK_CATS, INITIAL_CATS));
-    const [laws, setLaws] = useState<Law[]>(() => safeLoad(STORAGE_KEY_LAWS, []));
-
-    useEffect(() => {
-        const saveTimeout = setTimeout(() => {
-            if (tasks.length > 0 || localStorage.getItem(STORAGE_KEY_TASKS)) {
-                localStorage.setItem(STORAGE_KEY_TASKS, JSON.stringify(tasks));
-            }
-            if (categories.length > 0) localStorage.setItem(STORAGE_KEY_TASK_CATS, JSON.stringify(categories));
-            if (laws.length > 0) localStorage.setItem(STORAGE_KEY_LAWS, JSON.stringify(laws));
-        }, 500);
-        return () => clearTimeout(saveTimeout);
-    }, [tasks, categories, laws]);
+    // 🟢 USE PERSISTENCE HOOK
+    const [state, setState] = usePersistence<TaskState>(
+        'LIFE_OS_TASKS_COMBINED',
+        { tasks: INITIAL_TASKS, categories: INITIAL_CATS, laws: [] },
+        'tasks_data',
+        migrateTaskState
+    );
+    
+    const { tasks, categories, laws } = state;
 
     // ⚡ ACTIONS
 
@@ -171,12 +162,12 @@ export const TaskProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             isArchived: false
         };
         playSound('click', soundEnabled);
-        setTasks(prev => [newTask, ...prev]);
+        setState(prev => ({ ...prev, tasks: [newTask, ...prev.tasks] }));
         lifeDispatch.setModal('none'); 
     };
 
     const updateTask = (taskId: string, updates: Partial<Omit<Task, 'id'>>) => {
-        setTasks(prev => prev.map(t => t.id === taskId ? { ...t, ...updates } : t));
+        setState(prev => ({ ...prev, tasks: prev.tasks.map(t => t.id === taskId ? { ...t, ...updates } : t) }));
         playSound('click', soundEnabled);
     };
 
@@ -282,17 +273,17 @@ export const TaskProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         }
 
         if (soundToPlay && soundEnabled) playSound(soundToPlay, soundEnabled);
-        setTasks(prev => prev.map(t => t.id === taskId ? { ...t, isCompleted: isCompleting } : t));
+        setState(prev => ({ ...prev, tasks: prev.tasks.map(t => t.id === taskId ? { ...t, isCompleted: isCompleting } : t) }));
     };
 
     const toggleSubtask = (taskId: string, subtaskId: string) => {
-        setTasks(prev => prev.map(t => {
+        setState(prev => ({ ...prev, tasks: prev.tasks.map(t => {
             if (t.id !== taskId) return t;
             const updatedSubtasks = t.subtasks.map(st => 
                 st.id === subtaskId ? { ...st, isCompleted: !st.isCompleted } : st
             );
             return { ...t, subtasks: updatedSubtasks };
-        }));
+        })}));
         playSound('click', soundEnabled);
     };
 
@@ -329,7 +320,7 @@ export const TaskProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             playSound('delete', soundEnabled);
         }
         
-        setTasks(prev => prev.filter(t => t.id !== taskId));
+        setState(prev => ({ ...prev, tasks: prev.tasks.filter(t => t.id !== taskId) }));
     };
 
     const addCategory = (title: string) => {
@@ -338,37 +329,40 @@ export const TaskProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             title, 
             isCollapsed: false 
         };
-        setCategories(prev => [...prev, newCat]);
+        setState(prev => ({ ...prev, categories: [...prev.categories, newCat] }));
         playSound('click', soundEnabled);
     };
 
     const deleteCategory = (id: string) => {
-        setCategories(prev => prev.filter(c => c.id !== id));
-        setTasks(prev => prev.map(t => t.categoryId === id ? { ...t, categoryId: undefined } : t));
+        setState(prev => ({ 
+            ...prev, 
+            categories: prev.categories.filter(c => c.id !== id),
+            tasks: prev.tasks.map(t => t.categoryId === id ? { ...t, categoryId: undefined } : t)
+        }));
         playSound('delete', soundEnabled);
     };
 
     const renameCategory = (id: string, newTitle: string) => {
-        setCategories(prev => prev.map(c => c.id === id ? { ...c, title: newTitle } : c));
+        setState(prev => ({ ...prev, categories: prev.categories.map(c => c.id === id ? { ...c, title: newTitle } : c) }));
     };
 
     const toggleCategory = (id: string) => {
-        setCategories(prev => prev.map(c => c.id === id ? { ...c, isCollapsed: !c.isCollapsed } : c));
+        setState(prev => ({ ...prev, categories: prev.categories.map(c => c.id === id ? { ...c, isCollapsed: !c.isCollapsed } : c) }));
     };
 
     const moveTask = (taskId: string, categoryId: string | undefined) => {
-        setTasks(prev => prev.map(t => t.id === taskId ? { ...t, categoryId } : t));
+        setState(prev => ({ ...prev, tasks: prev.tasks.map(t => t.id === taskId ? { ...t, categoryId } : t) }));
         playSound('click', soundEnabled);
     };
 
     const archiveTask = (taskId: string) => {
-        setTasks(prev => prev.map(t => t.id === taskId ? { ...t, isArchived: true } : t));
+        setState(prev => ({ ...prev, tasks: prev.tasks.map(t => t.id === taskId ? { ...t, isArchived: true } : t) }));
         lifeDispatch.addToast('Mission moved to Backlog', 'info');
         playSound('click', soundEnabled);
     };
 
     const restoreTask = (taskId: string) => {
-        setTasks(prev => prev.map(t => t.id === taskId ? { ...t, isArchived: false } : t));
+        setState(prev => ({ ...prev, tasks: prev.tasks.map(t => t.id === taskId ? { ...t, isArchived: false } : t) }));
         lifeDispatch.addToast('Mission Restored', 'success');
         playSound('click', soundEnabled);
     };
@@ -383,18 +377,18 @@ export const TaskProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             statTarget: stat,
             timesBroken: 0
         };
-        setLaws(prev => [...prev, newLaw]);
+        setState(prev => ({ ...prev, laws: [...prev.laws, newLaw] }));
         playSound('click', soundEnabled);
         lifeDispatch.addToast('New Law Enacted', 'info');
     };
 
     const updateLaw = (id: string, updates: Partial<Omit<Law, 'id'>>) => {
-        setLaws(prev => prev.map(l => l.id === id ? { ...l, ...updates } : l));
+        setState(prev => ({ ...prev, laws: prev.laws.map(l => l.id === id ? { ...l, ...updates } : l) }));
         playSound('click', soundEnabled);
     };
 
     const deleteLaw = (id: string) => {
-        setLaws(prev => prev.filter(l => l.id !== id));
+        setState(prev => ({ ...prev, laws: prev.laws.filter(l => l.id !== id) }));
         playSound('delete', soundEnabled);
     };
 
@@ -436,20 +430,18 @@ export const TaskProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         }
 
         // Update Tracker
-        setLaws(prev => prev.map(l => l.id === id ? { ...l, timesBroken: l.timesBroken + 1 } : l));
+        setState(prev => ({ ...prev, laws: prev.laws.map(l => l.id === id ? { ...l, timesBroken: l.timesBroken + 1 } : l) }));
         playSound('error', soundEnabled);
     };
 
     const restoreData = (newTasks: Task[], newCategories: TaskCategory[], newLaws: Law[]) => {
-        setTasks(newTasks);
-        setCategories(newCategories);
-        setLaws(newLaws);
+        setState({ tasks: newTasks, categories: newCategories, laws: newLaws });
         lifeDispatch.addToast('Tasks & Laws Restored', 'success');
     };
 
     return (
         <TaskContext.Provider value={{ 
-            taskState: { tasks, categories, laws }, 
+            taskState: state, 
             taskDispatch: { 
                 addTask, updateTask, toggleTask, deleteTask, 
                 addCategory, deleteCategory, renameCategory, toggleCategory, moveTask, archiveTask, restoreTask,
