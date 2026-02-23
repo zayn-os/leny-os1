@@ -51,7 +51,7 @@ import { onAuthStateChanged, User } from 'firebase/auth';
 import LoginScreen from './components/auth/LoginScreen';
 
 const MainContent: React.FC = () => {
-  const { state } = useLifeOS();
+  const { state, dispatch } = useLifeOS();
   const { ui, user } = state;
   const [shake, setShake] = useState(false);
 
@@ -124,12 +124,12 @@ const MainContent: React.FC = () => {
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm animate-in fade-in">
                 <div className="relative w-full max-w-md">
                     <button 
-                        onClick={() => state.dispatch.setModal('none')}
+                        onClick={() => dispatch.setModal('none')}
                         className="absolute top-4 right-4 z-50 text-life-muted hover:text-white"
                     >
                         ✕
                     </button>
-                    <LoginScreen onGuestLogin={() => state.dispatch.setModal('none')} />
+                    <LoginScreen onGuestLogin={() => dispatch.setModal('none')} />
                 </div>
             </div>
         )}

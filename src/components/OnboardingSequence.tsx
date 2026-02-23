@@ -93,7 +93,7 @@ const OnboardingSequence: React.FC = () => {
                             Welcome to LifeOS. This interface will augment your daily operations, turning chaos into order and effort into progression.
                         </p>
                         <button onClick={handleNext} disabled={isTyping} className="w-full py-4 bg-life-gold hover:bg-yellow-400 text-black font-black uppercase tracking-[0.2em] rounded-sm transition-all hover:scale-[1.02]">
-                            Initialize System
+                            Start
                         </button>
                     </div>
                 )}
