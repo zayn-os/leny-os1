@@ -67,7 +67,6 @@ export interface OracleTask {
     deadline?: string;
     scheduledTime?: string;
     subtasks?: string[];
-    energyLevel?: string;
 }
 
 // 🟢 Detailed Step for AI Context

@@ -3,8 +3,6 @@ import { Difficulty, Stat, Reminder } from './types';
 
 // 🏛️ MODULE 01: TASK ENTITIES
 
-export type EnergyLevel = 'low' | 'medium' | 'high';
-
 export interface Subtask {
     id: string;
     title: string;
@@ -38,7 +36,6 @@ export interface Task {
   
   // 🆕 Step 2: Tactical Granularity
   subtasks: Subtask[]; 
-  energyLevel: EnergyLevel;
 
   // Organization
   categoryId?: string; 

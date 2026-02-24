@@ -166,6 +166,7 @@ export type ModalType =
     | 'economyProtocol'
     | 'raidProtocol'
     | 'skillProtocol'
+    | 'shopProtocol'
     | 'codexArbiter'
     | 'badgeProtocol'; // 👈 NEW: Badge Protocol Modal
 

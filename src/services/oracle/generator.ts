@@ -67,7 +67,6 @@ export const generateOracleBlueprint = (
             isCampaign: t.isCampaign || false,
             deadline: t.deadline,
             scheduledTime: t.scheduledTime,
-            energyLevel: t.energyLevel,
             subtasks: t.subtasks ? t.subtasks.map(s => s.title) : []
         }));
 
@@ -292,7 +291,7 @@ GOAL: Define and track long-term proficiencies.
 4. **Rust:** Skills decay if not practiced for 7 days (Rust State).
    - To cure rust: Complete a task linked to that skill.
 5. **Stat Inheritance:**
-   - If a Task/Habit/Raid is linked to a Skill, it inherits ALL of the Skill's `relatedStats`.
+   - If a Task/Habit/Raid is linked to a Skill, it inherits ALL of the Skill's \`relatedStats\`.
    - The Stat Reward (e.g., +1 Stat Point) is SPLIT among these stats.
    - Example: A "Coding" skill has [INT, CRT]. A task linked to it gives +0.5 INT and +0.5 CRT.
    - This allows for multi-stat training via a single activity.

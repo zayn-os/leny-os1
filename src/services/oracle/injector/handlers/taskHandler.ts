@@ -17,7 +17,6 @@ export const handleTasks = (ctx: HandlerContext) => {
                     difficulty: t.difficulty,
                     stat: t.stat,
                     skillId: t.skillId, // 👈 Added skillId
-                    energyLevel: t.energyLevel,
                     isTimed: !!t.durationMinutes,
                     durationMinutes: t.durationMinutes,
                     deadline: t.deadline,
@@ -34,7 +33,6 @@ export const handleTasks = (ctx: HandlerContext) => {
                     difficulty: t.difficulty || 'normal',
                     stat: t.stat || 'STR',
                     skillId: t.skillId, // 👈 Added skillId
-                    energyLevel: t.energyLevel || 'medium',
                     isTimed: !!t.durationMinutes,
                     durationMinutes: t.durationMinutes,
                     deadline: t.deadline,
