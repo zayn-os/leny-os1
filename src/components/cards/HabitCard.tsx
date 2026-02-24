@@ -39,7 +39,7 @@ const HabitCard: React.FC<HabitCardProps> = ({ habit, onProcess, onDelete }) => 
   const [isExpanded, setIsExpanded] = useState(false);
 
   const levelData = getHabitLevel(habit.streak);
-  const linkedSkill = habit.skillId ? state.user.skills?.find((s: any) => s.id === habit.skillId) || skillState.skills.find(s => s.id === habit.skillId) : null;
+  const linkedSkill = habit.skillId ? skillState.skills.find(s => s.id === habit.skillId) : null;
 
   const isCompleted = habit.status === 'completed';
   const isFailed = habit.status === 'failed';

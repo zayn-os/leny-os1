@@ -31,8 +31,7 @@ const CodexArbiterModal: React.FC = () => {
         })),
         habits: habitState.habits.map(h => ({
             title: h.title,
-            type: h.type,
-            frequency: h.frequency
+            type: h.type
         })),
         activeRaids: raidState.raids.filter(r => r.status === 'active').map(r => ({
             title: r.title,

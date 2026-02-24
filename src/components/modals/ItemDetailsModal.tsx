@@ -120,8 +120,8 @@ const ItemDetailsModal: React.FC = () => {
             
             // Difficulty / Stat / Skill
             // Use RAW values from item to support inheritance logic
-            setEditDifficulty(resolvedData.item.difficulty);
-            setEditStat(resolvedData.item.stat);
+            setEditDifficulty(resolvedData.difficulty);
+            setEditStat(resolvedData.stat);
             setEditSkillId(resolvedData.skillId || '');
 
             let timeStr = resolvedData.scheduledTime || "";
@@ -192,7 +192,7 @@ const ItemDetailsModal: React.FC = () => {
             // Skill ID is NOT saved for steps (Inherited)
             
             // ⏱️ TIMER DATA
-            payload.isTimed = resolvedData.item.isTimed; // Preserve unless we add UI for it (we should add UI later)
+            payload.isTimed = (resolvedData.item as any).isTimed; // Preserve unless we add UI for it (we should add UI later)
             // For now, let's assume if user edits time, they might want to toggle timer? 
             // Actually, let's just save what we have.
         } else {
@@ -373,7 +373,7 @@ const ItemDetailsModal: React.FC = () => {
                             />
                             
                             {/* 🟢 RAID STEPS MANAGEMENT (EDIT MODE) */}
-                            {modalData.type === 'raid' && resolvedData.item.steps && (
+                            {modalData.type === 'raid' && (resolvedData.item as any).steps && (
                                 <div className="mt-4 border-t border-zinc-800 pt-4">
                                     <div className="flex justify-between items-center mb-3">
                                         <h4 className="text-[10px] text-life-muted uppercase font-bold flex items-center gap-1"><Activity size={12} /> Operation Steps</h4>
@@ -387,7 +387,7 @@ const ItemDetailsModal: React.FC = () => {
                                                     difficulty: resolvedData.difficulty,
                                                     stat: resolvedData.stat,
                                                 };
-                                                const updatedSteps = [...resolvedData.item.steps, newStep];
+                                                const updatedSteps = [...(resolvedData.item as any).steps, newStep];
                                                 raidDispatch.updateRaid(modalData.itemId, { steps: updatedSteps });
                                                 dispatch.addToast("Step Added", "success");
                                             }}
@@ -397,17 +397,17 @@ const ItemDetailsModal: React.FC = () => {
                                         </button>
                                     </div>
                                     <div className="space-y-2">
-                                        {resolvedData.item.steps.map((step: any, idx: number) => (
+                                        {(resolvedData.item as any).steps.map((step: any, idx: number) => (
                                             <div key={step.id} className="flex items-center justify-between p-3 rounded bg-life-black border border-life-muted/20 group hover:border-life-gold/30 transition-all">
                                                 <div className="flex items-center gap-3">
                                                     <span className="text-[9px] font-mono text-life-muted opacity-50">{(idx + 1).toString().padStart(2, '0')}</span>
                                                     <div className="flex flex-col">
                                                         <span className={`text-xs font-bold ${step.isCompleted ? 'text-life-muted line-through' : 'text-life-text'}`}>{step.title}</span>
                                                         <div className="flex gap-1 mt-0.5">
-                                                            {step.difficulty && step.difficulty !== resolvedData.item.difficulty && (
+                                                            {step.difficulty && step.difficulty !== (resolvedData.item as any).difficulty && (
                                                                 <span className={`text-[7px] font-black uppercase px-1 rounded border ${DIFFICULTY_COLORS[step.difficulty]}`}>{step.difficulty}</span>
                                                             )}
-                                                            {step.stat && step.stat !== resolvedData.item.stats?.[0] && (
+                                                            {step.stat && step.stat !== (resolvedData.item as any).stats?.[0] && (
                                                                 <span className="text-[7px] font-black uppercase px-1 rounded border border-life-muted/20 flex items-center gap-0.5" style={{ color: STAT_COLORS[step.stat], borderColor: `${STAT_COLORS[step.stat]}40` }}>
                                                                     <StatIcon stat={step.stat} size={6} /> {step.stat}
                                                                 </span>
@@ -420,7 +420,7 @@ const ItemDetailsModal: React.FC = () => {
                                                         onClick={(e) => {
                                                             e.stopPropagation();
                                                             // Open step details (even while editing parent, this switches context)
-                                                            dispatch.setModal('details', { itemId: step.id, type: 'raid_step', parentId: modalData.itemId });
+                                                            dispatch.setModal('itemDetails', { itemId: step.id, type: 'raid_step', parentId: modalData.itemId });
                                                         }}
                                                         className="p-1.5 rounded bg-life-muted/10 hover:bg-life-gold/20 text-life-muted hover:text-life-gold"
                                                     >
@@ -471,7 +471,7 @@ const ItemDetailsModal: React.FC = () => {
                             )}
 
                             {/* 🟢 RAID STEPS MANAGEMENT (ONLY FOR RAID PARENT) */}
-                            {modalData.type === 'raid' && resolvedData.item.steps && (
+                            {modalData.type === 'raid' && (resolvedData.item as any).steps && (
                                 <div className="mt-6 border-t border-zinc-800 pt-4">
                                     <div className="flex justify-between items-center mb-3">
                                         <h4 className="text-[10px] text-life-muted uppercase font-bold flex items-center gap-1"><Activity size={12} /> Operation Steps</h4>
@@ -486,7 +486,7 @@ const ItemDetailsModal: React.FC = () => {
                                                     difficulty: resolvedData.difficulty, // Inherit
                                                     stat: resolvedData.stat, // Inherit
                                                 };
-                                                const updatedSteps = [...resolvedData.item.steps, newStep];
+                                                const updatedSteps = [...(resolvedData.item as any).steps, newStep];
                                                 raidDispatch.updateRaid(modalData.itemId, { steps: updatedSteps });
                                                 dispatch.addToast("Step Added", "success");
                                             }}
@@ -496,17 +496,17 @@ const ItemDetailsModal: React.FC = () => {
                                         </button>
                                     </div>
                                     <div className="space-y-2">
-                                        {resolvedData.item.steps.map((step: any, idx: number) => (
+                                        {(resolvedData.item as any).steps.map((step: any, idx: number) => (
                                             <div key={step.id} className="flex items-center justify-between p-3 rounded bg-life-black border border-life-muted/20 group hover:border-life-gold/30 transition-all">
                                                 <div className="flex items-center gap-3">
                                                     <span className="text-[9px] font-mono text-life-muted opacity-50">{(idx + 1).toString().padStart(2, '0')}</span>
                                                     <div className="flex flex-col">
                                                         <span className={`text-xs font-bold ${step.isCompleted ? 'text-life-muted line-through' : 'text-life-text'}`}>{step.title}</span>
                                                         <div className="flex gap-1 mt-0.5">
-                                                            {step.difficulty && step.difficulty !== resolvedData.item.difficulty && (
+                                                            {step.difficulty && step.difficulty !== (resolvedData.item as any).difficulty && (
                                                                 <span className={`text-[7px] font-black uppercase px-1 rounded border ${DIFFICULTY_COLORS[step.difficulty]}`}>{step.difficulty}</span>
                                                             )}
-                                                            {step.stat && step.stat !== resolvedData.item.stats?.[0] && (
+                                                            {step.stat && step.stat !== (resolvedData.item as any).stats?.[0] && (
                                                                 <span className="text-[7px] font-black uppercase px-1 rounded border border-life-muted/20 flex items-center gap-0.5" style={{ color: STAT_COLORS[step.stat], borderColor: `${STAT_COLORS[step.stat]}40` }}>
                                                                     <StatIcon stat={step.stat} size={6} /> {step.stat}
                                                                 </span>
@@ -518,7 +518,7 @@ const ItemDetailsModal: React.FC = () => {
                                                     <button 
                                                         onClick={(e) => {
                                                             e.stopPropagation();
-                                                            dispatch.setModal('details', { itemId: step.id, type: 'raid_step', parentId: modalData.itemId });
+                                                            dispatch.setModal('itemDetails', { itemId: step.id, type: 'raid_step', parentId: modalData.itemId });
                                                         }}
                                                         className="p-1.5 rounded bg-life-muted/10 hover:bg-life-gold/20 text-life-muted hover:text-life-gold"
                                                     >

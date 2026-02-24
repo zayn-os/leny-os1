@@ -1,25 +1,26 @@
-
-import React, { useState, useRef, useEffect } from 'react';
-import { Plus, Trash2, Dumbbell, Brain, Zap, Shield, Heart, Activity, ChevronRight, BookOpen, Calendar, FileText, CheckSquare, Bell, Palette } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Plus, Trash2, Dumbbell, Brain, Zap, Heart, Activity, ChevronRight, BookOpen, Calendar, FileText, CheckSquare, Bell, Palette, Flame, Users, Coins, Clock, ChevronDown, ChevronUp, AlignLeft } from 'lucide-react';
 import { useRaids } from '../../contexts/RaidContext';
 import { useSkills } from '../../contexts/SkillContext';
 import { useLifeOS } from '../../contexts/LifeOSContext';
-import { Difficulty, Stat, Reminder } from '../../types/types';
-import { Subtask } from '../../types/taskTypes';
-import { STAT_COLORS, DIFFICULTY_COLORS, DIFFICULTY_BG } from '../../types/constants';
-import { RaidStepEditor } from './parts/RaidStepEditor'; // 👈 IMPORT NEW COMPONENT
+import { Raid, RaidStep } from '../../types/raidTypes';
+import { Difficulty, Stat } from '../../types/types';
+import { DIFFICULTY_COLORS, DIFFICULTY_BG, STAT_COLORS } from '../../types/constants';
+
+import { RaidStepEditor } from './parts/RaidStepEditor';
 
 interface RaidFormProps {
     onClose: () => void;
+    initialData?: Raid | null;
 }
 
-interface PendingRaidStep {
-    id: string;
-    title: string;
-    notes: string;
-    subtasks: Subtask[];
-    reminders: Reminder[];
-    // 🟢 NEW FIELDS
+// Helper to generate IDs
+const generateId = (prefix: string) => `${prefix}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+// Extended Step Interface for Form State
+export interface PendingRaidStep extends Omit<RaidStep, 'id' | 'isCompleted'> {
+    id: string; // We need ID for list management
+    isLocked: boolean;
     difficulty?: Difficulty;
     stat?: Stat;
     scheduledTime?: string;
@@ -28,142 +29,135 @@ interface PendingRaidStep {
     durationMinutes?: number;
 }
 
-const RaidForm: React.FC<RaidFormProps> = ({ onClose }) => {
-    const { state } = useLifeOS(); 
+const RaidForm: React.FC<RaidFormProps> = ({ onClose, initialData }) => {
     const { raidDispatch } = useRaids();
     const { skillState } = useSkills();
+    const { state } = useLifeOS();
     
+    // Basic Info
     const [title, setTitle] = useState('');
-    const initialDate = state.ui.modalData?.date ? state.ui.modalData.date.split('T')[0] : '';
-    const [deadline, setDeadline] = useState(initialDate);
-    const [difficulty, setDifficulty] = useState<Difficulty>(Difficulty.EASY);
-    const [selectedStats, setSelectedStats] = useState<Stat[]>([Stat.DIS]);
-    const [selectedSkillId, setSelectedSkillId] = useState<string>('');
+    const [description, setDescription] = useState('');
+    const [difficulty, setDifficulty] = useState<Difficulty>(Difficulty.EASY); 
+    const [stat, setStat] = useState<Stat>(Stat.DIS);
+    const [skillId, setSkillId] = useState<string>('');
     
-    // 🟢 REWARD TYPE TOGGLE
-    const [rewardType, setRewardType] = useState<'skill' | 'stat'>('stat');
-    
-    const [raidSteps, setRaidSteps] = useState<PendingRaidStep[]>([
-        { id: `temp_${Date.now()}_1`, title: '', notes: '', subtasks: [], reminders: [] },
-        { id: `temp_${Date.now()}_2`, title: '', notes: '', subtasks: [], reminders: [] }
-    ]);
+    // Steps
+    const [steps, setSteps] = useState<PendingRaidStep[]>([]);
+    const [editingStepId, setEditingStepId] = useState<string | null>(null);
 
-    const stepInputRefs = useRef<(HTMLInputElement | null)[]>([]);
-    const [editingStepIndex, setEditingStepIndex] = useState<number | null>(null);
-
-    // 🟢 FOCUS NEW STEP
+    // Initialize Data (Edit Mode)
     useEffect(() => {
-        if (raidSteps.length > 0) {
-            const lastIdx = raidSteps.length - 1;
-            if (raidSteps[lastIdx].title === '') {
-                stepInputRefs.current[lastIdx]?.focus();
+        if (initialData) {
+            setTitle(initialData.title);
+            setDescription(initialData.description || '');
+            setDifficulty(initialData.difficulty);
+            setStat(initialData.stats[0] || Stat.DIS);
+            setSkillId(initialData.skillId || '');
+            
+            // Map existing steps to pending steps
+            setSteps(initialData.steps.map(s => ({
+                id: s.id,
+                title: s.title,
+                isLocked: s.isLocked || false,
+                notes: s.notes || '',
+                subtasks: s.subtasks || [],
+                reminders: s.reminders || [],
+                difficulty: s.difficulty,
+                stat: s.stat,
+                scheduledTime: s.scheduledTime,
+                deadline: s.deadline,
+                isTimed: s.isTimed,
+                durationMinutes: s.durationMinutes
+            })));
+
+            if (initialData.skillId) {
+                setRewardType('skill');
             }
-        }
-    }, [raidSteps.length]);
-
-    const handleAddStep = () => {
-        setRaidSteps([...raidSteps, { 
-            id: `temp_${Date.now()}_${raidSteps.length + 1}`, 
-            title: '', 
-            notes: '', 
-            subtasks: [], 
-            reminders: [],
-            // 🟢 INIT NEW FIELDS as undefined to inherit from Parent
-            difficulty: undefined, 
-            stat: undefined,
-        }]);
-    };
-
-    const handleRemoveStep = (index: number) => {
-        setRaidSteps(raidSteps.filter((_, i) => i !== index));
-    };
-
-    const handleStepChange = (index: number, field: keyof PendingRaidStep, value: any) => {
-        const newSteps = [...raidSteps];
-        newSteps[index] = { ...newSteps[index], [field]: value };
-        setRaidSteps(newSteps);
-    };
-
-    // Subtask Handlers
-    const handleAddSubtask = (index: number) => {
-        const newSub: Subtask = { id: `st_new_${Date.now()}`, title: '', isCompleted: false };
-        const newSteps = [...raidSteps];
-        newSteps[index].subtasks.push(newSub);
-        setRaidSteps(newSteps);
-    };
-
-    const handleSubtaskChange = (stepIndex: number, subtaskIndex: number, val: string) => {
-        const newSteps = [...raidSteps];
-        newSteps[stepIndex].subtasks[subtaskIndex].title = val;
-        setRaidSteps(newSteps);
-    };
-
-    const handleRemoveSubtask = (stepIndex: number, subtaskId: string) => {
-        const newSteps = [...raidSteps];
-        newSteps[stepIndex].subtasks = newSteps[stepIndex].subtasks.filter(st => st.id !== subtaskId);
-        setRaidSteps(newSteps);
-    };
-
-    // Reminder Handlers
-    const handleAddReminder = (index: number, minutes: number) => {
-        if (minutes === -1) return;
-        const exists = raidSteps[index].reminders.some(r => r.minutesBefore === minutes);
-        if (exists) return;
-        const newReminder: Reminder = { id: `rem_new_${Date.now()}_${Math.random().toString(36).substr(2, 5)}`, minutesBefore: minutes, isSent: false };
-        const newSteps = [...raidSteps];
-        newSteps[index].reminders.push(newReminder);
-        newSteps[index].reminders.sort((a,b) => a.minutesBefore - b.minutesBefore);
-        setRaidSteps(newSteps);
-    };
-
-    const handleRemoveReminder = (stepIndex: number, reminderId: string) => {
-        const newSteps = [...raidSteps];
-        newSteps[stepIndex].reminders = newSteps[stepIndex].reminders.filter(r => r.id !== reminderId);
-        setRaidSteps(newSteps);
-    };
-
-    const toggleStat = (stat: Stat) => {
-        if (selectedStats.includes(stat)) {
-            setSelectedStats(selectedStats.filter(s => s !== stat));
         } else {
-            if (selectedStats.length < 3) setSelectedStats([...selectedStats, stat]);
+            // Default 1 empty step for new Raid
+            setSteps([
+                { id: generateId('rs'), title: '', isLocked: false, notes: '', subtasks: [], reminders: [] },
+            ]);
         }
-    };
+    }, [initialData]);
+
+    // 🟢 REWARD TYPE TOGGLE
+    const [rewardType, setRewardType] = useState<'stat' | 'skill'>('stat');
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (!title.trim() || selectedStats.length === 0) return;
+        if (!title.trim()) return;
 
-        const validSteps = raidSteps
-            .filter(s => s.title.trim() !== '')
-            .map((step, idx) => ({
-                id: `rs_${Date.now()}_${idx}`,
-                title: step.title,
-                notes: step.notes, 
-                subtasks: step.subtasks.filter(st => st.title.trim() !== ''),
-                reminders: step.reminders,
-                isCompleted: false,
-                isLocked: idx > 0,
-                // 🟢 NEW FIELDS PAYLOAD
-                difficulty: step.difficulty,
-                stat: step.stat,
-                scheduledTime: step.scheduledTime,
-                deadline: step.deadline,
-                isTimed: step.isTimed,
-                durationMinutes: step.durationMinutes
-            }));
+        // Convert PendingSteps back to RaidSteps (clean up ID if needed, but we keep it)
+        const finalSteps: RaidStep[] = steps.map(s => ({
+            id: s.id,
+            title: s.title,
+            isCompleted: false, 
+            isLocked: s.isLocked || false,
+            notes: s.notes,
+            subtasks: s.subtasks,
+            reminders: s.reminders,
+            difficulty: s.difficulty || difficulty, // Inherit from Raid if not set
+            stat: stat, // Inherit from Raid
+            scheduledTime: s.scheduledTime,
+            deadline: s.deadline,
+            isTimed: s.isTimed,
+            durationMinutes: s.durationMinutes
+        }));
 
-        if (validSteps.length === 0) { alert("Operation must have at least one step."); return; }
+        // If editing, we need to preserve `isCompleted` from original data if step ID matches
+        if (initialData) {
+            const mergedSteps = finalSteps.map(fs => {
+                const original = initialData.steps.find(os => os.id === fs.id);
+                return original ? { ...fs, isCompleted: original.isCompleted } : fs;
+            });
 
-        raidDispatch.addRaid({
-            title,
-            deadline: deadline || undefined,
-            difficulty,
-            stats: selectedStats,
-            skillId: rewardType === 'skill' ? (selectedSkillId || undefined) : undefined,
-            steps: validSteps
-        });
+            raidDispatch.updateRaid(initialData.id, {
+                title,
+                description,
+                difficulty,
+                stats: [stat],
+                skillId: rewardType === 'skill' ? (skillId || undefined) : undefined,
+                steps: mergedSteps
+            });
+        } else {
+            raidDispatch.addRaid({
+                title,
+                description,
+                difficulty,
+                stats: [stat],
+                skillId: rewardType === 'skill' ? (skillId || undefined) : undefined,
+                steps: finalSteps
+            });
+        }
         onClose();
+    };
+
+    // Step Management
+    const addStep = () => {
+        const newId = generateId('rs');
+        setSteps([...steps, { id: newId, title: '', isLocked: false, notes: '', subtasks: [], reminders: [] }]);
+    };
+
+    const removeStep = (index: number) => {
+        const newSteps = [...steps];
+        newSteps.splice(index, 1);
+        setSteps(newSteps);
+    };
+
+    const updateStep = (index: number, field: string, value: any) => {
+        const newSteps = [...steps];
+        newSteps[index] = { ...newSteps[index], [field]: value };
+        setSteps(newSteps);
+    };
+
+    const toggleDetails = (id: string) => {
+        setEditingStepId(id);
+    };
+
+    const handleSaveStep = (updatedStep: PendingRaidStep) => {
+        setSteps(steps.map(s => s.id === updatedStep.id ? updatedStep : s));
+        setEditingStepId(null);
     };
 
     const StatIcon = ({ type }: { type: Stat }) => {
@@ -180,95 +174,145 @@ const RaidForm: React.FC<RaidFormProps> = ({ onClose }) => {
         }
     };
 
+    if (editingStepId) {
+        const stepToEdit = steps.find(s => s.id === editingStepId);
+        if (stepToEdit) {
+            return (
+                <RaidStepEditor 
+                    step={stepToEdit} 
+                    onSave={handleSaveStep} 
+                    onClose={() => setEditingStepId(null)} 
+                />
+            );
+        }
+    }
+
     return (
-        <>
-            <form onSubmit={handleSubmit} className="space-y-6 animate-in slide-in-from-right fade-in duration-300">
-                <div className="space-y-4">
-                    <div>
-                        <label className="block text-[10px] text-life-muted uppercase font-bold tracking-widest mb-2">Operation Title</label>
-                        <input 
-                            type="text" value={title} onChange={(e) => setTitle(e.target.value)}
-                            placeholder="e.g. Master React Native..." autoFocus
-                            className="w-full bg-life-black border border-zinc-800 rounded-lg p-3 text-life-text placeholder:text-life-muted/50 focus:outline-none focus:border-life-gold/50 transition-all font-medium"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-[10px] text-life-muted uppercase font-bold tracking-widest mb-2">Deadline (Target Date)</label>
-                        <div className="relative">
-                            <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 text-life-muted" size={16} />
-                            <input type="date" value={deadline} onChange={(e) => setDeadline(e.target.value)} className="w-full bg-life-black border border-zinc-800 rounded-lg p-3 pl-10 text-life-text focus:outline-none focus:border-life-gold/50 text-sm" />
-                        </div>
-                    </div>
-                </div>
-
+        <form onSubmit={handleSubmit} className="space-y-6 animate-in slide-in-from-bottom-4 fade-in duration-300">
+            
+            {/* 1. IDENTITY SECTION */}
+            <div className="space-y-4">
                 <div>
-                    <div className="flex items-center justify-between mb-2">
-                        <label className="block text-[10px] text-life-muted uppercase font-bold tracking-widest">Tactical Steps & Intel</label>
-                        <button type="button" onClick={handleAddStep} className="text-[10px] flex items-center gap-1 text-life-gold hover:text-white transition-colors uppercase font-bold">
-                            <Plus size={12} /> Add Step
-                        </button>
-                    </div>
-                    
-                    <div className="space-y-3">
-                        {raidSteps.map((step, idx) => (
-                            <div key={step.id} className="bg-life-black/40 p-3 rounded-lg border border-zinc-800">
-                                <div className="flex gap-2 items-center mb-2">
-                                    <span className="text-[10px] font-mono text-life-muted w-4">{idx + 1}.</span>
-                                    <input 
-                                        ref={(el) => { stepInputRefs.current[idx] = el; }}
-                                        type="text" value={step.title}
-                                        onChange={(e) => handleStepChange(idx, 'title', e.target.value)}
-                                        onKeyDown={(e) => {
-                                            if (e.key === 'Enter') {
-                                                e.preventDefault();
-                                                if (idx < raidSteps.length - 1) {
-                                                    stepInputRefs.current[idx + 1]?.focus();
-                                                } else {
-                                                    handleAddStep();
-                                                    // Note: Focus on newly added step will require a useEffect or similar
-                                                    // For now, focusing the next existing one is handled.
-                                                }
-                                            }
-                                        }}
-                                        placeholder={`Step ${idx + 1} objective...`}
-                                        className="flex-1 bg-transparent border-b border-zinc-800 px-2 py-1 text-sm text-life-text focus:outline-none focus:border-life-gold/50"
-                                    />
-                                    {raidSteps.length > 1 && <button type="button" onClick={() => handleRemoveStep(idx)} className="text-life-muted hover:text-life-hard p-1"><Trash2 size={14} /></button>}
-                                </div>
-                                <div className="pl-6">
-                                    <button type="button" onClick={() => setEditingStepIndex(idx)} className={`w-full flex items-center gap-3 p-2 rounded-md border text-xs text-left transition-all ${(step.notes || step.subtasks.length > 0 || step.reminders.length > 0) ? 'bg-life-gold/5 border-life-gold/30 text-life-text' : 'bg-transparent border-dashed border-zinc-800 text-life-muted hover:text-life-gold hover:border-life-gold/50'}`}>
-                                        <FileText size={14} className={step.notes ? 'text-life-gold' : 'opacity-50'} />
-                                        <div className="flex-1 truncate">{step.notes ? step.notes : <span className="opacity-50">+ Add Intel, Subtasks, Alerts</span>}</div>
-                                        {(step.subtasks.length > 0 || step.reminders.length > 0) && (
-                                            <div className="flex gap-2 text-[9px] font-mono font-bold">
-                                                {step.subtasks.length > 0 && <span className="flex items-center gap-1 text-life-gold"><CheckSquare size={10} /> {step.subtasks.length}</span>}
-                                                {step.reminders.length > 0 && <span className="flex items-center gap-1 text-life-gold"><Bell size={10} /> {step.reminders.length}</span>}
-                                            </div>
-                                        )}
-                                    </button>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+                    <label className="block text-[10px] text-life-muted uppercase font-bold tracking-widest mb-2">Operation Name</label>
+                    <input 
+                        type="text" 
+                        value={title} 
+                        onChange={e => setTitle(e.target.value)} 
+                        placeholder="e.g. Project Spartan" 
+                        autoFocus
+                        className="w-full bg-life-black border border-life-muted/30 rounded-lg p-3 text-life-text placeholder:text-life-muted/50 focus:outline-none focus:border-life-gold/50 transition-all font-medium"
+                    />
                 </div>
 
+                {/* DIFFICULTY */}
                 <div>
                     <label className="block text-[10px] text-life-muted uppercase font-bold tracking-widest mb-2">Threat Level</label>
                     <div className="grid grid-cols-3 gap-2">
-                        {Object.values(Difficulty).map((diff) => (
-                            <button key={diff} type="button" onClick={() => setDifficulty(diff)} className={`py-2 rounded-lg text-xs font-bold uppercase tracking-wider border transition-all ${difficulty === diff ? `${DIFFICULTY_COLORS[diff]} ${DIFFICULTY_BG[diff]} shadow-[0_0_10px_rgba(0,0,0,0.5)] scale-105` : 'border-zinc-800 text-life-muted hover:bg-life-muted/5'}`}>{diff}</button>
+                        {Object.values(Difficulty).map((d) => (
+                            <button
+                                key={d}
+                                type="button"
+                                onClick={() => setDifficulty(d)}
+                                className={`py-3 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all border ${difficulty === d ? `${DIFFICULTY_COLORS[d]} ${DIFFICULTY_BG[d]} shadow-lg scale-[1.02] border-transparent` : 'bg-life-black border-life-muted/20 text-life-muted hover:bg-life-muted/5'}`}
+                            >
+                                {d}
+                            </button>
                         ))}
                     </div>
                 </div>
+            </div>
 
-            {/* Reward Type Toggle & Selection */}
+            {/* 2. CONTEXT & LINKAGE */}
+            <div className="space-y-4">
+                {/* Intel / Description */}
+                <div>
+                    <label className="block text-[10px] text-life-muted uppercase font-bold tracking-widest mb-2 flex items-center gap-1">
+                        <FileText size={12} /> Briefing / Intel
+                    </label>
+                    <textarea 
+                        rows={3}
+                        value={description}
+                        onChange={e => setDescription(e.target.value)}
+                        placeholder="Add mission briefing..."
+                        className="w-full bg-life-black border border-life-muted/30 rounded-lg p-3 text-xs text-life-text placeholder:text-life-muted/50 focus:outline-none focus:border-life-gold/50 transition-all resize-none"
+                    />
+                </div>
+            </div>
+
+            {/* 3. STEPS */}
+            <div>
+                <div className="flex items-center justify-between mb-2">
+                    <label className="block text-[10px] text-life-muted uppercase font-bold tracking-widest flex items-center gap-1">
+                        <CheckSquare size={12} /> Operational Steps
+                    </label>
+                    <button type="button" onClick={addStep} className="text-[10px] flex items-center gap-1 text-life-gold hover:text-white transition-colors uppercase font-bold">
+                        <Plus size={12} /> Add Step
+                    </button>
+                </div>
+                
+                <div className="space-y-2">
+                    {steps.map((step, idx) => (
+                        <div key={step.id} className="bg-life-black border border-life-muted/20 rounded-lg p-2 transition-all hover:border-life-muted/40">
+                            {/* Header Row */}
+                            <div className="flex items-center gap-2">
+                                <div className="flex flex-col items-center justify-center w-5 h-5 rounded bg-life-muted/10 text-life-muted font-black text-[9px]">
+                                    {idx + 1}
+                                </div>
+                                
+                                <div className="flex-1 relative">
+                                    <input 
+                                        type="text" 
+                                        value={step.title}
+                                        onChange={(e) => updateStep(idx, 'title', e.target.value)}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter') {
+                                                e.preventDefault();
+                                                addStep();
+                                            }
+                                        }}
+                                        placeholder="Step Title..."
+                                        className="w-full bg-transparent border-none text-xs font-bold text-life-text focus:outline-none placeholder:text-life-muted/30"
+                                        autoFocus={idx === steps.length - 1 && steps.length > 1}
+                                    />
+                                </div>
+
+                                {/* Timer Toggle */}
+                                <button
+                                    type="button"
+                                    onClick={() => updateStep(idx, 'isTimed', !step.isTimed)}
+                                    className={`p-1.5 rounded-md transition-colors ${step.isTimed ? 'text-life-gold' : 'text-life-muted hover:text-white'}`}
+                                    title="Toggle Timer"
+                                >
+                                    <Clock size={14} />
+                                </button>
+
+                                {/* Details Toggle */}
+                                <button 
+                                    type="button" 
+                                    onClick={() => toggleDetails(step.id)}
+                                    className="p-1.5 rounded-md transition-colors text-life-muted hover:text-life-gold hover:bg-life-gold/10"
+                                    title="Step Details"
+                                >
+                                    <AlignLeft size={14} />
+                                </button>
+
+                                <button type="button" onClick={() => removeStep(idx)} className="text-life-muted hover:text-life-hard p-1.5">
+                                    <Trash2 size={14} />
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {/* REWARD SOURCE (STAT OR SKILL) */}
             <div>
                 <label className="block text-[10px] text-life-muted uppercase font-bold tracking-widest mb-2">
                     Reward Source
                 </label>
                 
                 {/* Toggle Switch */}
-                <div className="flex bg-life-black rounded-lg border border-zinc-800 p-1 mb-4">
+                <div className="flex bg-life-black rounded-lg border border-life-muted/20 p-1 mb-4">
                     <button
                         type="button"
                         onClick={() => setRewardType('stat')}
@@ -288,28 +332,24 @@ const RaidForm: React.FC<RaidFormProps> = ({ onClose }) => {
                 {/* Conditional Render */}
                 {rewardType === 'stat' ? (
                     <div className="animate-in fade-in slide-in-from-top-2 duration-300">
-                        <div className="grid grid-cols-7 gap-2">
-                            {Object.values(Stat).map((s) => {
-                                const isSelected = selectedStats.includes(s);
-                                return (
-                                    <button
-                                        key={s}
-                                        type="button"
-                                        onClick={() => toggleStat(s)}
-                                        className={`
-                                            flex flex-col items-center justify-center p-2 rounded-lg border transition-all aspect-square relative
-                                            ${isSelected 
-                                                ? 'bg-life-muted/10 border-current shadow-lg scale-110' 
-                                                : 'border-zinc-800 text-life-muted opacity-70 hover:opacity-100 hover:bg-life-muted/5'}
-                                        `}
-                                        style={{ color: isSelected ? STAT_COLORS[s] : undefined }}
-                                    >
-                                        <StatIcon type={s} />
-                                        <span className="text-[9px] font-bold mt-1">{s}</span>
-                                        {isSelected && <div className="absolute top-1 right-1 w-2 h-2 rounded-full bg-current shadow-[0_0_5px_currentColor]" />}
-                                    </button>
-                                );
-                            })}
+                        <div className="grid grid-cols-4 gap-2">
+                            {Object.values(Stat).map((s) => (
+                                <button
+                                    key={s}
+                                    type="button"
+                                    onClick={() => setStat(s)}
+                                    className={`
+                                        flex flex-col items-center justify-center p-3 rounded-lg border transition-all aspect-square
+                                        ${stat === s 
+                                            ? 'bg-life-muted/10 border-current shadow-lg scale-105' 
+                                            : 'bg-life-black border-life-muted/20 text-life-muted opacity-70 hover:opacity-100 hover:bg-life-muted/5'}
+                                    `}
+                                    style={{ color: stat === s ? STAT_COLORS[s] : undefined }}
+                                >
+                                    <StatIcon type={s} />
+                                    <span className="text-[9px] font-bold mt-1.5">{s}</span>
+                                </button>
+                            ))}
                         </div>
                     </div>
                 ) : (
@@ -317,40 +357,34 @@ const RaidForm: React.FC<RaidFormProps> = ({ onClose }) => {
                         <div className="relative">
                             <BookOpen className="absolute left-3 top-1/2 -translate-y-1/2 text-life-muted" size={16} />
                             <select 
-                                value={selectedSkillId}
+                                value={skillId}
                                 onChange={(e) => {
                                     const newSkillId = e.target.value;
-                                    setSelectedSkillId(newSkillId);
-                                    // Auto-update stats based on skill
+                                    setSkillId(newSkillId);
+                                    // Auto-update stat based on skill
                                     const skill = skillState.skills.find(s => s.id === newSkillId);
                                     if (skill && skill.relatedStats.length > 0) {
-                                        setSelectedStats(skill.relatedStats);
+                                        setStat(skill.relatedStats[0]);
                                     }
                                 }}
-                                className="w-full bg-life-black border border-zinc-800 rounded-lg p-3 pl-10 text-xs text-life-text appearance-none focus:outline-none focus:border-life-gold/50"
+                                className="w-full bg-life-black border border-life-muted/30 rounded-lg p-3 pl-10 text-xs text-life-text appearance-none focus:outline-none focus:border-life-gold/50"
                             >
                                 <option value="">Select a Skill...</option>
                                 {skillState.skills.map(skill => (
                                     <option key={skill.id} value={skill.id}>{skill.title} (Lvl {skill.level})</option>
                                 ))}
                             </select>
-                            <ChevronRight className="absolute right-3 top-1/2 -translate-y-1/2 text-life-muted rotate-90" size={14} />
+                            <ChevronRight className="absolute right-3 top-1/2 -translate-y-1/2 text-life-muted rotate-90 pointer-events-none" size={14} />
                         </div>
                         
-                        {selectedSkillId && (
+                        {skillId && (
                             <div className="p-3 bg-life-gold/10 border border-life-gold/20 rounded-lg flex items-center gap-3">
                                 <div className="p-2 bg-life-gold/20 rounded-full text-life-gold">
                                     <Zap size={14} />
                                 </div>
                                 <div className="flex-1">
-                                    <p className="text-[10px] text-life-gold font-bold uppercase tracking-wider">Auto-Linked Attributes</p>
-                                    <div className="flex gap-2 mt-1">
-                                        {selectedStats.map(s => (
-                                            <span key={s} className="text-xs font-mono px-1.5 py-0.5 rounded bg-life-black/50 border border-life-gold/30 text-life-gold">
-                                                {s}
-                                            </span>
-                                        ))}
-                                    </div>
+                                    <p className="text-[10px] text-life-gold font-bold uppercase tracking-wider">Auto-Linked Attribute</p>
+                                    <p className="text-xs text-life-text font-mono">{stat}</p>
                                 </div>
                             </div>
                         )}
@@ -358,28 +392,16 @@ const RaidForm: React.FC<RaidFormProps> = ({ onClose }) => {
                 )}
             </div>
 
-                <button type="submit" className={`w-full py-4 rounded-xl font-black uppercase tracking-widest text-sm flex items-center justify-center gap-2 transition-all mt-4 ${title && selectedStats.length > 0 ? 'bg-life-gold text-life-black hover:bg-yellow-400 shadow-[0_0_20px_rgba(251,191,36,0.3)]' : 'border-zinc-800 text-life-muted cursor-not-allowed'}`} disabled={!title || selectedStats.length === 0}>
-                    Launch Operation <ChevronRight size={16} />
-                </button>
-            </form>
+            {/* ACTION BUTTON */}
+            <button 
+                type="submit" 
+                className={`w-full py-4 rounded-xl font-black uppercase tracking-widest text-sm transition-all shadow-lg ${title ? 'bg-life-gold text-life-black hover:bg-yellow-400 shadow-life-gold/20' : 'bg-life-muted/10 text-life-muted cursor-not-allowed'}`}
+                disabled={!title}
+            >
+                {initialData ? 'Update Operation' : 'Launch Operation'}
+            </button>
 
-            {editingStepIndex !== null && (
-                <RaidStepEditor 
-                    stepIndex={editingStepIndex}
-                    step={raidSteps[editingStepIndex]}
-                    parentDifficulty={difficulty}
-                    parentStat={selectedStats[0] || Stat.DIS}
-                    parentSkillId={selectedSkillId}
-                    onUpdate={handleStepChange}
-                    onClose={() => setEditingStepIndex(null)}
-                    onAddSubtask={handleAddSubtask}
-                    onRemoveSubtask={handleRemoveSubtask}
-                    onChangeSubtask={handleSubtaskChange}
-                    onAddReminder={handleAddReminder}
-                    onRemoveReminder={handleRemoveReminder}
-                />
-            )}
-        </>
+        </form>
     );
 };
 

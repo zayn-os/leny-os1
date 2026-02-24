@@ -1,26 +1,45 @@
 
-import React, { useState } from 'react';
-import { Dumbbell, Brain, Zap, Shield, Heart, Activity, ChevronRight, BookOpen, Palette } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Dumbbell, Brain, Zap, Heart, Activity, ChevronRight, Palette, Flame, Users, Coins } from 'lucide-react';
 // --- تصحيح المسارات (الرجوع خطوتين ../../ والدخول للمجلدات الصحيحة) ---
 import { useSkills } from '../../contexts/SkillContext';
 import { Stat } from '../../types/types';
+import { Skill } from '../../types/skillTypes';
 import { STAT_COLORS } from '../../types/constants';
+
 interface SkillFormProps {
     onClose: () => void;
+    initialData?: Skill | null;
 }
 
-const SkillForm: React.FC<SkillFormProps> = ({ onClose }) => {
+const SkillForm: React.FC<SkillFormProps> = ({ onClose, initialData }) => {
     const { skillDispatch } = useSkills();
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [selectedStats, setSelectedStats] = useState<Stat[]>([]);
+
+    useEffect(() => {
+        if (initialData) {
+            setTitle(initialData.title);
+            setDescription(initialData.description || '');
+            setSelectedStats(initialData.relatedStats || []);
+        }
+    }, [initialData]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (!title.trim()) return;
         if (selectedStats.length === 0) return; // Must select at least one
 
-        skillDispatch.addSkill(title, selectedStats, description);
+        if (initialData) {
+            skillDispatch.updateSkill(initialData.id, {
+                title,
+                description,
+                relatedStats: selectedStats
+            });
+        } else {
+            skillDispatch.addSkill(title, selectedStats, description);
+        }
         onClose();
     };
 
@@ -86,8 +105,8 @@ const SkillForm: React.FC<SkillFormProps> = ({ onClose }) => {
                 <label className="block text-[10px] text-life-muted uppercase font-bold tracking-widest mb-2">
                     Parent Attributes (Select 1-3)
                 </label>
-                {/* 🟢 Updated grid cols to 7 */}
-                <div className="grid grid-cols-7 gap-2">
+                {/* 🟢 Updated grid cols to 4 */}
+                <div className="grid grid-cols-4 gap-2">
                     {Object.values(Stat).map((s) => {
                         const isSelected = selectedStats.includes(s);
                         return (
@@ -126,7 +145,7 @@ const SkillForm: React.FC<SkillFormProps> = ({ onClose }) => {
                 `}
                 disabled={!title || selectedStats.length === 0}
             >
-                Acquire Skill <ChevronRight size={16} />
+                {initialData ? 'Update Skill' : 'Acquire Skill'} <ChevronRight size={16} />
             </button>
         </form>
     );

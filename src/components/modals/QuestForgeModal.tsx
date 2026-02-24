@@ -49,7 +49,6 @@ I will describe a goal, or provide an existing Task JSON to modify.
       "durationMinutes": 45,
       "scheduledTime": "2024-10-25T09:00:00",
       "deadline": "2024-10-25",
-      "energyLevel": "high",
       "isCampaign": false
     }
   ],

@@ -16,6 +16,7 @@ interface SkillContextType {
     skillState: SkillState;
     skillDispatch: {
         addSkill: (title: string, relatedStats: Stat[], description?: string) => void;
+        updateSkill: (skillId: string, updates: Partial<Skill>) => void;
         addSkillXP: (skillId: string, amount: number) => void;
         deleteSkill: (skillId: string) => void;
         setActiveSkill: (skillId: string | null) => void;
@@ -31,6 +32,19 @@ const INITIAL_SKILLS: Skill[] = [
         title: 'Coding',
         description: 'Building the matrix.',
         relatedStats: [Stat.INT],
+        level: 1,
+        currentXP: 0,
+        targetXP: 100, 
+        rank: 'Novice',
+        lastPracticed: new Date().toISOString(),
+        isRusty: false,
+        createdAt: new Date().toISOString()
+    },
+    {
+        id: 'sk_02',
+        title: 'كارزمه',
+        description: 'دمج بين المهارات الاجتماعية، الذكاء، والصحة.',
+        relatedStats: [Stat.REL, Stat.INT, Stat.HEA],
         level: 1,
         currentXP: 0,
         targetXP: 100, 
@@ -113,6 +127,17 @@ export const SkillProvider: React.FC<{ children: ReactNode }> = ({ children }) =
         lifeDispatch.addToast(`Skill Acquired: ${title}`, 'success');
     };
 
+    const updateSkill = (skillId: string, updates: Partial<Skill>) => {
+        playSound('click', soundEnabled);
+        setState(prev => ({
+            ...prev,
+            skills: prev.skills.map(skill => 
+                skill.id === skillId ? { ...skill, ...updates } : skill
+            )
+        }));
+        lifeDispatch.addToast('Skill Updated', 'success');
+    };
+
     const addSkillXP = (skillId: string, amount: number) => {
         setState(prev => ({
             ...prev,
@@ -171,7 +196,7 @@ export const SkillProvider: React.FC<{ children: ReactNode }> = ({ children }) =
     return (
         <SkillContext.Provider value={{ 
             skillState: { skills, activeSkillId }, 
-            skillDispatch: { addSkill, addSkillXP, deleteSkill, setActiveSkill, restoreData } 
+            skillDispatch: { addSkill, updateSkill, addSkillXP, deleteSkill, setActiveSkill, restoreData } 
         }}>
             {children}
         </SkillContext.Provider>

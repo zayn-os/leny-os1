@@ -85,8 +85,8 @@ export const PACK_SPARTAN: InjectionPayload = {
         { title: "Clean Eating", difficulty: "normal", stat: "STR", type: "daily", description: "Fuel, not fun." }
     ],
     tasks: [
-        { title: "Run 5k", difficulty: "normal", stat: "STR", energyLevel: "high", description: "Cardio is survival." },
-        { title: "Heavy Deadlift Session", difficulty: "hard", stat: "STR", energyLevel: "high", description: "Pick up heavy things." }
+        { title: "Run 5k", difficulty: "normal", stat: "STR", description: "Cardio is survival." },
+        { title: "Heavy Deadlift Session", difficulty: "hard", stat: "STR", description: "Pick up heavy things." }
     ],
     skills: [
         { title: "Combat", relatedStats: ["STR", "DIS"], description: "Self-defense arts." },

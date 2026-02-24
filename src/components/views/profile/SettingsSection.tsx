@@ -1,10 +1,11 @@
 
-import React from 'react';
-import { Download, Upload, Skull, ShieldCheck, Database, RefreshCw, FileText, Share2, Smartphone, Brain, Activity, Coins, Star, ShoppingCart, Scale, Bell } from 'lucide-react';
+import React, { useState } from 'react';
+import { Download, Upload, Skull, ShieldCheck, Database, RefreshCw, FileText, Share2, Smartphone, Brain, Activity, Coins, Star, ShoppingCart, Scale, Bell, Archive } from 'lucide-react';
 import { UserProfile } from '../../../types/types';
 import { usePWAInstall } from '../../../hooks/usePWAInstall';
 import { useSkills } from '../../../contexts/SkillContext';
 import { requestNotificationPermission, sendAlert } from '../../../utils/notifications';
+import { downloadSourceCode } from '../../../utils/downloadSource';
 
 interface SettingsSectionProps {
     user: UserProfile;
@@ -19,6 +20,7 @@ export const SettingsSection: React.FC<SettingsSectionProps> = ({
 }) => {
     const { isInstallable, promptInstall } = usePWAInstall();
     const { skillState } = useSkills();
+    const [verificationCode, setVerificationCode] = useState('');
 
     const handleTitleOverrideToggle = () => {
         dispatch.togglePreference('useSkillAsTitle');
@@ -189,6 +191,38 @@ export const SettingsSection: React.FC<SettingsSectionProps> = ({
                         AI_RAID_OPS
                     </span>
                 </button>
+
+                                {/* 📦 SOURCE ARCHIVE (ORACLE) */}
+                <div className="w-full flex flex-col items-center justify-between p-4 rounded-xl bg-zinc-900/50 border border-zinc-700 transition-all group space-y-3">
+                    <div className="w-full flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                            <div className="p-1.5 bg-zinc-700/20 rounded-lg text-zinc-400 group-hover:text-zinc-300">
+                                <Download size={16} />
+                            </div>
+                            <span className="text-[10px] font-black uppercase tracking-widest text-zinc-200 group-hover:text-white">
+                                Oracle Source Archive (ZIP)
+                            </span>
+                        </div>
+                        <span className="text-[8px] font-mono text-zinc-500 bg-zinc-950/50 px-2 py-1 rounded border border-zinc-700/30">
+                            SYS_EXPORT
+                        </span>
+                    </div>
+                    <input 
+                        type="password"
+                        placeholder="Enter code to unlock"
+                        value={verificationCode}
+                        onChange={(e) => setVerificationCode(e.target.value)}
+                        className="w-full bg-life-black border border-zinc-600 rounded-lg p-2 text-center text-xs text-life-text placeholder:text-life-muted/50 focus:outline-none focus:border-life-gold/50 transition-all font-mono"
+                    />
+                    <button 
+                        onClick={downloadSourceCode}
+                        disabled={verificationCode !== 'asad0032'}
+                        className="w-full py-2 rounded-lg bg-life-gold text-life-black text-xs font-bold uppercase tracking-wider transition-all shadow-lg shadow-life-gold/20 disabled:bg-zinc-700 disabled:text-zinc-500 disabled:cursor-not-allowed disabled:shadow-none"
+                    >
+                        Download Source
+                    </button>
+                </div>
+                
 
                 {/* ⚖️ CODEX ARBITER (LAWS) */}
                 <button 

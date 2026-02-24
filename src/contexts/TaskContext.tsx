@@ -60,8 +60,7 @@ const INITIAL_TASKS: Task[] = [
       subtasks: [
           { id: 'st_1', title: 'Check Audio Systems', isCompleted: true },
           { id: 'st_2', title: 'Verify Data Persistence', isCompleted: false }
-      ],
-      energyLevel: 'high'
+      ]
     }
 ];
 
@@ -82,7 +81,6 @@ const migrateTask = (t: any): Task => {
         difficulty: Difficulty.NORMAL,
         stat: Stat.STR,
         subtasks: [],
-        energyLevel: 'medium',
         isTimed: false,
         isArchived: false,
         isCompleted: false,
