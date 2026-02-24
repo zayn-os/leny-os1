@@ -9,6 +9,7 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, (process as any).cwd(), '');
   
   return {
+
     base: '/leny-os1/',
     plugins: [react()],
     define: {
