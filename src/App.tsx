@@ -5,7 +5,7 @@ import { useLifeOS } from './contexts/LifeOSContext';
 // --- المكونات الأساسية ---
 import Navigation from './components/Navigation';
 import Header from './components/Header';
-import FocusMode from './components/FocusMode';
+import FocusMode from './components/focus/FocusMode';
 import OnboardingSequence from './components/OnboardingSequence';
 import NotificationManager from './components/NotificationManager'; // 👈 NEW
 
@@ -178,3 +178,5 @@ const App: React.FC = () => {
 };
 
 export default App;
+
+
