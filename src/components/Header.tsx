@@ -1,13 +1,11 @@
 
 import React, { useState, useEffect } from 'react';
-import { User, Shield, Flame, Award, Settings, LogOut } from 'lucide-react';
+import { User, Shield, Flame, Award, Settings } from 'lucide-react';
 
 // --- تصحيح المسارات (الرجوع خطوة واحدة ../ والدخول للمجلدات الصحيحة) ---
 import { useLifeOS } from '../contexts/LifeOSContext';
 import { useSkills } from '../contexts/SkillContext';
 import { playSound } from '../utils/audio';
-import { auth } from '../firebase';
-import { signOut } from 'firebase/auth';
 
 const Header: React.FC = () => {
   const { state, dispatch } = useLifeOS();
@@ -72,14 +70,6 @@ const Header: React.FC = () => {
       dispatch.setModal('honorBreakdown');
   };
 
-  const handleLogout = async () => {
-      try {
-          await signOut(auth);
-      } catch (error) {
-          console.error("Logout Error:", error);
-      }
-  };
-
   return (
     <header className="h-16 px-4 border-b border-zinc-800 flex items-center justify-between bg-life-black/60 backdrop-blur-xl z-20 shadow-lg transition-all duration-300 select-none sticky top-0">
       
@@ -138,14 +128,7 @@ const Header: React.FC = () => {
             <Settings size={20} />
           </button>
 
-          {/* 🚪 LOGOUT BUTTON */}
-          <button 
-            onClick={handleLogout}
-            className="p-2 rounded-full text-life-muted hover:text-life-hard hover:bg-life-hard/10 transition-all active:scale-95"
-            title="System Logout"
-          >
-            <LogOut size={20} />
-          </button>
+
 
           {/* 💰 Resources Container */}
           <div className="hidden sm:flex flex-col items-end gap-0.5 mr-1">

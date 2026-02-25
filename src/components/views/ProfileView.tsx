@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { ChevronRight, Award, X, Zap, Shield } from 'lucide-react';
+import { ChevronRight, Award, X } from 'lucide-react';
 import { useLifeOS } from '../../contexts/LifeOSContext';
 import { useShop } from '../../contexts/ShopContext';
 import { useSkills } from '../../contexts/SkillContext';
@@ -130,6 +130,16 @@ const ProfileView: React.FC = () => {
     }
   };
 
+  const handleLogout = async () => {
+    try {
+      await auth.signOut();
+      dispatch.addToast('Neural Link Severed', 'info');
+    } catch (error: any) {
+      console.error("Logout Error:", error);
+      dispatch.addToast('Logout Failed', 'error');
+    }
+  };
+
   return (
     <div className="pb-24 animate-in fade-in zoom-in-95 duration-500 relative">
       
@@ -140,40 +150,7 @@ const ProfileView: React.FC = () => {
           featuredBadgesData={featuredBadgesData as any}
       />
 
-      {/* 🟢 NEURAL LINK (GOOGLE AUTH) */}
-      <button 
-        onClick={handleGoogleLink}
-        className={`w-full mb-6 border rounded-xl p-4 flex items-center justify-between transition-all group shadow-lg ${
-            currentUser 
-            ? 'bg-life-easy/10 border-life-easy/30 hover:bg-life-easy/20' 
-            : 'bg-life-black border-zinc-800 hover:border-life-gold/50 hover:bg-life-gold/5'
-        }`}
-      >
-          <div className="flex items-center gap-3">
-              <div className={`w-10 h-10 rounded-full flex items-center justify-center border group-hover:scale-110 transition-transform ${
-                  currentUser 
-                  ? 'bg-life-easy/20 text-life-easy border-life-easy/30' 
-                  : 'bg-life-gold/10 text-life-gold border-life-gold/20'
-              }`}>
-                  <Zap size={20} className={currentUser ? '' : 'animate-pulse'} />
-              </div>
-              <div className="text-left">
-                  <h3 className={`text-xs font-black uppercase tracking-widest transition-colors ${
-                      currentUser ? 'text-life-easy' : 'text-life-text group-hover:text-life-gold'
-                  }`}>
-                      {currentUser ? 'Neural Link Active' : 'Connect Neural Link'}
-                  </h3>
-                  <p className="text-[9px] text-life-muted uppercase tracking-[0.2em]">
-                      {currentUser ? (currentUser.email || 'Linked') : 'Sync with Google Cloud'}
-                  </p>
-              </div>
-          </div>
-          {currentUser ? (
-              <Shield size={20} className="text-life-easy" />
-          ) : (
-              <ChevronRight size={20} className="text-life-muted group-hover:text-life-gold" />
-          )}
-      </button>
+
 
       {/* 🟢 HALL OF FAME SHORTCUT */}
       <button 
@@ -208,6 +185,9 @@ const ProfileView: React.FC = () => {
           onForceSleep={handleForceSleep}
           onExport={handleExport}
           onImport={handleImport}
+          currentUser={currentUser}
+          onLogin={handleGoogleLink}
+          onLogout={handleLogout}
       />
 
        {/* 🟢 ITEM MODAL */}

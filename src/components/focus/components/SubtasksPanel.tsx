@@ -1,6 +1,6 @@
 import React from 'react';
 import { X, ListTodo, Check } from 'lucide-react';
-import { Subtask } from '../../../types/types';
+import { Subtask } from '../../../types/taskTypes';
 
 interface SubtasksPanelProps {
     subtasks: Subtask[];
