@@ -154,15 +154,8 @@ const TaskCard: React.FC<TaskCardProps> = ({ task, onToggle, onDelete }) => {
                     </span>
                 )}
 
-                {/* 🟢 MULTI-STAT DISPLAY */}
-                {linkedSkill && linkedSkill.relatedStats && linkedSkill.relatedStats.length > 0 ? (
-                    linkedSkill.relatedStats.map((stat: Stat) => (
-                        <span key={stat} className={`text-[9px] font-bold px-1.5 py-0.5 rounded border flex items-center gap-1 uppercase tracking-wider ${task.isCompleted ? 'border-gray-600 text-gray-500' : ''}`} style={{ borderColor: task.isCompleted ? undefined : `${STAT_COLORS[stat]}40`, color: task.isCompleted ? undefined : STAT_COLORS[stat], backgroundColor: task.isCompleted ? undefined : `${STAT_COLORS[stat]}10` }}>
-                            <StatIcon stat={stat} size={10} />
-                            {stat}
-                        </span>
-                    ))
-                ) : (
+                {/* 🟢 STAT DISPLAY (Only if no skill linked) */}
+                {!linkedSkill && (
                     <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded border flex items-center gap-1 uppercase tracking-wider ${task.isCompleted ? 'border-gray-600 text-gray-500' : ''}`} style={{ borderColor: task.isCompleted ? undefined : `${statColor}40`, color: task.isCompleted ? undefined : statColor, backgroundColor: task.isCompleted ? undefined : `${statColor}10` }}>
                         <StatIcon stat={task.stat} size={10} />
                         {task.stat}
